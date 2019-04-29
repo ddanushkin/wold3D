@@ -181,6 +181,56 @@ CMakeFiles/wolf3d.dir/libft/src/ft_tolower.c.o
 CMakeFiles/wolf3d.dir/libft/src/ft_toupper.c.o
  ../libft/includes/libft.h
  /Users/ndremora/Desktop/wolf/libft/src/ft_toupper.c
+CMakeFiles/wolf3d.dir/sources/init.c.o
+ ../includes/wolf3d.h
+ ../libft/includes/libft.h
+ /Users/ndremora/Desktop/wolf/sources/init.c
+ /Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL.h
+ /Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL_assert.h
+ /Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL_atomic.h
+ /Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL_audio.h
+ /Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL_blendmode.h
+ /Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL_clipboard.h
+ /Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL_config.h
+ /Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL_config_macosx.h
+ /Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL_cpuinfo.h
+ /Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL_endian.h
+ /Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL_error.h
+ /Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL_events.h
+ /Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL_filesystem.h
+ /Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL_gamecontroller.h
+ /Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL_gesture.h
+ /Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL_haptic.h
+ /Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL_hints.h
+ /Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL_joystick.h
+ /Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL_keyboard.h
+ /Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL_keycode.h
+ /Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL_loadso.h
+ /Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL_log.h
+ /Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL_main.h
+ /Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL_messagebox.h
+ /Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL_mouse.h
+ /Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL_mutex.h
+ /Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL_pixels.h
+ /Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL_platform.h
+ /Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL_power.h
+ /Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL_quit.h
+ /Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL_rect.h
+ /Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL_render.h
+ /Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL_rwops.h
+ /Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL_scancode.h
+ /Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL_sensor.h
+ /Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL_shape.h
+ /Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL_stdinc.h
+ /Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL_surface.h
+ /Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL_system.h
+ /Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL_thread.h
+ /Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL_timer.h
+ /Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL_touch.h
+ /Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL_version.h
+ /Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL_video.h
+ /Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers/begin_code.h
+ /Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers/close_code.h
 CMakeFiles/wolf3d.dir/sources/main.c.o
  ../includes/wolf3d.h
  ../libft/includes/libft.h

@@ -1743,6 +1743,33 @@ libft/src/ft_toupper.c.s:
 	$(MAKE) -f CMakeFiles/wolf3d.dir/build.make CMakeFiles/wolf3d.dir/libft/src/ft_toupper.c.s
 .PHONY : libft/src/ft_toupper.c.s
 
+sources/init.o: sources/init.c.o
+
+.PHONY : sources/init.o
+
+# target to build an object file
+sources/init.c.o:
+	$(MAKE) -f CMakeFiles/wolf3d.dir/build.make CMakeFiles/wolf3d.dir/sources/init.c.o
+.PHONY : sources/init.c.o
+
+sources/init.i: sources/init.c.i
+
+.PHONY : sources/init.i
+
+# target to preprocess a source file
+sources/init.c.i:
+	$(MAKE) -f CMakeFiles/wolf3d.dir/build.make CMakeFiles/wolf3d.dir/sources/init.c.i
+.PHONY : sources/init.c.i
+
+sources/init.s: sources/init.c.s
+
+.PHONY : sources/init.s
+
+# target to generate assembly for a file
+sources/init.c.s:
+	$(MAKE) -f CMakeFiles/wolf3d.dir/build.make CMakeFiles/wolf3d.dir/sources/init.c.s
+.PHONY : sources/init.c.s
+
 sources/main.o: sources/main.c.o
 
 .PHONY : sources/main.o
@@ -1959,6 +1986,9 @@ help:
 	@echo "... libft/src/ft_toupper.o"
 	@echo "... libft/src/ft_toupper.i"
 	@echo "... libft/src/ft_toupper.s"
+	@echo "... sources/init.o"
+	@echo "... sources/init.i"
+	@echo "... sources/init.s"
 	@echo "... sources/main.o"
 	@echo "... sources/main.i"
 	@echo "... sources/main.s"

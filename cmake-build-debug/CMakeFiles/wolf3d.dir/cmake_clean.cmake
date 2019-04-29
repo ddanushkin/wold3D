@@ -59,6 +59,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/wolf3d.dir/libft/src/ft_strtrim.c.o"
   "CMakeFiles/wolf3d.dir/libft/src/ft_tolower.c.o"
   "CMakeFiles/wolf3d.dir/libft/src/ft_toupper.c.o"
+  "CMakeFiles/wolf3d.dir/sources/init.c.o"
   "CMakeFiles/wolf3d.dir/sources/main.c.o"
   "wolf3d.pdb"
   "wolf3d"

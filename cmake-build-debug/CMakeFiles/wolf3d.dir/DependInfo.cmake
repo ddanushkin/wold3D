@@ -64,6 +64,7 @@ set(CMAKE_DEPENDS_CHECK_C
   "/Users/ndremora/Desktop/wolf/libft/src/ft_strtrim.c" "/Users/ndremora/Desktop/wolf/cmake-build-debug/CMakeFiles/wolf3d.dir/libft/src/ft_strtrim.c.o"
   "/Users/ndremora/Desktop/wolf/libft/src/ft_tolower.c" "/Users/ndremora/Desktop/wolf/cmake-build-debug/CMakeFiles/wolf3d.dir/libft/src/ft_tolower.c.o"
   "/Users/ndremora/Desktop/wolf/libft/src/ft_toupper.c" "/Users/ndremora/Desktop/wolf/cmake-build-debug/CMakeFiles/wolf3d.dir/libft/src/ft_toupper.c.o"
+  "/Users/ndremora/Desktop/wolf/sources/init.c" "/Users/ndremora/Desktop/wolf/cmake-build-debug/CMakeFiles/wolf3d.dir/sources/init.c.o"
   "/Users/ndremora/Desktop/wolf/sources/main.c" "/Users/ndremora/Desktop/wolf/cmake-build-debug/CMakeFiles/wolf3d.dir/sources/main.c.o"
   )
 set(CMAKE_C_COMPILER_ID "AppleClang")

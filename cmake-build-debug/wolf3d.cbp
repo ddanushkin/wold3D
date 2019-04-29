@@ -272,6 +272,9 @@
 		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_toupper.c">
 			<Option target="wolf3d"/>
 		</Unit>
+		<Unit filename="/Users/ndremora/Desktop/wolf/sources/init.c">
+			<Option target="wolf3d"/>
+		</Unit>
 		<Unit filename="/Users/ndremora/Desktop/wolf/sources/main.c">
 			<Option target="wolf3d"/>
 		</Unit>
