@@ -6,7 +6,7 @@
 /*   By: lglover <lglover@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/10 17:19:36 by lglover           #+#    #+#             */
-/*   Updated: 2019/04/29 16:15:49 by lglover          ###   ########.fr       */
+/*   Updated: 2019/04/29 17:04:33 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,11 @@ void		update(t_sdl *sdl, t_player *player)
 			player->y++;
 		if (state[SDL_SCANCODE_DOWN])
 			player->y--;
-		SDL_SetRenderDrawColor(sdl->ren, 255, 0, 0, 255);
-		SDL_RenderDrawPoint(sdl->ren, player->x, player->y);
+
+
+
+		//SDL_SetRenderDrawColor(sdl->ren, 255, 255, 255, 255);
+		//SDL_RenderDrawPoint(sdl->ren, player->x, player->y);
 		SDL_RenderPresent(sdl->ren);
 	}
 }
@@ -49,6 +52,7 @@ int		main(void)
 	if ((fd = open("../levels/1.wolf3d", O_RDONLY)) != -1)
 	{
 		read_map(fd, &app.map);
+		draw_minimap(&app.map);
 		update(&app.sdl, &app.player);
 	}
 	else
