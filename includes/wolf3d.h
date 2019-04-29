@@ -6,7 +6,7 @@
 /*   By: lglover <lglover@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 12:28:27 by lglover           #+#    #+#             */
-/*   Updated: 2019/04/29 17:04:33 by lglover          ###   ########.fr       */
+/*   Updated: 2019/04/29 16:40:28 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ typedef struct		s_node
 {
 	int				x;
 	int				y;
-	int 			collidable;
 	char			*texture;
+	int 			collidable;
 }					t_node;
 
 typedef struct		s_map
