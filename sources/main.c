@@ -6,11 +6,12 @@
 /*   By: lglover <lglover@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/10 17:19:36 by lglover           #+#    #+#             */
-/*   Updated: 2019/04/29 15:09:38 by lglover          ###   ########.fr       */
+/*   Updated: 2019/04/29 15:31:16 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
+#include "stdio.h"
 #include "unistd.h"
 
 void		update(t_sdl *sdl, t_player *player)
