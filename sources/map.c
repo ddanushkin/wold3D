@@ -6,7 +6,7 @@
 /*   By: lglover <lglover@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 15:56:55 by lglover           #+#    #+#             */
-/*   Updated: 2019/04/29 16:41:49 by lglover          ###   ########.fr       */
+/*   Updated: 2019/04/29 18:00:19 by ndremora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,16 @@ void	map_init(int fd, t_map *map)
 void	fill_row(t_map *map, char **data, int row)
 {
 		int col;
+		char *s;
 
 		col = 0;
 		while (col < map->cols)
 		{
 			if (*data[col] == '1')
 			{
+				s = ft_strjoin(data[col], ".bmp");
+				map->nodes[row][col].texture = s;
+				free(s);
 				map->nodes[row][col].x = col * MM_SEC_SIZE;
 				map->nodes[row][col].y = row * MM_SEC_SIZE;
 				map->nodes[row][col++].collidable = true;

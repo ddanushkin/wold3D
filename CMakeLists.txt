@@ -8,6 +8,7 @@ project(wolf3d C)
 set(CMAKE_C_STANDARD 99)
 
 include_directories("includes")
+include_directories("resources")
 include_directories("libft/includes")
 include_directories("/Users/$ENV{USER}/Library/Frameworks/SDL2.framework/Versions/A/Headers/")
 add_executable(wolf3d
