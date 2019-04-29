@@ -15,5 +15,5 @@ add_executable(wolf3d
         ${HEADERS}
         ${HEADERS2}
         ${SOURCES2}
-        )
+        sources/errors.c)
 target_link_libraries(wolf3d "-F /Users/$ENV{USER}/Library/Frameworks/ -framework SDL2")

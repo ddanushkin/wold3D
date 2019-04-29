@@ -6,13 +6,11 @@
 /*   By: lglover <lglover@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/10 17:19:36 by lglover           #+#    #+#             */
-/*   Updated: 2019/04/29 15:33:43 by ndremora         ###   ########.fr       */
+/*   Updated: 2019/04/29 15:59:42 by ndremora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
-#include "stdio.h"
-#include "unistd.h"
 
 void		update(t_sdl *sdl, t_player *player)
 {
@@ -64,14 +62,13 @@ void	read_map(t_map *map)
 	ft_strdel(&line);
 }
 
-int		main(void) {
+int		main(void)
+{
 	t_app		app;
 
 	init(&app.sdl, &app.player);
 	read_map(&app.map);
 	update(&app.sdl, &app.player);
-	SDL_DestroyRenderer(app.sdl.ren);
-	SDL_DestroyWindow(app.sdl.win);
-	SDL_Quit();
+	quit_properly(&app);
 	return (0);
 }

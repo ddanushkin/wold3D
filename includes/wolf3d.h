@@ -6,7 +6,7 @@
 /*   By: lglover <lglover@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 12:28:27 by lglover           #+#    #+#             */
-/*   Updated: 2019/04/29 15:31:04 by lglover          ###   ########.fr       */
+/*   Updated: 2019/04/29 16:08:36 by ndremora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,5 +59,7 @@ typedef struct		s_app
 }					t_app;
 
 void		init(t_sdl *sdl, t_player *player);
+void		ft_error(char *str);
+void		quit_properly(t_app *sdl);
 
 #endif
