@@ -6,7 +6,7 @@
 /*   By: lglover <lglover@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/10 17:19:36 by lglover           #+#    #+#             */
-/*   Updated: 2019/04/29 14:31:03 by lglover          ###   ########.fr       */
+/*   Updated: 2019/04/29 14:53:21 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	read_map(t_map *map)
 	int		res;
 	int 	fd;
 
-	fd = open("map", O_RDONLY);
+	fd = open("../levels/1.wolf3d", O_RDONLY);
 	line = NULL;
 
 	ft_gnl(fd, &line);
