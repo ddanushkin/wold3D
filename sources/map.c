@@ -6,7 +6,7 @@
 /*   By: lglover <lglover@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 15:56:55 by lglover           #+#    #+#             */
-/*   Updated: 2019/04/29 16:41:49 by lglover          ###   ########.fr       */
+/*   Updated: 2019/04/29 16:52:28 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,14 @@ void	fill_row(t_map *map, char **data, int row)
 		{
 			if (*data[col] == '1')
 			{
-				map->nodes[row][col].x = col * 10;
-				map->nodes[row][col].y = row * 10;
+				map->nodes[row][col].x = col * MM_SEC_SIZE;
+				map->nodes[row][col].y = row * MM_SEC_SIZE;
 				map->nodes[row][col++].collidable = true;
 			}
 			else
 			{
-				map->nodes[row][col].x = col * 10;
-				map->nodes[row][col].y = row * 10;
+				map->nodes[row][col].x = col * MM_SEC_SIZE;
+				map->nodes[row][col].y = row * MM_SEC_SIZE;
 				map->nodes[row][col++].collidable = false;
 			}
 		}
