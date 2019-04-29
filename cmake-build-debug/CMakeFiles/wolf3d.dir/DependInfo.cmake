@@ -64,6 +64,7 @@ set(CMAKE_DEPENDS_CHECK_C
   "/Users/lglover/CLionProjects/wolf32/libft/src/ft_strtrim.c" "/Users/lglover/CLionProjects/wolf32/cmake-build-debug/CMakeFiles/wolf3d.dir/libft/src/ft_strtrim.c.o"
   "/Users/lglover/CLionProjects/wolf32/libft/src/ft_tolower.c" "/Users/lglover/CLionProjects/wolf32/cmake-build-debug/CMakeFiles/wolf3d.dir/libft/src/ft_tolower.c.o"
   "/Users/lglover/CLionProjects/wolf32/libft/src/ft_toupper.c" "/Users/lglover/CLionProjects/wolf32/cmake-build-debug/CMakeFiles/wolf3d.dir/libft/src/ft_toupper.c.o"
+  "/Users/lglover/CLionProjects/wolf32/sources/init.c" "/Users/lglover/CLionProjects/wolf32/cmake-build-debug/CMakeFiles/wolf3d.dir/sources/init.c.o"
   "/Users/lglover/CLionProjects/wolf32/sources/main.c" "/Users/lglover/CLionProjects/wolf32/cmake-build-debug/CMakeFiles/wolf3d.dir/sources/main.c.o"
   )
 set(CMAKE_C_COMPILER_ID "AppleClang")
