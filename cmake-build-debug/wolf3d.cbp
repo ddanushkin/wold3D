@@ -89,9 +89,6 @@
 		<Unit filename="/Users/lglover/CLionProjects/wolf32/includes/wolf3d.h">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/levels">
-			<Option target="wolf3d"/>
-		</Unit>
 		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/includes/libft.h">
 			<Option target="wolf3d"/>
 		</Unit>
@@ -273,9 +270,6 @@
 			<Option target="wolf3d"/>
 		</Unit>
 		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_toupper.c">
-			<Option target="wolf3d"/>
-		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/resources">
 			<Option target="wolf3d"/>
 		</Unit>
 		<Unit filename="/Users/lglover/CLionProjects/wolf32/sources/init.c">
