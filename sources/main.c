@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "wolf3d.h"
-
+#include "unistd.h"
 
 void		update(t_sdl *sdl, t_player *player)
 {
