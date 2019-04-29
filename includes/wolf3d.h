@@ -6,7 +6,7 @@
 /*   By: lglover <lglover@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 12:28:27 by lglover           #+#    #+#             */
-/*   Updated: 2019/04/29 16:40:28 by lglover          ###   ########.fr       */
+/*   Updated: 2019/04/29 18:04:51 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,11 @@ typedef struct		s_app
 	t_map			map;
 }					t_app;
 
-# define MM_SEC_SIZE 10
+# define MM_SEC_SIZE 16
 
 void				init(t_sdl *sdl, t_player *player);
 void				read_map(int fd, t_map *map);
 void				ft_error(char *str);
 void				quit_properly(t_app *sdl);
-void				draw_minimap(t_map *map);
+void				draw_minimap(t_map *map, t_sdl *sdl);
 #endif
