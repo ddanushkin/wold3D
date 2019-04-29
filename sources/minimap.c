@@ -6,7 +6,7 @@
 /*   By: lglover <lglover@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 16:55:16 by lglover           #+#    #+#             */
-/*   Updated: 2019/04/29 18:04:51 by lglover          ###   ########.fr       */
+/*   Updated: 2019/04/29 19:19:30 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,14 @@ void	draw_sector(t_sdl *sdl, int row, int col)
 	SDL_SetRenderDrawColor(sdl->ren, 0, 0, 0, 0);
 }
 
-void	draw_minimap(t_map *map, t_sdl *sdl)
+void	draw_player(t_sdl *sdl, t_player *player)
+{
+	SDL_SetRenderDrawColor(sdl->ren, 2, 191, 255, 255);
+	SDL_RenderDrawPoint(sdl->ren, player->x, player->y);
+	SDL_SetRenderDrawColor(sdl->ren, 0, 0, 0, 0);
+}
+
+void	draw_minimap(t_map *map, t_sdl *sdl, t_player *player)
 {
 	int		row;
 	int		col;
@@ -41,7 +48,10 @@ void	draw_minimap(t_map *map, t_sdl *sdl)
 		while (col < map->cols)
 		{
 			if (map->nodes[row][col].collidable)
+			{
 				draw_sector(sdl, row, col);
+				draw_player(sdl, player);
+			}
 			col++;
 		}
 		row++;

@@ -6,7 +6,7 @@
 /*   By: lglover <lglover@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 15:56:55 by lglover           #+#    #+#             */
-/*   Updated: 2019/04/29 16:41:49 by lglover          ###   ########.fr       */
+/*   Updated: 2019/04/29 18:58:45 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	map_init(int fd, t_map *map)
 		map->nodes[i++] = (t_node *)malloc(sizeof(t_node) * map->cols);
 }
 
-void	fill_row(t_map *map, char **data, int row)
+void	fill_row(t_map *map, char **data, int row, t_player *player)
 {
 		int col;
 		char *s;
@@ -43,10 +43,17 @@ void	fill_row(t_map *map, char **data, int row)
 			{
 				s = ft_strjoin(data[col], ".bmp");
 				map->nodes[row][col].texture = s;
-				free(s);
 				map->nodes[row][col].x = col * MM_SEC_SIZE;
 				map->nodes[row][col].y = row * MM_SEC_SIZE;
 				map->nodes[row][col++].collidable = true;
+			}
+			else if (*data[col] == 'P')
+			{
+				map->nodes[row][col].x = col * MM_SEC_SIZE;
+				map->nodes[row][col].y = row * MM_SEC_SIZE;
+				map->nodes[row][col++].collidable = false;
+				player->y = col * MM_SEC_SIZE + (MM_SEC_SIZE / 2);
+				player->x = row * MM_SEC_SIZE + (MM_SEC_SIZE / 2);
 			}
 			else
 			{
@@ -57,7 +64,7 @@ void	fill_row(t_map *map, char **data, int row)
 		}
 }
 
-void	read_map(int fd, t_map *map)
+void	read_map(int fd, t_map *map, t_player *player)
 {
 	char	*line;
 	char	**data;
@@ -69,8 +76,9 @@ void	read_map(int fd, t_map *map)
 	while (ft_gnl(fd, &line))
 	{
 		data = ft_strsplit(line, ' ');
-		fill_row(map, data, i++);
+		fill_row(map, data, i++, player);
 		ft_strdel(&line);
+		ft_delarr(data);
 	}
 	close(fd);
 	ft_strdel(&line);
