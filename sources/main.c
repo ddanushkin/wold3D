@@ -6,7 +6,7 @@
 /*   By: lglover <lglover@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/10 17:19:36 by lglover           #+#    #+#             */
-/*   Updated: 2019/04/29 15:59:42 by ndremora         ###   ########.fr       */
+/*   Updated: 2019/04/29 16:15:49 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,36 +39,20 @@ void		update(t_sdl *sdl, t_player *player)
 	}
 }
 
-void	read_map(t_map *map)
-{
-	char	*line;
-	char	**data;
-	int		res;
-	int 	fd;
-
-	fd = open("../levels/1.wolf3d", O_RDONLY);
-	line = NULL;
-
-	ft_gnl(fd, &line);
-	data = ft_strsplit(line, ' ');
-	map->rows = ft_atoi(data[0]);
-	map->cols = ft_atoi(data[1]);
-	ft_delarr(data);
-	while ((res = ft_gnl(fd, &line)) > 0)
-	{
-		ft_strdel(&line);
-	}
-	close(fd);
-	ft_strdel(&line);
-}
-
 int		main(void)
 {
 	t_app		app;
+	int fd;
 
 	init(&app.sdl, &app.player);
-	read_map(&app.map);
-	update(&app.sdl, &app.player);
+
+	if ((fd = open("../levels/1.wolf3d", O_RDONLY)) != -1)
+	{
+		read_map(fd, &app.map);
+		update(&app.sdl, &app.player);
+	}
+	else
+		ft_error("Map path error.");
 	quit_properly(&app);
 	return (0);
 }
