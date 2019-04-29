@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/wolf3d.dir/main.c.o"
   "CMakeFiles/wolf3d.dir/libft/src/ft_atoi.c.o"
   "CMakeFiles/wolf3d.dir/libft/src/ft_bzero.c.o"
+  "CMakeFiles/wolf3d.dir/libft/src/ft_delarr.c.o"
   "CMakeFiles/wolf3d.dir/libft/src/ft_gnl.c.o"
   "CMakeFiles/wolf3d.dir/libft/src/ft_isalnum.c.o"
   "CMakeFiles/wolf3d.dir/libft/src/ft_isalpha.c.o"
@@ -59,7 +59,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/wolf3d.dir/libft/src/ft_strtrim.c.o"
   "CMakeFiles/wolf3d.dir/libft/src/ft_tolower.c.o"
   "CMakeFiles/wolf3d.dir/libft/src/ft_toupper.c.o"
-  "CMakeFiles/wolf3d.dir/libft/src/ft_delarr.c.o"
+  "CMakeFiles/wolf3d.dir/sources/main.c.o"
   "wolf3d.pdb"
   "wolf3d"
 )

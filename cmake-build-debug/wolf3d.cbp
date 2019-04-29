@@ -8,45 +8,45 @@
 		<Option virtualFolders="CMake Files\;"/>
 		<Build>
 			<Target title="all">
-				<Option working_dir="/Users/lglover/CLionProjects/wolf32/cmake-build-debug"/>
+				<Option working_dir="/Users/ndremora/Desktop/wolf/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/Users/lglover/CLionProjects/wolf32/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/lglover/CLionProjects/wolf32/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/Users/lglover/CLionProjects/wolf32/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/lglover/CLionProjects/wolf32/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/ndremora/Desktop/wolf/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/ndremora/Desktop/wolf/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/ndremora/Desktop/wolf/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/ndremora/Desktop/wolf/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="rebuild_cache">
-				<Option working_dir="/Users/lglover/CLionProjects/wolf32/cmake-build-debug"/>
+				<Option working_dir="/Users/ndremora/Desktop/wolf/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/Users/lglover/CLionProjects/wolf32/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/lglover/CLionProjects/wolf32/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/Users/lglover/CLionProjects/wolf32/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/lglover/CLionProjects/wolf32/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/ndremora/Desktop/wolf/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/ndremora/Desktop/wolf/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/ndremora/Desktop/wolf/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/ndremora/Desktop/wolf/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="edit_cache">
-				<Option working_dir="/Users/lglover/CLionProjects/wolf32/cmake-build-debug"/>
+				<Option working_dir="/Users/ndremora/Desktop/wolf/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/Users/lglover/CLionProjects/wolf32/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/lglover/CLionProjects/wolf32/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/Users/lglover/CLionProjects/wolf32/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/lglover/CLionProjects/wolf32/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/ndremora/Desktop/wolf/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/ndremora/Desktop/wolf/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/ndremora/Desktop/wolf/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/ndremora/Desktop/wolf/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="wolf3d">
-				<Option output="/Users/lglover/CLionProjects/wolf32/cmake-build-debug/wolf3d" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/Users/lglover/CLionProjects/wolf32/cmake-build-debug"/>
+				<Option output="/Users/ndremora/Desktop/wolf/cmake-build-debug/wolf3d" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/ndremora/Desktop/wolf/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/Users/lglover/CLionProjects/wolf32/includes"/>
-					<Add directory="/Users/lglover/CLionProjects/wolf32/libft/includes"/>
-					<Add directory="/Users/lglover/Library/Frameworks/SDL2.framework/Versions/A/Headers"/>
+					<Add directory="/Users/ndremora/Desktop/wolf/includes"/>
+					<Add directory="/Users/ndremora/Desktop/wolf/libft/includes"/>
+					<Add directory="/Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers"/>
 					<Add directory="/usr/local/include"/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/9.0.0/include"/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
@@ -55,22 +55,22 @@
 					<Add directory="/Library/Frameworks"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/Users/lglover/CLionProjects/wolf32/cmake-build-debug/Makefile&quot;  VERBOSE=1 wolf3d"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/lglover/CLionProjects/wolf32/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/Users/lglover/CLionProjects/wolf32/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/lglover/CLionProjects/wolf32/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/ndremora/Desktop/wolf/cmake-build-debug/Makefile&quot;  VERBOSE=1 wolf3d"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/ndremora/Desktop/wolf/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/ndremora/Desktop/wolf/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/ndremora/Desktop/wolf/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="wolf3d/fast">
-				<Option output="/Users/lglover/CLionProjects/wolf32/cmake-build-debug/wolf3d" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/Users/lglover/CLionProjects/wolf32/cmake-build-debug"/>
+				<Option output="/Users/ndremora/Desktop/wolf/cmake-build-debug/wolf3d" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/ndremora/Desktop/wolf/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/Users/lglover/CLionProjects/wolf32/includes"/>
-					<Add directory="/Users/lglover/CLionProjects/wolf32/libft/includes"/>
-					<Add directory="/Users/lglover/Library/Frameworks/SDL2.framework/Versions/A/Headers"/>
+					<Add directory="/Users/ndremora/Desktop/wolf/includes"/>
+					<Add directory="/Users/ndremora/Desktop/wolf/libft/includes"/>
+					<Add directory="/Users/ndremora/Library/Frameworks/SDL2.framework/Versions/A/Headers"/>
 					<Add directory="/usr/local/include"/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/9.0.0/include"/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
@@ -79,203 +79,203 @@
 					<Add directory="/Library/Frameworks"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/Users/lglover/CLionProjects/wolf32/cmake-build-debug/Makefile&quot;  VERBOSE=1 wolf3d/fast"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/lglover/CLionProjects/wolf32/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/Users/lglover/CLionProjects/wolf32/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/lglover/CLionProjects/wolf32/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/ndremora/Desktop/wolf/cmake-build-debug/Makefile&quot;  VERBOSE=1 wolf3d/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/ndremora/Desktop/wolf/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/ndremora/Desktop/wolf/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/ndremora/Desktop/wolf/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/includes/wolf3d.h">
+		<Unit filename="/Users/ndremora/Desktop/wolf/includes/wolf3d.h">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/includes/libft.h">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/includes/libft.h">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_atoi.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_atoi.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_bzero.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_bzero.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_delarr.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_delarr.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_gnl.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_gnl.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_isalnum.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_isalnum.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_isalpha.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_isalpha.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_isascii.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_isascii.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_isdigit.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_isdigit.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_isprint.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_isprint.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_itoa.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_itoa.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_lstadd.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_lstadd.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_lstdel.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_lstdel.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_lstdelone.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_lstdelone.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_lstiter.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_lstiter.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_lstmap.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_lstmap.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_lstnew.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_lstnew.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_memalloc.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_memalloc.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_memccpy.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_memccpy.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_memchr.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_memchr.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_memcmp.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_memcmp.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_memcpy.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_memcpy.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_memdel.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_memdel.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_memmove.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_memmove.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_memset.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_memset.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_putchar.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_putchar.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_putchar_fd.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_putchar_fd.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_putendl.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_putendl.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_putendl_fd.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_putendl_fd.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_putnbr.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_putnbr.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_putnbr_fd.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_putnbr_fd.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_putstr.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_putstr.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_putstr_fd.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_putstr_fd.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_strcat.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_strcat.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_strchr.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_strchr.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_strclr.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_strclr.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_strcmp.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_strcmp.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_strcpy.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_strcpy.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_strdel.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_strdel.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_strdup.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_strdup.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_strequ.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_strequ.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_striter.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_striter.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_striteri.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_striteri.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_strjoin.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_strjoin.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_strlcat.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_strlcat.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_strlen.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_strlen.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_strmap.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_strmap.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_strmapi.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_strmapi.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_strncat.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_strncat.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_strncmp.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_strncmp.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_strncpy.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_strncpy.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_strnequ.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_strnequ.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_strnew.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_strnew.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_strnstr.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_strnstr.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_strrchr.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_strrchr.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_strsplit.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_strsplit.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_strstr.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_strstr.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_strsub.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_strsub.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_strtrim.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_strtrim.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_tolower.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_tolower.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/libft/src/ft_toupper.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/libft/src/ft_toupper.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/main.c">
+		<Unit filename="/Users/ndremora/Desktop/wolf/sources/main.c">
 			<Option target="wolf3d"/>
 		</Unit>
-		<Unit filename="/Users/lglover/CLionProjects/wolf32/CMakeLists.txt">
+		<Unit filename="/Users/ndremora/Desktop/wolf/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
 	</Project>
