@@ -36,8 +36,8 @@ void		update(t_sdl *sdl, t_map *map, t_player *player)
 
 int		main(void)
 {
-	t_app		app;
-	int fd;
+	t_app	app;
+	int		fd;
 
 	init(&app.sdl);
 	player_init(&app.player);

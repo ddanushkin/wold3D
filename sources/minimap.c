@@ -19,6 +19,17 @@ void	draw_sector(t_sdl *sdl, int row, int col)
 
 void	draw_player(t_sdl *sdl, t_player *player)
 {
+	t_ipoint s;
+	t_ipoint e;
+
+	s.x = player->x;
+	s.y = player->y;
+
+	SDL_SetRenderDrawColor(sdl->ren, 0, 0, 0, 255);
+	end_point(player->direction, s, &e, 100);
+	line_add(sdl, s, e);
+	SDL_SetRenderDrawColor(sdl->ren, 255, 0, 0, 255);
+	SDL_RenderDrawPoint(sdl->ren, e.x, e.y);
 	SDL_SetRenderDrawColor(sdl->ren, 2, 191, 255, 255);
 	SDL_RenderDrawPoint(sdl->ren, player->x, player->y);
 	SDL_SetRenderDrawColor(sdl->ren, 0, 0, 0, 0);

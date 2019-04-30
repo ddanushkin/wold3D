@@ -8,7 +8,8 @@
 #include "libft.h"
 
 # define MM_SEC_SIZE 16
-# define TICK_INTERVAL 30;
+# define TICK_INTERVAL 30
+# define MAX(a,b) (((a)>(b))?(a):(b))
 
 typedef struct		s_sdl
 {
@@ -55,6 +56,18 @@ typedef struct		s_app
 	t_map			map;
 }					t_app;
 
+typedef struct		s_ipoint
+{
+	int				x;
+	int				y;
+}					t_ipoint;
+
+typedef struct		s_fpoint
+{
+	float			x;
+	float			y;
+}					t_fpoint;
+
 void				init(t_sdl *sdl);
 void				map_read(int fd, t_map *map, t_player *player);
 void				ft_error(char *str);
@@ -64,4 +77,7 @@ int					load_texture(t_node *node, char *name);
 void				player_init(t_player *player);
 void				player_vel(t_player *player, const Uint8 *state);
 void				player_move(t_player *player);
+double				to_rad(int angle);
+void				end_point(int angle, t_ipoint s, t_ipoint *e, int length);
+void				line_add(t_sdl *sdl, t_ipoint start, t_ipoint end);
 #endif
