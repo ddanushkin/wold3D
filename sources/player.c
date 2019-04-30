@@ -10,19 +10,19 @@ void	player_init(t_player *player)
 
 void	player_vel(t_player *player, const Uint8 *state)
 {
-	if(state[SDL_SCANCODE_LEFT])
+	if(state[SDL_SCANCODE_A])
 		player->x_v = -1;
 	else if(player->x_v < 0)
 		player->x_v = 0;
-	if(state[SDL_SCANCODE_RIGHT])
+	if(state[SDL_SCANCODE_D])
 		player->x_v = 1;
 	else if(player->x_v > 0)
 		player->x_v = 0;
-	if(state[SDL_SCANCODE_UP])
+	if(state[SDL_SCANCODE_W])
 		player->y_v = -1;
 	else if(player->y_v < 0)
 		player->y_v = 0;
-	if(state[SDL_SCANCODE_DOWN])
+	if(state[SDL_SCANCODE_S])
 		player->y_v = 1;
 	else if(player->y_v > 0)
 		player->y_v = 0;
