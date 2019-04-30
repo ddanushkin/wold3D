@@ -18,6 +18,7 @@ void	player_vel(t_player *player, const Uint8 *state)
 		player->y_v = (player->y_v < 0) ? 0 : -1;
 	else if (state[SDL_SCANCODE_S])
 		player->y_v = (player->y_v > 0) ? 0 : 1;
+	//hren
 }
 
 void	player_move(t_player *player)
