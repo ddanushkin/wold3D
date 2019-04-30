@@ -21,18 +21,27 @@ void	draw_player(t_sdl *sdl, t_player *player)
 {
 	t_ipoint s;
 	t_ipoint e;
+	int i;
 
+	i = 0;
 	s.x = player->x;
 	s.y = player->y;
 
+
 	SDL_SetRenderDrawColor(sdl->ren, 0, 0, 0, 255);
 	end_point(player->direction, s, &e, 100);
-	line_add(sdl, s, e);
+	while(i < 45)
+	{
+		e.y += 1;
+		line_add(sdl, s, e);
+		i++;
+	}
+
 	SDL_SetRenderDrawColor(sdl->ren, 255, 0, 0, 255);
 	SDL_RenderDrawPoint(sdl->ren, e.x, e.y);
 	SDL_SetRenderDrawColor(sdl->ren, 2, 191, 255, 255);
 	SDL_RenderDrawPoint(sdl->ren, player->x, player->y);
-	SDL_SetRenderDrawColor(sdl->ren, 0, 0, 0, 0);
+	//SDL_SetRenderDrawColor(sdl->ren, 0, 0, 0, 0);
 }
 
 void	minimap_draw(t_map *map, t_sdl *sdl, t_player *player)

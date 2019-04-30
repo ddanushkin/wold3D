@@ -19,8 +19,8 @@ void		line_add(t_sdl *sdl, t_ipoint start, t_ipoint end)
 	float		len;
 
 	SDL_SetRenderDrawColor(sdl->ren, 2, 191, 255, 255);
-	current.x = start.x + 0.5;
-	current.y = start.y + 0.5;
+	current.x = start.x + 1;
+	current.y = start.y;
 	len = line_len(end.x, end.y, current.x, current.y);
 	delta.x = (end.x - start.x) / len;
 	delta.y = (end.y - start.y) / len;
