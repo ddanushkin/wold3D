@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   wolf3d.h                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: lglover <lglover@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/29 12:28:27 by lglover           #+#    #+#             */
-/*   Updated: 2019/04/29 19:15:40 by lglover          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef WOLF3D_WOLF3D_H
 #define WOLF3D_WOLF3D_H
 
@@ -26,6 +14,7 @@ typedef struct		s_sdl
 	int 			height;
 	SDL_Renderer	*ren;
 	SDL_Event		event;
+	SDL_Surface		*textures;
 }					t_sdl;
 
 typedef struct		s_player
@@ -66,4 +55,6 @@ void				read_map(int fd, t_map *map, t_player *player);
 void				ft_error(char *str);
 void				quit_properly(t_app *sdl);
 void				draw_minimap(t_map *map, t_sdl *sdl, t_player *player);
+int					loadMedia(t_sdl *sdl);
+SDL_Surface 		*loadSurface( char *str );
 #endif
