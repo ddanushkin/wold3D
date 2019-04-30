@@ -28,6 +28,8 @@ void	player_vel(t_player *player, const Uint8 *state)
 		player->y_v = 0;
 }
 
+//her
+
 void	player_move(t_player *player)
 {
 	player->x += player->speed * player->x_v;
