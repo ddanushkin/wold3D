@@ -37,11 +37,11 @@ void	fill_row(t_map *map, char **data, int row, t_player *player)
 			}
 			else if (*data[col] == 'P')
 			{
+				player->y = row * MM_SEC_SIZE + (MM_SEC_SIZE / 2);
+				player->x = col * MM_SEC_SIZE + (MM_SEC_SIZE / 2);
 				map->nodes[row][col].x = col * MM_SEC_SIZE;
 				map->nodes[row][col].y = row * MM_SEC_SIZE;
 				map->nodes[row][col++].collidable = false;
-				player->y = col * MM_SEC_SIZE + (MM_SEC_SIZE / 2);
-				player->x = row * MM_SEC_SIZE + (MM_SEC_SIZE / 2);
 			}
 			else
 			{
