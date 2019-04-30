@@ -7,6 +7,9 @@
 #include <stdio.h> /* Delete! */
 #include "libft.h"
 
+# define MM_SEC_SIZE 16
+# define TICK_INTERVAL 30;
+
 typedef struct		s_sdl
 {
 	SDL_Window		*win;
@@ -19,9 +22,10 @@ typedef struct		s_sdl
 typedef struct		s_player
 {
 	int				x;
-	int				y;
-	int				d;
-	int				v;
+	int 			y;
+	int				x_v;
+	int				y_v;
+	int				speed;
 	int				a;
 }					t_player;
 
@@ -29,7 +33,6 @@ typedef struct		s_node
 {
 	int				x;
 	int				y;
-	char 			*name;
 	SDL_Surface		*texture;
 	int 			collidable;
 }					t_node;
@@ -48,12 +51,13 @@ typedef struct		s_app
 	t_map			map;
 }					t_app;
 
-# define MM_SEC_SIZE 16
-
-void				init(t_sdl *sdl, t_player *player);
+void				init(t_sdl *sdl);
 void				read_map(int fd, t_map *map, t_player *player);
 void				ft_error(char *str);
 void				quit_properly(t_app *sdl);
 void				draw_minimap(t_map *map, t_sdl *sdl, t_player *player);
-int					loadMedia(t_node *node);
+int					load_texture(t_node *node, char *name);
+void				player_init(t_player *player);
+void				player_vel(t_player *player, SDL_Event *event, const Uint8 *state);
+void				player_move(t_player *player);
 #endif

@@ -1,8 +1,20 @@
 #include "wolf3d.h"
 
+Uint32 time_left(Uint32 next_time)
+{
+	Uint32 now;
+
+	now = SDL_GetTicks();
+	if(next_time <= now)
+		return 0;
+	else
+		return next_time - now;
+}
+
 void		update(t_sdl *sdl, t_map *map, t_player *player)
 {
 	const Uint8	*state;
+	static Uint32 next_time;
 
 	while (1)
 	{
@@ -13,26 +25,22 @@ void		update(t_sdl *sdl, t_map *map, t_player *player)
 		state = SDL_GetKeyboardState(NULL);
 		if (state[SDL_SCANCODE_ESCAPE])
 			break;
-		if (state[SDL_SCANCODE_LEFT])
-			player->x++;
-		if (state[SDL_SCANCODE_RIGHT])
-			player->x--;
-		if (state[SDL_SCANCODE_UP])
-			player->y++;
-		if (state[SDL_SCANCODE_DOWN])
-			player->y--;
+		player_vel(player, &sdl->event, state);
+		player_move(player);
 		draw_minimap(map, sdl, player);
 		SDL_RenderPresent(sdl->ren);
+		SDL_Delay(time_left(next_time));
+		next_time += TICK_INTERVAL;
 	}
 }
 
 int		main(void)
 {
 	t_app		app;
-	SDL_Surface *image = SDL_LoadBMP("../resources/1.bmp");
 	int fd;
 
-	init(&app.sdl, &app.player);
+	init(&app.sdl);
+	player_init(&app.player);
 	if ((fd = open("../levels/1.wolf3d", O_RDONLY)) != -1)
 	{
 		read_map(fd, &app.map, &app.player);

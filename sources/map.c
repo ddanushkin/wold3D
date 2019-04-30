@@ -19,16 +19,18 @@ void	map_init(int fd, t_map *map)
 		map->nodes[i++] = (t_node *)malloc(sizeof(t_node) * map->cols);
 }
 
-int		loadMedia(t_node *node)
+int		load_texture(t_node *node, char *name)
 {
-	char *s2 = node->name;
-	char s1[99] = "../resources/";
-	ft_strcat(s1, s2);
-	node->texture = SDL_LoadBMP(s1);
-	//node->texture = SDL_LoadBMP("../resources/1.bmp");
+	char file_path[50];
+
+	file_path[0] = '\0';
+	ft_strcat(file_path, "../resources/");
+	ft_strcat(file_path, name);
+	ft_strcat(file_path, ".bmp");
+	node->texture = SDL_LoadBMP(file_path);
 	if (node->texture == NULL)
 	{
-		printf( "Failed to load right image!\n" );
+		printf("Failed to load right image!\n");
 		return (0);
 	}
 	return (1);
@@ -41,11 +43,9 @@ void	fill_row(t_map *map, char **data, int row, t_player *player)
 		col = 0;
 		while (col < map->cols)
 		{
-			if (*data[col] >= '1' && *data[col] <= '5')
+			if (*data[col] >= '1' && *data[col] <= '9')
 			{
-				map->nodes[row][col].name = ft_strcat(data[col], ".bmp");
-				loadMedia(&map->nodes[row][col]);
-				//map->nodes[row][col].texture = SDL_LoadBMP(ft_strcat("../resources/", map->nodes[row][col].name));
+				load_texture(&map->nodes[row][col], data[col]);
 				map->nodes[row][col].x = col * MM_SEC_SIZE;
 				map->nodes[row][col].y = row * MM_SEC_SIZE;
 				map->nodes[row][col++].collidable = true;

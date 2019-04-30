@@ -1,12 +1,9 @@
 #include "wolf3d.h"
 
-void		init(t_sdl *sdl, t_player *player)
+void		init(t_sdl *sdl)
 {
 	sdl->width = 640;
 	sdl->height = 480;
-
-	player->x = sdl->width / 2;
-	player->y = sdl->height / 2;
 
 	//float fFOV = 3.14159 / 4.0;
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
