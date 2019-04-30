@@ -25,9 +25,9 @@ void		update(t_sdl *sdl, t_map *map, t_player *player)
 		state = SDL_GetKeyboardState(NULL);
 		if (state[SDL_SCANCODE_ESCAPE])
 			break;
-		player_vel(player, &sdl->event, state);
+		player_vel(player, state);
 		player_move(player);
-		draw_minimap(map, sdl, player);
+		minimap_draw(map, sdl, player);
 		SDL_RenderPresent(sdl->ren);
 		SDL_Delay(time_left(next_time));
 		next_time += TICK_INTERVAL;
@@ -43,7 +43,7 @@ int		main(void)
 	player_init(&app.player);
 	if ((fd = open("../levels/1.wolf3d", O_RDONLY)) != -1)
 	{
-		read_map(fd, &app.map, &app.player);
+		map_read(fd, &app.map, &app.player);
 		update(&app.sdl, &app.map, &app.player);
 	}
 	else

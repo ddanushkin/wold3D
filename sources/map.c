@@ -67,7 +67,7 @@ void	fill_row(t_map *map, char **data, int row, t_player *player)
 		}
 }
 
-void	read_map(int fd, t_map *map, t_player *player)
+void	map_read(int fd, t_map *map, t_player *player)
 {
 	char	*line;
 	char	**data;

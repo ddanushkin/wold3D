@@ -52,12 +52,12 @@ typedef struct		s_app
 }					t_app;
 
 void				init(t_sdl *sdl);
-void				read_map(int fd, t_map *map, t_player *player);
+void				map_read(int fd, t_map *map, t_player *player);
 void				ft_error(char *str);
 void				quit_properly(t_app *sdl);
-void				draw_minimap(t_map *map, t_sdl *sdl, t_player *player);
+void				minimap_draw(t_map *map, t_sdl *sdl, t_player *player);
 int					load_texture(t_node *node, char *name);
 void				player_init(t_player *player);
-void				player_vel(t_player *player, SDL_Event *event, const Uint8 *state);
+void				player_vel(t_player *player, const Uint8 *state);
 void				player_move(t_player *player);
 #endif

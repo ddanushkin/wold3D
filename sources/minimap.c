@@ -24,7 +24,7 @@ void	draw_player(t_sdl *sdl, t_player *player)
 	SDL_SetRenderDrawColor(sdl->ren, 0, 0, 0, 0);
 }
 
-void	draw_minimap(t_map *map, t_sdl *sdl, t_player *player)
+void	minimap_draw(t_map *map, t_sdl *sdl, t_player *player)
 {
 	int		row;
 	int		col;
