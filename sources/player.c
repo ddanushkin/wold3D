@@ -2,6 +2,7 @@
 
 void	player_init(t_player *player)
 {
+	player->direction = 0;
 	player->x_vector = -1;
 	player->y_vector = 0;
 	player->x_plane = 0;
@@ -29,12 +30,40 @@ void	player_vel(t_player *player, const Uint8 *state)
 		player->y_v = 1;
 	else if(player->y_v > 0)
 		player->y_v = 0;
+	if (state[SDL_SCANCODE_LEFT])
+	{
+		player->direction++;
+		if (player->direction > 360)
+			player->direction = 0;
+	}
+	if (state[SDL_SCANCODE_RIGHT])
+	{
+		player->direction--;
+		if (player->direction < 0)
+			player->direction = 360;
+	}
 }
-
-//hren2
 
 void	player_move(t_player *player)
 {
-	player->x += player->speed * player->x_v;
-	player->y += player->speed * player->y_v;
+	if ((player->direction >= 0 && player->direction <= 90) || player->direction == 360)
+	{
+		player->x += player->speed * player->x_v;
+		player->y -= player->speed * player->y_v;
+	}
+	else if ((player->direction >= 91 && player->direction <= 180))
+	{
+		player->x -= player->speed * player->x_v;
+		player->y -= player->speed * player->y_v;
+	}
+	else if ((player->direction >= 181 && player->direction <= 270))
+	{
+		player->x += player->speed * player->x_v;
+		player->y += player->speed * player->y_v;
+	}
+	else if ((player->direction >= 271 && player->direction <= 359))
+	{
+		player->x -= player->speed * player->x_v;
+		player->y += player->speed * player->y_v;
+	}
 }
