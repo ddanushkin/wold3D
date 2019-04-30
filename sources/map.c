@@ -25,7 +25,6 @@ int		loadMedia(t_node *node)
 	char s1[99] = "../resources/";
 	ft_strcat(s1, s2);
 	node->texture = SDL_LoadBMP(s1);
-	//node->texture = SDL_LoadBMP("../resources/1.bmp");
 	if (node->texture == NULL)
 	{
 		printf( "Failed to load right image!\n" );
@@ -44,7 +43,11 @@ void	fill_row(t_map *map, char **data, int row, t_player *player)
 			if (*data[col] >= '1' && *data[col] <= '5')
 			{
 				map->nodes[row][col].name = ft_strcat(data[col], ".bmp");
-				loadMedia(&map->nodes[row][col]);
+				if (loadMedia(&map->nodes[row][col]) == 0)
+				{
+					ft_error("ti sam znaesh");
+				}
+
 				//map->nodes[row][col].texture = SDL_LoadBMP(ft_strcat("../resources/", map->nodes[row][col].name));
 				map->nodes[row][col].x = col * MM_SEC_SIZE;
 				map->nodes[row][col].y = row * MM_SEC_SIZE;
