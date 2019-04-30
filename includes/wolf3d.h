@@ -14,7 +14,6 @@ typedef struct		s_sdl
 	int 			height;
 	SDL_Renderer	*ren;
 	SDL_Event		event;
-	SDL_Surface		*textures;
 }					t_sdl;
 
 typedef struct		s_player
@@ -30,7 +29,8 @@ typedef struct		s_node
 {
 	int				x;
 	int				y;
-	char			*texture;
+	char 			*name;
+	SDL_Surface		*texture;
 	int 			collidable;
 }					t_node;
 
@@ -55,6 +55,5 @@ void				read_map(int fd, t_map *map, t_player *player);
 void				ft_error(char *str);
 void				quit_properly(t_app *sdl);
 void				draw_minimap(t_map *map, t_sdl *sdl, t_player *player);
-int					loadMedia(t_sdl *sdl);
-SDL_Surface 		*loadSurface( char *str );
+int					loadMedia(t_node *node);
 #endif

@@ -19,18 +19,33 @@ void	map_init(int fd, t_map *map)
 		map->nodes[i++] = (t_node *)malloc(sizeof(t_node) * map->cols);
 }
 
+int		loadMedia(t_node *node)
+{
+	char *s2 = node->name;
+	char s1[99] = "../resources/";
+	ft_strcat(s1, s2);
+	node->texture = SDL_LoadBMP(s1);
+	//node->texture = SDL_LoadBMP("../resources/1.bmp");
+	if (node->texture == NULL)
+	{
+		printf( "Failed to load right image!\n" );
+		return (0);
+	}
+	return (1);
+}
+
 void	fill_row(t_map *map, char **data, int row, t_player *player)
 {
 		int col;
-		char *s;
 
 		col = 0;
 		while (col < map->cols)
 		{
-			if (*data[col] == '1')
+			if (*data[col] >= '1' && *data[col] <= '5')
 			{
-				s = ft_strjoin(data[col], ".bmp");
-				map->nodes[row][col].texture = s;
+				map->nodes[row][col].name = ft_strcat(data[col], ".bmp");
+				loadMedia(&map->nodes[row][col]);
+				//map->nodes[row][col].texture = SDL_LoadBMP(ft_strcat("../resources/", map->nodes[row][col].name));
 				map->nodes[row][col].x = col * MM_SEC_SIZE;
 				map->nodes[row][col].y = row * MM_SEC_SIZE;
 				map->nodes[row][col++].collidable = true;
