@@ -25,7 +25,7 @@ void		update(t_sdl *sdl, t_map *map, t_player *player)
 		state = SDL_GetKeyboardState(NULL);
 		if (state[SDL_SCANCODE_ESCAPE])
 			break;
-		player_vel(player, &sdl->event, state);
+		player_vel(player, state);
 		player_move(player);
 		draw_minimap(map, sdl, player);
 		SDL_RenderPresent(sdl->ren);
