@@ -29,10 +29,10 @@ void		update(t_sdl *sdl, t_map *map, t_player *player)
 int		main(void)
 {
 	t_app		app;
+	SDL_Surface *image = SDL_LoadBMP("../resources/1.bmp");
 	int fd;
 
 	init(&app.sdl, &app.player);
-
 	if ((fd = open("../levels/1.wolf3d", O_RDONLY)) != -1)
 	{
 		read_map(fd, &app.map, &app.player);
