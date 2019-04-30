@@ -34,6 +34,8 @@ void		update(t_sdl *sdl, t_map *map, t_player *player)
 	}
 }
 
+//Test
+
 int		main(void)
 {
 	t_app		app;

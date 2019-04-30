@@ -26,6 +26,7 @@ void	player_vel(t_player *player, const Uint8 *state)
 		player->y_v = 1;
 	else if(player->y_v > 0)
 		player->y_v = 0;
+	//hren2
 }
 
 //her

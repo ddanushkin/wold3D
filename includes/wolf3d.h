@@ -27,6 +27,7 @@ typedef struct		s_player
 	int				y_v;
 	int				speed;
 	int				a;
+	// hren
 }					t_player;
 
 typedef struct		s_node
