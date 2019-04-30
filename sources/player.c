@@ -2,7 +2,10 @@
 
 void	player_init(t_player *player)
 {
-	player->a = 180;
+	player->x_vector = -1;
+	player->y_vector = 0;
+	player->x_plane = 0;
+	player->y_plane = 0.66;
 	player->speed = 1;
 	player->x_v = 0;
 	player->y_v = 0;

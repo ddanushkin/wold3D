@@ -26,7 +26,10 @@ typedef struct		s_player
 	int				x_v;
 	int				y_v;
 	int				speed;
-	int				a;
+	double			x_vector;
+	double			y_vector;
+	double 			x_plane;
+	double 			y_plane;
 	// hren
 }					t_player;
 
