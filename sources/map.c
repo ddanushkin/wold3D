@@ -38,33 +38,33 @@ int		load_texture(t_node *node, char *name)
 
 void	fill_row(t_map *map, char **data, int row, t_player *player)
 {
-	int col;
+		int col;
 
-	col = 0;
-	while (col < map->cols)
-	{
-		if (*data[col] >= '1' && *data[col] <= '9')
+		col = 0;
+		while (col < map->cols)
 		{
-			load_texture(&map->nodes[row][col], data[col]);
-			map->nodes[row][col].x = col * MM_SEC_SIZE;
-			map->nodes[row][col].y = row * MM_SEC_SIZE;
-			map->nodes[row][col++].collidable = true;
+			if (*data[col] >= '1' && *data[col] <= '9')
+			{
+				load_texture(&map->nodes[row][col], data[col]);
+				map->nodes[row][col].x = col * MM_SEC_SIZE;
+				map->nodes[row][col].y = row * MM_SEC_SIZE;
+				map->nodes[row][col++].collidable = true;
+			}
+			else if (*data[col] == 'P')
+			{
+				player->y = row * MM_SEC_SIZE + (MM_SEC_SIZE / 2);
+				player->x = col * MM_SEC_SIZE + (MM_SEC_SIZE / 2);
+				map->nodes[row][col].x = col * MM_SEC_SIZE;
+				map->nodes[row][col].y = row * MM_SEC_SIZE;
+				map->nodes[row][col++].collidable = false;
+			}
+			else
+			{
+				map->nodes[row][col].x = col * MM_SEC_SIZE;
+				map->nodes[row][col].y = row * MM_SEC_SIZE;
+				map->nodes[row][col++].collidable = false;
+			}
 		}
-		else if (*data[col] == 'P')
-		{
-			player->y = row * MM_SEC_SIZE + (MM_SEC_SIZE / 2);
-			player->x = col * MM_SEC_SIZE + (MM_SEC_SIZE / 2);
-			map->nodes[row][col].x = col * MM_SEC_SIZE;
-			map->nodes[row][col].y = row * MM_SEC_SIZE;
-			map->nodes[row][col++].collidable = false;
-		}
-		else
-		{
-			map->nodes[row][col].x = col * MM_SEC_SIZE;
-			map->nodes[row][col].y = row * MM_SEC_SIZE;
-			map->nodes[row][col++].collidable = false;
-		}
-	}
 }
 
 void	map_read(int fd, t_map *map, t_player *player)
