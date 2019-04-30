@@ -31,7 +31,6 @@ typedef struct		s_player
 	double			y_vector;
 	double 			x_plane;
 	double 			y_plane;
-	// hren
 }					t_player;
 
 typedef struct		s_node
