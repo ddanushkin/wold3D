@@ -38,7 +38,7 @@ int		load_texture(t_node *node, char *name)
 
 void	fill_row(t_map *map, char **data, int row, t_player *player)
 {
-		int col;
+		int		col;
 
 		col = 0;
 		while (col < map->cols)

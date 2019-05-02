@@ -12,15 +12,14 @@ static float	line_len(double x_e, double y_e, double x_s, double y_s)
 	return (len);
 }
 
-void		line_add(t_sdl *sdl, t_map *map, t_ipoint start, t_ipoint end)
+static void		line_draw(t_sdl *sdl, t_map *map, t_ipoint start, t_ipoint end)
 {
 	t_fpoint	current;
 	t_fpoint	delta;
 	float		len;
 
-	SDL_SetRenderDrawColor(sdl->ren, 2, 191, 255, 255);
-	current.x = start.x + 1;
-	current.y = start.y;
+	current.x = start.x + 0.5;
+	current.y = start.y + 0.5;
 	len = line_len(end.x, end.y, current.x, current.y);
 	delta.x = (end.x - start.x) / len;
 	delta.y = (end.y - start.y) / len;
@@ -29,8 +28,19 @@ void		line_add(t_sdl *sdl, t_map *map, t_ipoint start, t_ipoint end)
 		current.x += delta.x;
 		current.y += delta.y;
 		if (map->nodes[(int)current.y / MM_SEC_SIZE][(int)current.x / MM_SEC_SIZE].collidable)
-			len = 0;
-		SDL_RenderDrawPoint(sdl->ren, current.x, current.y);
+			return ;
+		SDL_RenderDrawPoint(sdl->ren, (int)current.x, (int)current.y);
 	}
 }
 
+void			cast_ray(t_sdl *sdl, t_map *map, t_player *player, int a)
+{
+	t_ipoint s;
+	t_ipoint e;
+
+	s.x = player->x;
+	s.y = player->y;
+
+	end_point(a, s, &e, 1000);
+	line_draw(sdl, map, s, e);
+}

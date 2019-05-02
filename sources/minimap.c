@@ -1,9 +1,9 @@
 #include "wolf3d.h"
 
-void	draw_sector(t_sdl *sdl, int row, int col)
+void		draw_sector(t_sdl *sdl, int row, int col)
 {
-	int i;
-	int j;
+	int		i;
+	int		j;
 
 	i = 0;
 	SDL_SetRenderDrawColor(sdl->ren, 163, 163, 163, 255);
@@ -17,33 +17,29 @@ void	draw_sector(t_sdl *sdl, int row, int col)
 	SDL_SetRenderDrawColor(sdl->ren, 0, 0, 0, 0);
 }
 
-void	draw_player(t_sdl *sdl, t_map *map, t_player *player)
+static void	cast_rays(t_sdl *sdl, t_map *map, t_player *player, int fov)
 {
-	t_ipoint s;
-	t_ipoint e;
-	int i;
+	int		i;
 
 	i = 0;
-	s.x = player->x;
-	s.y = player->y;
-
-	SDL_SetRenderDrawColor(sdl->ren, 0, 0, 0, 255);
-	end_point(player->direction, s, &e, 1000);
-	line_add(sdl, map, s, e);
-	while(i < 31)
+	SDL_SetRenderDrawColor(sdl->ren, 255, 0, 0, 255);
+	cast_ray(sdl, map, player, player->direction);
+	while(i <= fov / 2)
 	{
-		end_point(player->direction - i, s, &e, 1000);
-		line_add(sdl, map, s, e);
-		end_point(player->direction + i, s, &e, 1000);
-		line_add(sdl, map, s, e);
+		cast_ray(sdl, map, player, player->direction + i);
+		cast_ray(sdl, map, player, player->direction - i);
 		i++;
 	}
-	SDL_SetRenderDrawColor(sdl->ren, 255, 0, 0, 255);
+}
+
+void		draw_player(t_sdl *sdl, t_map *map, t_player *player)
+{
+	cast_rays(sdl, map, player, 60);
 	SDL_SetRenderDrawColor(sdl->ren, 2, 191, 255, 255);
 	SDL_RenderDrawPoint(sdl->ren, player->x, player->y);
 }
 
-void	minimap_draw(t_map *map, t_sdl *sdl, t_player *player)
+void		minimap_draw(t_map *map, t_sdl *sdl, t_player *player)
 {
 	int		row;
 	int		col;
@@ -55,10 +51,7 @@ void	minimap_draw(t_map *map, t_sdl *sdl, t_player *player)
 		while (col < map->cols)
 		{
 			if (map->nodes[row][col].collidable)
-			{
 				draw_sector(sdl, row, col);
-				//draw_player(sdl, player);
-			}
 			col++;
 		}
 		row++;
