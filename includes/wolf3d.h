@@ -7,7 +7,7 @@
 #include <stdio.h> /* Delete! */
 #include "libft.h"
 
-# define MM_SEC_SIZE 16
+# define MM_SEC_SIZE 32
 # define TICK_INTERVAL 30
 # define MAX(a,b) (((a)>(b))?(a):(b))
 
@@ -79,5 +79,5 @@ void				player_vel(t_player *player, const Uint8 *state);
 void				player_move(t_player *player);
 double				to_rad(int angle);
 void				end_point(int angle, t_ipoint s, t_ipoint *e, int length);
-void				line_add(t_sdl *sdl, t_ipoint start, t_ipoint end);
+void				line_add(t_sdl *sdl, t_map *map, t_ipoint start, t_ipoint end);
 #endif

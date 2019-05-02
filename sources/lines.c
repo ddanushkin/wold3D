@@ -12,7 +12,7 @@ static float	line_len(double x_e, double y_e, double x_s, double y_s)
 	return (len);
 }
 
-void		line_add(t_sdl *sdl, t_ipoint start, t_ipoint end)
+void		line_add(t_sdl *sdl, t_map *map, t_ipoint start, t_ipoint end)
 {
 	t_fpoint	current;
 	t_fpoint	delta;
@@ -28,6 +28,8 @@ void		line_add(t_sdl *sdl, t_ipoint start, t_ipoint end)
 	{
 		current.x += delta.x;
 		current.y += delta.y;
+		if (map->nodes[(int)current.y / MM_SEC_SIZE][(int)current.x / MM_SEC_SIZE].collidable)
+			len = 0;
 		SDL_RenderDrawPoint(sdl->ren, current.x, current.y);
 	}
 }
