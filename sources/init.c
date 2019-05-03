@@ -2,8 +2,8 @@
 
 void		init(t_sdl *sdl)
 {
-	sdl->width = 640;
-	sdl->height = 480;
+	sdl->width = 7 * MM_SEC_SIZE + 100;
+	sdl->height = 7 * MM_SEC_SIZE;
 
 	//float fFOV = 3.14159 / 4.0;
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)

@@ -17,21 +17,6 @@ void		draw_sector(t_sdl *sdl, int row, int col)
 	SDL_SetRenderDrawColor(sdl->ren, 0, 0, 0, 0);
 }
 
-static void	cast_rays(t_sdl *sdl, t_map *map, t_player *player, int fov)
-{
-	int		i;
-
-	i = 0;
-	SDL_SetRenderDrawColor(sdl->ren, 255, 0, 0, 255);
-	cast_ray(sdl, map, player, player->direction);
-	while(i <= fov / 2)
-	{
-		cast_ray(sdl, map, player, player->direction + i);
-		cast_ray(sdl, map, player, player->direction - i);
-		i++;
-	}
-}
-
 void		draw_player(t_sdl *sdl, t_map *map, t_player *player)
 {
 	cast_rays(sdl, map, player, 60);
