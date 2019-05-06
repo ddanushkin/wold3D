@@ -2,7 +2,7 @@
 
 void	player_init(t_player *player)
 {
-	player->direction = 90;
+	player->direction = 80;
 	player->x_vector = -1;
 	player->y_vector = 0;
 	player->x_plane = 0;
@@ -31,17 +31,11 @@ void	player_vel(t_player *player, const Uint8 *state)
 	else if(player->y_v > 0)
 		player->y_v = 0;
 	if (state[SDL_SCANCODE_LEFT])
-	{
-		player->direction++;
-		if (player->direction > 360)
-			player->direction = 0;
-	}
+		--player->direction < 0 ? player->direction = 360 : 0;
 	if (state[SDL_SCANCODE_RIGHT])
-	{
-		player->direction--;
-		if (player->direction < 0)
-			player->direction = 360;
-	}
+		++player->direction > 360 ? player->direction = 0 : 0;
+	if (state[SDL_SCANCODE_LEFT] || state[SDL_SCANCODE_RIGHT])
+		printf("player_dir - %d\n", player->direction);
 }
 
 void	player_move(t_player *player)

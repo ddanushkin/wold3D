@@ -27,7 +27,7 @@ typedef struct		s_player
 	int				x_v;
 	int				y_v;
 	int				speed;
-	int 			direction;
+	int				direction;
 	double			x_vector;
 	double			y_vector;
 	double 			x_plane;
@@ -67,6 +67,13 @@ typedef struct		s_fpoint
 	float			x;
 	float			y;
 }					t_fpoint;
+
+typedef struct		s_collision_point
+{
+	float			x;
+	float			y;
+	int				dist;
+}					t_collision_point;
 
 void				init(t_sdl *sdl);
 void				map_read(int fd, t_map *map, t_player *player);
