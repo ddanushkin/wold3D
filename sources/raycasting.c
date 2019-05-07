@@ -157,15 +157,22 @@ void		cast_rays(t_sdl *sdl, t_map *map, t_player *player, int fov)
 		coll_vert = cast_ray_v(map, player, i);
 		if (coll_horz->dist < coll_vert->dist)
 		{
-			draw_ray_collision(sdl, player, *coll_horz, 0, 0, 255);
-			dist = coll_horz->dist * cos(player->direction - i);
+			//draw_ray_collision(sdl, player, *coll_horz, 0, 0, 255);
+			a_rad = (player->direction - i) * (M_PI / 180.0);
+			dist = coll_horz->dist * (cos(a_rad));
 		}
 		else
 		{
-			draw_ray_collision(sdl, player, *coll_vert, 0, 255, 0);
-			dist = coll_vert->dist * cos(player->direction - i);
+			//draw_ray_collision(sdl, player, *coll_vert, 0, 255, 0);
+			a_rad = (player->direction - i) * (M_PI / 180.0);
+			dist = coll_vert->dist * (cos(a_rad));
 		}
-		slice_hieght = 64 / dist * sdl->dist_to_pp;
+		if (dist != 0)
+		{
+			slice_hieght = 64 / dist * sdl->dist_to_pp;
+			SDL_SetRenderDrawColor(sdl->ren, 195, 0, 255, 255);
+			SDL_RenderDrawLine(sdl->ren, j, sdl->height/2 - slice_hieght/2, j, sdl->height/2 + slice_hieght/2);
+		}
 		i += inc;
 		if (i >= 360)
 			i = 360.0 - i;
