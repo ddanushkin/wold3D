@@ -70,8 +70,8 @@ typedef struct		s_fpoint
 
 typedef struct		s_collision_point
 {
-	float			x;
-	float			y;
+	int			x;
+	int			y;
 	int				dist;
 }					t_collision_point;
 
