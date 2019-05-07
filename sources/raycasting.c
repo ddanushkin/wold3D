@@ -25,7 +25,10 @@ static t_collision_point	*cast_ray_v(t_map *map, t_player *player, double a)
 	collision = (t_collision_point *)malloc(sizeof(t_collision_point));
 	a_rad = (a - 90.0) * (M_PI / 180.0);
 	if (a == 90 || a == 270)
-		return(NULL);
+	{
+		collision->dist = 9999;
+		return(collision);
+	}
 	if (a > 90 && a < 270)
 	{
 		start.x = (player->x / 64) * 64 - 1;
@@ -82,7 +85,10 @@ static t_collision_point	*cast_ray_h(t_map *map, t_player *player, double a)
 	collision = (t_collision_point *)malloc(sizeof(t_collision_point));
 	a_rad = a * (M_PI / 180.0);
 	if (a == 0 || a == 180)
-		return(NULL);
+	{
+		collision->dist = 9999;
+		return(collision);
+	}
 	if (a > 0 && a < 180)
 	{
 		start.y = (player->y / 64) * 64 - 1;
@@ -136,8 +142,8 @@ void		cast_rays(t_sdl *sdl, t_map *map, t_player *player, int fov)
 	float		inc;
 	t_collision_point	*coll_horz;
 	t_collision_point	*coll_vert;
-
 	double a_rad;
+
 	inc = floor(60.0/sdl->width*100)/100.0;
 	i = (float)player->direction - 30.0;
 	if (i <= 0)
