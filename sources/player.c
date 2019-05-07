@@ -2,7 +2,7 @@
 
 void	player_init(t_player *player)
 {
-	player->direction = 80;
+	player->direction = 90;
 	player->x_vector = -1;
 	player->y_vector = 0;
 	player->x_plane = 0;
