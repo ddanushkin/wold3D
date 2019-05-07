@@ -26,8 +26,8 @@ void		update(t_sdl *sdl, t_map *map, t_player *player)
 		if (state[SDL_SCANCODE_ESCAPE])
 			break;
 		player_vel(player, state);
-		player_move(player);
 		minimap_draw(map, sdl, player);
+		player_move(player);
 		SDL_RenderPresent(sdl->ren);
 		SDL_Delay(time_left(next_time));
 		next_time += TICK_INTERVAL;

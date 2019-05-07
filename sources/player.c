@@ -1,5 +1,29 @@
 #include "wolf3d.h"
 
+void	player_is_collising(t_map *map, t_player *player)
+{
+	if (player->x_v < 0)
+	{
+		if(map->nodes[player->y / 64][(player->x - player->speed) / 64].collidable)
+			player->x_v = 0;
+	}
+	if (player->x_v > 0)
+	{
+		if(map->nodes[player->y / 64][(player->x + player->speed) / 64].collidable)
+			player->x_v = 0;
+	}
+	if (player->y_v < 0)
+	{
+		if(map->nodes[(player->y - player->speed) / 64][player->x / 64].collidable)
+			player->y_v = 0;
+	}
+	if (player->y_v > 0)
+	{
+		if(map->nodes[(player->y + player->speed) / 64][player->x / 64].collidable)
+			player->y_v = 0;
+	}
+}
+
 void	player_init(t_player *player)
 {
 	player->direction = 90;

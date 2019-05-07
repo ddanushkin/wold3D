@@ -85,4 +85,5 @@ void				player_init(t_player *player);
 void				player_vel(t_player *player, const Uint8 *state);
 void				player_move(t_player *player);
 void				cast_rays(t_sdl *sdl, t_map *map, t_player *player, int fov);
+void				player_is_collising(t_map *map, t_player *player);
 #endif

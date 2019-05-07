@@ -124,7 +124,6 @@ void		cast_rays(t_sdl *sdl, t_map *map, t_player *player, int fov)
 	t_collision_point	*coll_vert;
 
 	double a_rad;
-
 	inc = floor(60.0/sdl->width*100)/100.0;
 	i = (float)player->direction - 30.0;
 	if (i <= 0)
