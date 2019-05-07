@@ -40,12 +40,15 @@ static t_collision_point	*cast_ray_v(t_map *map, t_player *player, double a)
 	}
 	start.y = player->y + (start.x - player->x) / tan(a_rad);
 	if (start.y < 0 || start.x < 0 || (long)(start.y / 64) >= map->rows || (long)(start.x / 64) >= map->cols)
-		return(NULL);
+	{
+		collision->dist = 9999;
+		return(collision);
+	}
 	if (map->nodes[(long)(start.y / 64)][(long)(start.x / 64)].collidable)
 	{
 		collision->x = start.x;
 		collision->y = start.y;
-		collision->dist = (player->x - start.x) * (player->x - start.x) + (player->y - start.y) * (player->y - start.y);
+		collision->dist = sqrt(abs(player->x - start.x) * abs(player->x - start.x) + abs(player->x - start.x) * abs(player->x - start.x));
 		return(collision);
 	}
 	while(start.x >= 0 && start.x < map->cols * 64 && start.y >= 0 && start.y < map->rows * 64)
@@ -53,16 +56,20 @@ static t_collision_point	*cast_ray_v(t_map *map, t_player *player, double a)
 		start.x = start.x + step.x;
 		start.y = start.y + step.y;
 		if (start.y < 0 || start.x < 0 || (int)(start.y / 64) >= map->rows || (int)(start.x / 64) >= map->cols)
-			return(NULL);
+		{
+			collision->dist = 9999;
+			return(collision);
+		}
 		if (map->nodes[(long)(start.y / 64)][(long)(start.x / 64)].collidable)
 		{
 			collision->x = start.x;
 			collision->y = start.y;
-			collision->dist = (player->x - start.x) * (player->x - start.x) + (player->y - start.y) * (player->y - start.y);
+			collision->dist = sqrt(abs(player->x - start.x) * abs(player->x - start.x) + abs(player->x - start.x) * abs(player->x - start.x));
 			return(collision);
 		}
 	}
-	return(NULL);
+	collision->dist = 9999;
+	return(collision);
 }
 
 static t_collision_point	*cast_ray_h(t_map *map, t_player *player, double a)
@@ -90,12 +97,15 @@ static t_collision_point	*cast_ray_h(t_map *map, t_player *player, double a)
 	}
 	start.x = player->x + (player->y - start.y) / tan(a_rad);
 	if (start.y < 0 || start.x < 0 || (long)(start.y / 64) >= map->rows || (long)(start.x / 64) >= map->cols)
-		return(NULL);
+	{
+		collision->dist = 9999;
+		return(collision);
+	}
 	if (map->nodes[(long)start.y / 64][(long)start.x / 64].collidable)
 	{
 		collision->x = start.x;
 		collision->y = start.y;
-		collision->dist = (player->x - start.x) * (player->x - start.x) + (player->y - start.y) * (player->y - start.y);
+		collision->dist = sqrt(abs(player->x - start.x) * abs(player->x - start.x) + abs(player->x - start.x) * abs(player->x - start.x));
 		return(collision);
 	}
 	while(start.x >= 0 && start.x < map->cols * 64 && start.y >= 0 && start.y < map->rows * 64)
@@ -103,16 +113,20 @@ static t_collision_point	*cast_ray_h(t_map *map, t_player *player, double a)
 		start.x = start.x + step.x;
 		start.y = start.y + step.y;
 		if (start.y < 0 || start.x < 0 || (long)(start.y / 64) >= map->rows || (long)(start.x / 64) >= map->cols)
-			return(NULL);
+		{
+			collision->dist = 9999;
+			return(collision);
+		}
 		if (map->nodes[(long)(start.y / 64)][(long)(start.x / 64)].collidable)
 		{
 			collision->x = start.x;
 			collision->y = start.y;
-			collision->dist = (player->x - start.x) * (player->x - start.x) + (player->y - start.y) * (player->y - start.y);
+			collision->dist = sqrt(abs(player->x - start.x) * abs(player->x - start.x) + abs(player->x - start.x) * abs(player->x - start.x));
 			return(collision);
 		}
 	}
-	return(NULL);
+	collision->dist = 9999;
+	return(collision);
 }
 
 void		cast_rays(t_sdl *sdl, t_map *map, t_player *player, int fov)
@@ -133,20 +147,11 @@ void		cast_rays(t_sdl *sdl, t_map *map, t_player *player, int fov)
 	{
 		coll_horz = cast_ray_h(map, player, i);
 		coll_vert = cast_ray_v(map, player, i);
-		if (coll_horz != NULL && coll_vert != NULL)
-		{
-			if (coll_horz->dist <= coll_vert->dist)
-				draw_ray_collision(sdl, player, *coll_horz, 0, 0, 255);
-			else
-				draw_ray_collision(sdl, player, *coll_vert, 0, 255, 0);
-		}
+		printf("h - %d, v - %d\n", coll_horz->dist, coll_vert->dist);
+		if (coll_horz->dist < coll_vert->dist)
+			draw_ray_collision(sdl, player, *coll_horz, 0, 0, 255);
 		else
-		{
-			if (coll_horz != NULL)
-				draw_ray_collision(sdl, player, *coll_horz, 0, 0, 255);
-			if (coll_vert != NULL)
-				draw_ray_collision(sdl, player, *coll_vert, 0, 255, 0);
-		}
+			draw_ray_collision(sdl, player, *coll_vert, 0, 255, 0);
 		i += inc;
 		if (i >= 360)
 			i = 360.0 - i;

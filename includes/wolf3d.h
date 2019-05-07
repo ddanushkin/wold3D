@@ -18,6 +18,8 @@ typedef struct		s_sdl
 	int 			height;
 	SDL_Renderer	*ren;
 	SDL_Event		event;
+	int				dist_to_pp;
+	float			fov;
 }					t_sdl;
 
 typedef struct		s_player
