@@ -137,12 +137,14 @@ static t_collision_point	*cast_ray_h(t_map *map, t_player *player, double a)
 
 void		cast_rays(t_sdl *sdl, t_map *map, t_player *player, int fov)
 {
-	float		i;
-	int			j;
-	float		inc;
+	float				i;
+	int					j;
+	float				inc;
 	t_collision_point	*coll_horz;
 	t_collision_point	*coll_vert;
-	double a_rad;
+	double				a_rad;
+	int					dist;
+	int					slice_hieght;
 
 	inc = floor(60.0/sdl->width*100)/100.0;
 	i = (float)player->direction - 30.0;
@@ -153,11 +155,17 @@ void		cast_rays(t_sdl *sdl, t_map *map, t_player *player, int fov)
 	{
 		coll_horz = cast_ray_h(map, player, i);
 		coll_vert = cast_ray_v(map, player, i);
-		printf("h - %d, v - %d\n", coll_horz->dist, coll_vert->dist);
 		if (coll_horz->dist < coll_vert->dist)
+		{
 			draw_ray_collision(sdl, player, *coll_horz, 0, 0, 255);
+			dist = coll_horz->dist * cos(player->direction - i);
+		}
 		else
+		{
 			draw_ray_collision(sdl, player, *coll_vert, 0, 255, 0);
+			dist = coll_vert->dist * cos(player->direction - i);
+		}
+		slice_hieght = 64 / dist * sdl->dist_to_pp;
 		i += inc;
 		if (i >= 360)
 			i = 360.0 - i;
