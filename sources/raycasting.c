@@ -51,7 +51,7 @@ static t_collision_point	*cast_ray_v(t_map *map, t_player *player, double a)
 	{
 		collision->x = start.x;
 		collision->y = start.y;
-		collision->dist = sqrt(abs(player->x - start.x) * abs(player->x - start.x) + abs(player->x - start.x) * abs(player->x - start.x));
+		collision->dist = sqrt(ft_powi((player->x - start.x), 2) * 2);
 		return(collision);
 	}
 	while(start.x >= 0 && start.x < map->cols * 64 && start.y >= 0 && start.y < map->rows * 64)
@@ -67,7 +67,7 @@ static t_collision_point	*cast_ray_v(t_map *map, t_player *player, double a)
 		{
 			collision->x = start.x;
 			collision->y = start.y;
-			collision->dist = sqrt(abs(player->x - start.x) * abs(player->x - start.x) + abs(player->x - start.x) * abs(player->x - start.x));
+			collision->dist = sqrt(ft_powi((player->x - start.x), 2) * 2);
 			return(collision);
 		}
 	}
@@ -111,7 +111,7 @@ static t_collision_point	*cast_ray_h(t_map *map, t_player *player, double a)
 	{
 		collision->x = start.x;
 		collision->y = start.y;
-		collision->dist = sqrt(abs(player->x - start.x) * abs(player->x - start.x) + abs(player->x - start.x) * abs(player->x - start.x));
+		collision->dist = sqrt(ft_powi((player->x - start.x), 2) * 2);
 		return(collision);
 	}
 	while(start.x >= 0 && start.x < map->cols * 64 && start.y >= 0 && start.y < map->rows * 64)
@@ -127,7 +127,7 @@ static t_collision_point	*cast_ray_h(t_map *map, t_player *player, double a)
 		{
 			collision->x = start.x;
 			collision->y = start.y;
-			collision->dist = sqrt(abs(player->x - start.x) * abs(player->x - start.x) + abs(player->x - start.x) * abs(player->x - start.x));
+			collision->dist = sqrt(ft_powi((player->x - start.x), 2) * 2);
 			return(collision);
 		}
 	}
@@ -144,9 +144,9 @@ void		cast_rays(t_sdl *sdl, t_map *map, t_player *player, int fov)
 	t_collision_point	*coll_vert;
 	double				a_rad;
 	int					dist;
-	int					slice_hieght;
+	int					slice_height;
 
-	inc = floor(60.0/sdl->width*100)/100.0;
+	inc = floor(60.0 / sdl->width * 100) / 100.0;
 	i = (float)player->direction - 30.0;
 	if (i <= 0)
 		i = 360.0 + i;
@@ -157,24 +157,24 @@ void		cast_rays(t_sdl *sdl, t_map *map, t_player *player, int fov)
 		coll_vert = cast_ray_v(map, player, i);
 		if (coll_horz->dist < coll_vert->dist)
 		{
-			//draw_ray_collision(sdl, player, *coll_horz, 0, 0, 255);
+			draw_ray_collision(sdl, player, *coll_horz, 0, 0, 255);
 			a_rad = (player->direction - i) * (M_PI / 180.0);
 			dist = coll_horz->dist * (cos(a_rad));
 		}
 		else
 		{
-			//draw_ray_collision(sdl, player, *coll_vert, 0, 255, 0);
+			draw_ray_collision(sdl, player, *coll_vert, 0, 255, 0);
 			a_rad = (player->direction - i) * (M_PI / 180.0);
 			dist = coll_vert->dist * (cos(a_rad));
 		}
 		if (dist != 0)
 		{
-			slice_hieght = 64 / dist * sdl->dist_to_pp;
+			slice_height = 64 / dist * sdl->dist_to_pp;
 			SDL_SetRenderDrawColor(sdl->ren, 195, 0, 255, 255);
-			SDL_RenderDrawLine(sdl->ren, j, sdl->height/2 - slice_hieght/2, j, sdl->height/2 + slice_hieght/2);
+			SDL_RenderDrawLine(sdl->ren, j, sdl->height/2 - slice_height/2, j, sdl->height/2 + slice_height/2);
 		}
 		i += inc;
-		if (i >= 360)
+		if (i > 360)
 			i = 360.0 - i;
 		j++;
 	}
@@ -182,4 +182,3 @@ void		cast_rays(t_sdl *sdl, t_map *map, t_player *player, int fov)
 	a_rad = (player->direction) * (M_PI / 180.0);
 	SDL_RenderDrawLine(sdl->ren, player->x, player->y, player->x + 15 * cos(a_rad), player->y + 15 * sin(-a_rad));
 }
-

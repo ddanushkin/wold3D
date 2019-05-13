@@ -1,28 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcpy.c                                        :+:      :+:    :+:   */
+/*   ft_powi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lglover <lglover@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/22 11:34:05 by lglover           #+#    #+#             */
-/*   Updated: 2019/05/09 13:38:55 by ndremora         ###   ########.fr       */
+/*   Created: 2019/04/03 14:33:08 by ndremora          #+#    #+#             */
+/*   Updated: 2019/04/16 12:54:13 by ndremora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-
-char	*ft_strcpy(char *dst, const char *src)
+int		ft_powi(int num, int pow)
 {
-	unsigned char	*orig_ptr;
+	int	out;
 
-	orig_ptr = (unsigned char *)dst;
-	while (*src)
-	{
-		*dst = *src;
-		dst++;
-		src++;
-	}
-	*dst = '\0';
-	return ((char *)orig_ptr);
+	out = num;
+	if (pow == 0)
+		return (1);
+	while (--pow)
+		out *= num;
+	return (out);
 }

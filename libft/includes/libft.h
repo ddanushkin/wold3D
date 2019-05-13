@@ -89,4 +89,9 @@ void			ft_lstiter(t_list *lst, void (*f)(t_list *elem));
 t_list			*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem));
 int				ft_gnl(const int fd, char **line);
 void			ft_delarr(char **array);
+double			ft_powd(double num, int pow);
+float			ft_powf(float num, int pow);
+int				ft_powi(int num, int pow);
+
+
 #endif

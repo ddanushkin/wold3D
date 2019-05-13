@@ -9,7 +9,7 @@
 
 # define MM_SEC_SIZE 64
 # define TICK_INTERVAL 30
-# define MAX(a,b) (((a)>(b))?(a):(b))
+# define MAX(a,b) (a > b) ? a : b
 
 typedef struct		s_sdl
 {
@@ -30,10 +30,6 @@ typedef struct		s_player
 	int				y_v;
 	int				speed;
 	int				direction;
-	double			x_vector;
-	double			y_vector;
-	double 			x_plane;
-	double 			y_plane;
 }					t_player;
 
 typedef struct		s_node
@@ -72,8 +68,8 @@ typedef struct		s_fpoint
 
 typedef struct		s_collision_point
 {
-	int			x;
-	int			y;
+	int				x;
+	int				y;
 	int				dist;
 }					t_collision_point;
 

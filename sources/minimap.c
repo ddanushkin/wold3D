@@ -6,12 +6,14 @@ void		draw_sector(t_sdl *sdl, int row, int col)
 	int		j;
 
 	i = 0;
+	col = col * MM_SEC_SIZE;
+	row = row * MM_SEC_SIZE;
 	SDL_SetRenderDrawColor(sdl->ren, 163, 163, 163, 255);
 	while (i < MM_SEC_SIZE)
 	{
 		j = 0;
 		while (j < MM_SEC_SIZE)
-			SDL_RenderDrawPoint(sdl->ren, col*MM_SEC_SIZE+i, row*MM_SEC_SIZE+(j++));
+			SDL_RenderDrawPoint(sdl->ren, col+i, row+(j++));
 		i++;
 	}
 	SDL_SetRenderDrawColor(sdl->ren, 0, 0, 0, 0);
