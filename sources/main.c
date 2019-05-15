@@ -11,9 +11,9 @@ Uint32 time_left(Uint32 next_time)
 		return next_time - now;
 }
 
-void		update(t_sdl *sdl, t_map *map, t_player *player)
+void		render(t_sdl *sdl, t_map *map, t_player *player)
 {
-	const Uint8	*state;
+	const Uint8	*button;
 	static Uint32 next_time;
 
 	while (1)
@@ -22,10 +22,10 @@ void		update(t_sdl *sdl, t_map *map, t_player *player)
 		SDL_RenderClear(sdl->ren);
 		if (SDL_PollEvent(&sdl->event) && sdl->event.type == SDL_QUIT)
 			break;
-		state = SDL_GetKeyboardState(NULL);
-		if (state[SDL_SCANCODE_ESCAPE])
+		button = SDL_GetKeyboardState(NULL);
+		if (button[SDL_SCANCODE_ESCAPE])
 			break;
-		player_vel(player, state);
+		player_velocity(player, button);
 		minimap_draw(map, sdl, player);
 		player_move(player);
 		SDL_RenderPresent(sdl->ren);
@@ -44,7 +44,7 @@ int		main(void)
 	if ((fd = open("../levels/1.wolf3d", O_RDONLY)) != -1)
 	{
 		map_read(fd, &app.map, &app.player);
-		update(&app.sdl, &app.map, &app.player);
+		render(&app.sdl, &app.map, &app.player);
 	}
 	else
 		ft_error("Map path error.");

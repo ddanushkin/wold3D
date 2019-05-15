@@ -146,39 +146,66 @@ void		cast_rays(t_sdl *sdl, t_map *map, t_player *player, int fov)
 	int					dist;
 	int					slice_height;
 
-	inc = floor(60.0 / sdl->width * 100) / 100.0;
-	i = (float)player->direction - 30.0;
+	inc = (60.0 / sdl->width * 100) / 100.0;
+	i = player->direction - 30;
 	if (i <= 0)
 		i = 360.0 + i;
 	j = 0;
 	while(j < sdl->width)
 	{
-		coll_horz = cast_ray_h(map, player, i);
 		coll_vert = cast_ray_v(map, player, i);
+		coll_horz = cast_ray_h(map, player, i);
+		if (j == sdl->width / 2)
+		{
+			if (coll_horz->dist < coll_vert->dist)
+				printf("%d\n", coll_horz->dist);
+			else
+				printf("%d\n", coll_vert->dist);
+		}
 		if (coll_horz->dist < coll_vert->dist)
 		{
 			draw_ray_collision(sdl, player, *coll_horz, 0, 0, 255);
-			a_rad = (player->direction - i) * (M_PI / 180.0);
-			dist = coll_horz->dist * (cos(a_rad));
+			//a_rad = (player->direction - i) * M_PI_180;
+			//dist = coll_horz->dist * cos(a_rad);
 		}
 		else
 		{
 			draw_ray_collision(sdl, player, *coll_vert, 0, 255, 0);
-			a_rad = (player->direction - i) * (M_PI / 180.0);
-			dist = coll_vert->dist * (cos(a_rad));
+			//a_rad = (player->direction - i) * M_PI_180;
+			//dist = coll_vert->dist * sin(a_rad);
 		}
+		double dx = coll_horz->dist * cos(i);
+		double dy = coll_vert->dist * sin(i);
+		dist = dx * cos(player->direction) + dy * sin(player->direction);
+/*
 		if (dist != 0)
 		{
-			slice_height = 64 / dist * sdl->dist_to_pp;
+			//slice_height = sdl->height * sdl->height / dist;
+			//int wallHeight = sdl->height * sdl->height / dist;
+			//int bottom = sdl->height / 2 * (1 + 1 / dist);
+			//slice_height = (64 / dist) * (sdl->dist_to_pp / 64) * 8;
+			slice_height = (64 / dist);
 			SDL_SetRenderDrawColor(sdl->ren, 195, 0, 255, 255);
 			SDL_RenderDrawLine(sdl->ren, j, sdl->height/2 - slice_height/2, j, sdl->height/2 + slice_height/2);
+			//SDL_RenderDrawLine(sdl->ren, j, bottom, j, wallHeight);
 		}
+		else
+		{
+			//slice_height = sdl->height * sdl->height / dist;
+			//int wallHeight = sdl->height * sdl->height / dist;
+			//int bottom = sdl->height / 2 * (1 + 1 / dist);
+			slice_height = (sdl->dist_to_pp);
+			//slice_height = (64 / dist);
+			SDL_SetRenderDrawColor(sdl->ren, 195, 0, 255, 255);
+			SDL_RenderDrawLine(sdl->ren, j, sdl->height/2 - slice_height/2, j, sdl->height/2 + slice_height/2);
+			//SDL_RenderDrawLine(sdl->ren, j, bottom, j, wallHeight);
+		}*/
 		i += inc;
 		if (i > 360)
 			i = 360.0 - i;
 		j++;
 	}
 	SDL_SetRenderDrawColor(sdl->ren, 255, 50, 50, 255);
-	a_rad = (player->direction) * (M_PI / 180.0);
+	a_rad = (player->direction) * M_PI_180;
 	SDL_RenderDrawLine(sdl->ren, player->x, player->y, player->x + 15 * cos(a_rad), player->y + 15 * sin(-a_rad));
 }

@@ -7,9 +7,11 @@
 #include <stdio.h> /* Delete! */
 #include "libft.h"
 
-# define MM_SEC_SIZE 64
+# define TEXTURE_SIZE 64
 # define TICK_INTERVAL 30
+# define M_PI_180 0.017453292519943295
 # define MAX(a,b) (a > b) ? a : b
+# define MIN(a,b) (a < b) ? a : b
 
 typedef struct		s_sdl
 {
@@ -80,8 +82,8 @@ void				quit_properly(t_app *sdl);
 void				minimap_draw(t_map *map, t_sdl *sdl, t_player *player);
 int					load_texture(t_node *node, char *name);
 void				player_init(t_player *player);
-void				player_vel(t_player *player, const Uint8 *state);
+void				player_velocity(t_player *player, const Uint8 *button);
 void				player_move(t_player *player);
 void				cast_rays(t_sdl *sdl, t_map *map, t_player *player, int fov);
-void				player_is_collising(t_map *map, t_player *player);
+void				check_for_collision(t_map *map, t_player *player);
 #endif

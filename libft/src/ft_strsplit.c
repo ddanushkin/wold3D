@@ -6,7 +6,7 @@
 /*   By: lglover <lglover@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/29 15:25:27 by lglover           #+#    #+#             */
-/*   Updated: 2019/03/04 09:33:25 by lglover          ###   ########.fr       */
+/*   Updated: 2019/05/14 10:36:21 by ndremora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,22 @@
 
 static size_t	count_words(char const *s, char c)
 {
-	size_t	cnt;
+	size_t	count;
 
-	cnt = 0;
+	count = 0;
 	while (*s)
 	{
 		if (*s != c && (*(s + 1) == c || *(s + 1) == '\0'))
-		{
-			cnt++;
-		}
+			count++;
 		s++;
 	}
-	return (cnt);
+	return (count);
 }
 
 static char		**del_array(char **array, size_t i)
 {
 	while (i > 0)
-	{
-		ft_strdel(&array[i]);
-		i--;
-	}
+		ft_strdel(&array[i--]);
 	free(array);
 	return (NULL);
 }
@@ -101,9 +96,8 @@ char			**ft_strsplit(char const *s, char c)
 	if (!s)
 		return (NULL);
 	words = count_words(s, c);
-	str = (char*)s;
-	res = (char**)malloc(sizeof(char*) * words + 1);
-	if (!res)
+	str = (char *)s;
+	if (!(res = (char **)malloc(sizeof(char *) * words + 1)))
 		return (NULL);
 	res = create_array(str, c, res);
 	return (input_data(res, str, c));
