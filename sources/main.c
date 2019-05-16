@@ -25,9 +25,8 @@ void		update(t_sdl *sdl, t_map *map, t_player *player)
 		state = SDL_GetKeyboardState(NULL);
 		if (state[SDL_SCANCODE_ESCAPE])
 			break;
-		player_vel(player, state);
 		minimap_draw(map, sdl, player);
-		player_move(player);
+		player_move(map, state, player);
 		SDL_RenderPresent(sdl->ren);
 		SDL_Delay(time_left(next_time));
 		next_time += TICK_INTERVAL;

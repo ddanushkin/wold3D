@@ -11,6 +11,24 @@
 # define TICK_INTERVAL 30
 # define MAX(a,b) (a > b) ? a : b
 
+typedef struct		s_ipoint
+{
+	int				x;
+	int				y;
+}					t_ipoint;
+
+typedef struct		s_fpoint
+{
+	float			x;
+	float			y;
+}					t_fpoint;
+
+typedef struct		s_dpoint
+{
+	double			x;
+	double			y;
+}					t_dpoint;
+
 typedef struct		s_sdl
 {
 	SDL_Window		*win;
@@ -24,10 +42,10 @@ typedef struct		s_sdl
 
 typedef struct		s_player
 {
-	int				x;
+	int 			x;
 	int 			y;
-	int				x_v;
-	int				y_v;
+	double			x_v;
+	double			y_v;
 	int				speed;
 	int				direction;
 }					t_player;
@@ -54,23 +72,11 @@ typedef struct		s_app
 	t_map			map;
 }					t_app;
 
-typedef struct		s_ipoint
-{
-	int				x;
-	int				y;
-}					t_ipoint;
-
-typedef struct		s_fpoint
-{
-	float			x;
-	float			y;
-}					t_fpoint;
-
 typedef struct		s_collision_point
 {
 	int				x;
 	int				y;
-	int				dist;
+	double			dist;
 }					t_collision_point;
 
 void				init(t_sdl *sdl);
@@ -80,8 +86,6 @@ void				quit_properly(t_app *sdl);
 void				minimap_draw(t_map *map, t_sdl *sdl, t_player *player);
 int					load_texture(t_node *node, char *name);
 void				player_init(t_player *player);
-void				player_vel(t_player *player, const Uint8 *state);
-void				player_move(t_player *player);
-void				cast_rays(t_sdl *sdl, t_map *map, t_player *player, int fov);
-void				player_is_collising(t_map *map, t_player *player);
+void				player_move(t_map *map, const Uint8	*state, t_player *player);
+void				cast_rays(t_sdl *sdl, t_map *map, t_player *player);
 #endif

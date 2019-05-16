@@ -21,8 +21,7 @@ void		draw_sector(t_sdl *sdl, int row, int col)
 
 void		draw_player(t_sdl *sdl, t_map *map, t_player *player)
 {
-	cast_rays(sdl, map, player, 60);
-	player_is_collising(map, player);
+	cast_rays(sdl, map, player);
 	SDL_SetRenderDrawColor(sdl->ren, 195, 0, 255, 255);
 	SDL_RenderDrawPoint(sdl->ren, player->x, player->y - 1);
 	SDL_RenderDrawPoint(sdl->ren, player->x - 1, player->y);
