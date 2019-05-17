@@ -7,7 +7,7 @@
 #include <stdio.h> /* Delete! */
 #include "libft.h"
 
-# define MM_SEC_SIZE 64
+# define TEXTURE_SIZE 64
 # define TICK_INTERVAL 30
 # define MAX(a,b) (a > b) ? a : b
 
@@ -83,7 +83,7 @@ void				init(t_sdl *sdl);
 void				map_read(int fd, t_map *map, t_player *player);
 void				ft_error(char *str);
 void				quit_properly(t_app *sdl);
-void				minimap_draw(t_map *map, t_sdl *sdl, t_player *player);
+void				draw_minimap(t_map *map, t_sdl *sdl, t_player *player);
 int					load_texture(t_node *node, char *name);
 void				player_init(t_player *player);
 void				player_move(t_map *map, const Uint8	*state, t_player *player);

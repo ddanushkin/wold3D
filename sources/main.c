@@ -13,7 +13,7 @@ Uint32 time_left(Uint32 next_time)
 
 void		update(t_sdl *sdl, t_map *map, t_player *player)
 {
-	const Uint8	*state;
+	const Uint8	*button;
 	static Uint32 next_time;
 
 	while (1)
@@ -22,11 +22,11 @@ void		update(t_sdl *sdl, t_map *map, t_player *player)
 		SDL_RenderClear(sdl->ren);
 		if (SDL_PollEvent(&sdl->event) && sdl->event.type == SDL_QUIT)
 			break;
-		state = SDL_GetKeyboardState(NULL);
-		if (state[SDL_SCANCODE_ESCAPE])
+		button = SDL_GetKeyboardState(NULL);
+		if (button[SDL_SCANCODE_ESCAPE])
 			break;
-		minimap_draw(map, sdl, player);
-		player_move(map, state, player);
+		draw_minimap(map, sdl, player);
+		player_move(map, button, player);
 		SDL_RenderPresent(sdl->ren);
 		SDL_Delay(time_left(next_time));
 		next_time += TICK_INTERVAL;

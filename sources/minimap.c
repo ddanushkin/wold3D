@@ -6,17 +6,16 @@ void		draw_sector(t_sdl *sdl, int row, int col)
 	int		j;
 
 	i = 0;
-	col = col * MM_SEC_SIZE;
-	row = row * MM_SEC_SIZE;
+	col = col * TEXTURE_SIZE;
+	row = row * TEXTURE_SIZE;
 	SDL_SetRenderDrawColor(sdl->ren, 163, 163, 163, 255);
-	while (i < MM_SEC_SIZE)
+	while (i < TEXTURE_SIZE)
 	{
 		j = 0;
-		while (j < MM_SEC_SIZE)
+		while (j < TEXTURE_SIZE)
 			SDL_RenderDrawPoint(sdl->ren, col+i, row+(j++));
 		i++;
 	}
-	SDL_SetRenderDrawColor(sdl->ren, 0, 0, 0, 0);
 }
 
 void		draw_player(t_sdl *sdl, t_map *map, t_player *player)
@@ -34,7 +33,7 @@ void		draw_player(t_sdl *sdl, t_map *map, t_player *player)
 	SDL_RenderDrawPoint(sdl->ren, player->x, player->y);
 }
 
-void		minimap_draw(t_map *map, t_sdl *sdl, t_player *player)
+void		draw_minimap(t_map *map, t_sdl *sdl, t_player *player)
 {
 	int		row;
 	int		col;

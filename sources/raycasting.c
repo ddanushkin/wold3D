@@ -114,6 +114,27 @@ void draw_background(t_sdl *sdl)
 	SDL_RenderFillRect(sdl->ren, &rect);
 }
 
+double	check_angle(double angle)
+{
+	if (angle < 0)
+		angle = 360 + angle;
+	else if (angle > 359)
+		angle = angle - 360;
+	return (angle);
+}
+
+double		closest_distance(t_sdl *sdl, double dist_vert, double dist_horz)
+{
+	double dist;
+
+	if (dist_horz < dist_vert)
+		SDL_SetRenderDrawColor(sdl->ren, 195, 0, 255, 255);
+	else
+		SDL_SetRenderDrawColor(sdl->ren, 0, 195, 255, 255);
+	dist = dist_horz < dist_vert ? dist_horz : dist_vert;
+	return (dist);
+}
+
 void		cast_rays(t_sdl *sdl, t_map *map, t_player *player)
 {
 	double		angle;
@@ -125,27 +146,17 @@ void		cast_rays(t_sdl *sdl, t_map *map, t_player *player)
 
 	draw_background(sdl);
 	angle = player->direction - 30.0;
-	if (angle < 0)
-		angle = 360 + angle;
+	angle = check_angle(angle);
 	i = 0;
 	while (i < sdl->width)
 	{
 		dist_horz = cast_ray_horz(map, player, angle, sdl);
 		dist_vert = cast_ray_vert(map, player, angle, sdl);
-
-		if (dist_horz < dist_vert)
-			SDL_SetRenderDrawColor(sdl->ren, 195, 0, 255, 255);
-		else
-			SDL_SetRenderDrawColor(sdl->ren, 0, 195, 255, 255);
-		dist = dist_horz < dist_vert ? dist_horz : dist_vert;
-		//dist = dist * cos((double)player->direction - angle);
+		dist = closest_distance(sdl, dist_vert, dist_horz);
 		slice_height = 64.0 / dist * sdl->dist_to_pp;
-
 		SDL_RenderDrawLine(sdl->ren, i, sdl->height/2 - slice_height/2, i, sdl->height/2 + slice_height/2);
-
 		angle = angle + 60.0 / (double)sdl->width;
-		if (angle > 360)
-			angle = angle - 360;
+		angle = check_angle(angle);
 		i++;
 	}
 }
