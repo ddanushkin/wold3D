@@ -29,6 +29,13 @@ typedef struct		s_dpoint
 	double			y;
 }					t_dpoint;
 
+typedef struct		s_ray
+{
+	int				offset;
+	float			dist;
+	SDL_Surface		*texture;
+}					t_ray;
+
 typedef struct		s_sdl
 {
 	SDL_Window		*win;
@@ -72,12 +79,12 @@ typedef struct		s_app
 	t_map			map;
 }					t_app;
 
-typedef struct		s_collision_point
+typedef struct		s_texture_col
 {
-	int				x;
-	int				y;
-	double			dist;
-}					t_collision_point;
+	SDL_Surface		*surface;
+	SDL_Color		**pixels;
+	int				height;
+}					t_texture_col;
 
 void				init(t_sdl *sdl);
 void				map_read(int fd, t_map *map, t_player *player);
@@ -88,4 +95,5 @@ int					load_texture(t_node *node, char *name);
 void				player_init(t_player *player);
 void				player_move(t_map *map, const Uint8	*state, t_player *player);
 void				cast_rays(t_sdl *sdl, t_map *map, t_player *player);
+void				get_rgb(SDL_Surface *surface, SDL_Color *c, int x, int y);
 #endif

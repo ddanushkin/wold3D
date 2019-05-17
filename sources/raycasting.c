@@ -15,88 +15,100 @@ void		draw_ray_collision(t_sdl *sdl, t_player *player, int x, int y, int r, int 
 	SDL_RenderDrawPoint(sdl->ren, x-1, y-1);
 }
 
-double get_dist(int p_x, int p_y, double r_x, double r_y)
+float get_dist(int p_x, int p_y, float r_x, float r_y)
 {
-	double d_x;
-	double d_y;
+	float d_x;
+	float d_y;
 
 	d_x = p_x - r_x;
 	d_y = p_y - r_y;
-	return sqrt(d_x * d_x + d_y * d_y);
+	return sqrtf(d_x * d_x + d_y * d_y);
 }
 
-double		cast_ray_horz(t_map *map, t_player *player, double angle, t_sdl *sdl)
+int is_wall(t_map *map, t_fpoint *pos, t_ray *ray)
 {
-	t_ipoint start;
-	t_ipoint step;
+	if (pos->x < 0 || pos->y < 0 || pos->x >= map->cols * 64 || pos->y >= map->rows * 64)
+		return (1);
+	ray->texture = map->nodes[(int)(pos->y / 64)][(int)(pos->x / 64)].texture;
+	return map->nodes[(int)(pos->y / 64)][(int)(pos->x / 64)].collidable;
+}
 
+t_ray	*cast_ray_horz(t_map *map, t_player *player, double angle, t_sdl *sdl)
+{
+	t_fpoint start;
+	t_fpoint step;
+	t_ray *ray;
+
+	ray = (t_ray *)malloc(sizeof(t_ray));
 	angle = angle * M_PI / 180.0;
 	if (sin(angle) < 0)
 	{
-		start.y = (int)(player->y / 64) * 64 - 1;
-		step.y = -64;
+		start.y = (int)((player->y / 64) * 64 - 1);
+		step.y = -64.0;
 	}
 	else if(sin(angle) > 0)
 	{
-		start.y = (int)(player->y / 64) * 64 + 64;
-		step.y = 64;
+		start.y = (int)((player->y / 64) * 64 + 64);
+		step.y = 64.0;
 	}
 	else
-		return 99999;
-	step.x = 64 / tan(angle);
-	step.x = cos(angle) <= 0 ? -1 * abs(step.x) : abs(step.x);
-	start.x = player->x + (start.y - player->y) / (tan(angle));
-
-	while (start.x / 64 < map->cols && start.y / 64 < map->rows)
 	{
-		if (start.x < 0 || start.y < 0)
-			break;
-		if (map->nodes[(long)start.y / 64][(long)start.x / 64].collidable)
-		{
-			draw_ray_collision(sdl, player, start.x, start.y, 255, 0, 0);
-			return get_dist(player->x, player->y, start.x, start.y);
-		}
+		ray->dist = 99999;
+		ray->offset = 0;
+		ray->texture = NULL;
+		return ray;
+	}
+	step.x = (float)(64.0 / tan(angle));
+	step.x = cos(angle) <= 0 ? -fabsf(step.x) : fabsf(step.x);
+	start.x = (int)player->x + (start.y - player->y) / (tan(angle));
+
+	while (!is_wall(map, &start, ray))
+	{
 		start.x += step.x;
 		start.y += step.y;
 	}
-	return 99999;
+	ray->dist = get_dist(player->x, player->y, start.x, start.y);
+	ray->offset = (int)start.x % 64;
+	return ray;
 }
 
-double	cast_ray_vert(t_map *map, t_player *player, double angle, t_sdl *sdl)
+t_ray	*cast_ray_vert(t_map *map, t_player *player, double angle, t_sdl *sdl)
 {
-	t_ipoint start;
-	t_ipoint step;
+	t_fpoint start;
+	t_fpoint step;
+	t_ray *ray;
 
+	ray = (t_ray *)malloc(sizeof(t_ray));
 	angle = angle * M_PI / 180.0;
 	if (cos(angle) > 0)
 	{
-		start.x = (int)(player->x / 64) * 64 + 64;
-		step.x = 64;
+		start.x = (int)((player->x / 64) * 64 + 64);
+		step.x = 64.0;
 	}
 	else if(cos(angle) < 0)
 	{
-		start.x = (int)(player->x / 64) * 64 - 1;
-		step.x = -64;
+		start.x = (int)((player->x / 64) * 64 - 1);
+		step.x = -64.0;
 	}
 	else
-		return 99999;
-	step.y = 64 * tan(angle);
-	step.y = sin(angle) >= 0 ? abs(step.y) : -1 * abs(step.y);
-	start.y = player->y + (start.x - player->x) * tan(angle);
-
-	while (start.x / 64 < map->cols && start.y / 64 < map->rows)
 	{
-		if (start.x < 0 || start.y < 0)
-			break;
-		if (map->nodes[(long)start.y / 64][(long)start.x / 64].collidable)
-		{
-			draw_ray_collision(sdl, player, start.x, start.y, 255, 0, 0);
-			return get_dist(player->x, player->y, start.x, start.y);
-		}
+		ray->dist = 99999;
+		ray->offset = 0;
+		ray->texture = NULL;
+		return ray;
+	}
+	step.y = (float)(64 * tan(angle));
+	step.y = sin(angle) >= 0 ? fabsf(step.y) : -fabsf(step.y);
+	start.y = (int)(player->y + (start.x - player->x) * tan(angle));
+
+	while (!is_wall(map, &start, ray))
+	{
 		start.x += step.x;
 		start.y += step.y;
 	}
-	return 99999;
+	ray->dist = get_dist(player->x, player->y, start.x, start.y);
+	ray->offset = (int)start.y % 64;
+	return ray;
 }
 
 void draw_background(t_sdl *sdl)
@@ -123,40 +135,79 @@ double	check_angle(double angle)
 	return (angle);
 }
 
-double		closest_distance(t_sdl *sdl, double dist_vert, double dist_horz)
+void 	color_shade(int dist, SDL_Color *color)
 {
-	double dist;
-
-	if (dist_horz < dist_vert)
-		SDL_SetRenderDrawColor(sdl->ren, 195, 0, 255, 255);
+	if ((int)(color->r) - (dist / 4) < 0)
+	{
+		color->r = 0;
+	}
 	else
-		SDL_SetRenderDrawColor(sdl->ren, 0, 195, 255, 255);
-	dist = dist_horz < dist_vert ? dist_horz : dist_vert;
-	return (dist);
+		color->r -= dist / 4;
+	if ((int)(color->g) - (dist / 4) < 0)
+	{
+		color->g = 0;
+	}
+	else
+		color->g -= dist / 4;
+	if ((int)(color->b) - (dist / 4) < 0)
+	{
+		color->b = 0;
+	}
+	else
+		color->b -= dist / 4;
+}
+
+void	draw_col(t_sdl * sdl, t_ray *ray, int x, int height)
+{
+	int y;
+	int begin;
+	int end;
+	SDL_Color color;
+	double ratio;
+
+	ratio = 64.0 / (double)height;
+	begin = (int)(sdl->height / 2) - (int)(height / 2);
+	end = begin + height;
+	y = begin;
+	while (y < end)
+	{
+		if (y < sdl->height)
+		{
+			get_rgb(ray->texture, &color, ray->offset, (y - begin) * ratio);
+			//SDL_SetRenderDrawBlendMode(sdl->ren, SDL_BLENDMODE_BLEND);
+			//color_shade(ray->dist, &color);
+//			SDL_SetRenderDrawColor(sdl->ren, (int)(color.r * ray->dist) % 255, (int)(color.g * ray->dist) % 255, (int)(color.b * ray->dist) % 255, 255);
+			SDL_SetRenderDrawColor(sdl->ren, color.r, color.g, color.b, 255);
+			SDL_RenderDrawPoint(sdl->ren, x, y);
+		}
+		y++;
+	}
 }
 
 void		cast_rays(t_sdl *sdl, t_map *map, t_player *player)
 {
-	double		angle;
-	int			i;
-	double		dist_vert;
-	double		dist_horz;
+	float		angle;
+	int			x;
+	t_ray		*ray_vert;
+	t_ray		*ray_horz;
+	t_ray		*hit_ray;
 	double		dist;
-	double		slice_height;
+	int			slice_height;
 
 	draw_background(sdl);
 	angle = player->direction - 30.0;
 	angle = check_angle(angle);
-	i = 0;
-	while (i < sdl->width)
+	x = 0;
+	while (x < sdl->width)
 	{
-		dist_horz = cast_ray_horz(map, player, angle, sdl);
-		dist_vert = cast_ray_vert(map, player, angle, sdl);
-		dist = closest_distance(sdl, dist_vert, dist_horz);
-		slice_height = 64.0 / dist * sdl->dist_to_pp;
-		SDL_RenderDrawLine(sdl->ren, i, sdl->height/2 - slice_height/2, i, sdl->height/2 + slice_height/2);
-		angle = angle + 60.0 / (double)sdl->width;
+		ray_horz = cast_ray_horz(map, player, angle, sdl);
+		ray_vert = cast_ray_vert(map, player, angle, sdl);
+		hit_ray = ray_horz->dist < ray_vert->dist ? ray_horz : ray_vert;
+		dist = hit_ray->dist * cos((player->direction - angle) * M_PI / 180.0);
+		slice_height = 64 / dist * sdl->dist_to_pp;
+		draw_col(sdl, hit_ray, x, slice_height);
+		angle = angle + 60.0 / sdl->width;
 		angle = check_angle(angle);
-		i++;
+		x++;
 	}
 }

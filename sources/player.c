@@ -3,7 +3,7 @@
 void	player_init(t_player *player)
 {
 	player->direction = 270;
-	player->speed = 5;
+	player->speed = 4;
 	player->x_v = 0;
 	player->y_v = 0;
 }
@@ -18,6 +18,15 @@ void	player_rotate(t_player *player, const Uint8 *state)
 		printf("player_dir - %d\n", player->direction);
 }
 
+void	try_move(t_map *map, t_player *player, int new_x, int new_y)
+{
+	if(!map->nodes[new_y / 64][new_x / 64].collidable)
+	{
+		player->x = new_x;
+		player->y = new_y;
+	}
+}
+
 void	player_move(t_map *map, const Uint8	*state, t_player *player)
 {
 	int new_x;
@@ -26,27 +35,32 @@ void	player_move(t_map *map, const Uint8	*state, t_player *player)
 	player_rotate(player, state);
 	player->x_v = cos(player->direction * M_PI / 180.0);
 	player->y_v = sin(player->direction * M_PI / 180.0);
-
 	if(state[SDL_SCANCODE_W])
 	{
 		new_x = player->x + (int)(player->speed * player->x_v);
 		new_y = player->y + (int)(player->speed * player->y_v);
-		if(!map->nodes[new_y / 64][new_x / 64].collidable)
-		{
-			player->x = new_x;
-			player->y = new_y;
-		}
+		try_move(map, player, new_x, new_y);
 	}
 
 	if(state[SDL_SCANCODE_S])
 	{
 		new_x = player->x - (int)(player->speed * player->x_v);
 		new_y = player->y - (int)(player->speed * player->y_v);
-		if(!map->nodes[new_y / 64][new_x / 64].collidable)
-		{
-			player->x = new_x;
-			player->y = new_y;
-		}
+		try_move(map, player, new_x, new_y);
+	}
+
+	if(state[SDL_SCANCODE_D])
+	{
+		new_x = player->x - (int)(player->speed * player->y_v);
+		new_y = player->y + (int)(player->speed * player->x_v);
+		try_move(map, player, new_x, new_y);
+	}
+
+	if(state[SDL_SCANCODE_A])
+	{
+		new_x = player->x + (int)(player->speed * player->y_v);
+		new_y = player->y - (int)(player->speed * player->x_v);
+		try_move(map, player, new_x, new_y);
 	}
 
 }
