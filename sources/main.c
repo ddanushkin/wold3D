@@ -18,16 +18,20 @@ void		update(t_sdl *sdl, t_map *map, t_player *player)
 
 	while (1)
 	{
-		SDL_SetRenderDrawColor(sdl->ren, 0, 0, 0, 0);
-		SDL_RenderClear(sdl->ren);
+		SDL_FillRect(sdl->screen, NULL, 0x000000);
 		if (SDL_PollEvent(&sdl->event) && sdl->event.type == SDL_QUIT)
 			break;
 		button = SDL_GetKeyboardState(NULL);
 		if (button[SDL_SCANCODE_ESCAPE])
 			break;
-		draw_minimap(map, sdl, player);
+		if (button[SDL_SCANCODE_EQUALS])
+			player->shade_dist += 10;
+		if (button[SDL_SCANCODE_MINUS])
+			player->shade_dist -= 10;
+		//draw_minimap(map, sdl, player);
+		cast_rays(sdl, map, player);
 		player_move(map, button, player);
-		SDL_RenderPresent(sdl->ren);
+		SDL_UpdateWindowSurface(sdl->window);
 		SDL_Delay(time_left(next_time));
 		next_time += TICK_INTERVAL;
 	}

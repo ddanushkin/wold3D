@@ -11,10 +11,5 @@ include_directories("includes")
 include_directories("resources")
 include_directories("libft/includes")
 include_directories("/Users/$ENV{USER}/Library/Frameworks/SDL2.framework/Versions/A/Headers/")
-add_executable(wolf3d
-        ${SOURCES}
-        ${HEADERS}
-        ${HEADERS2}
-        ${SOURCES2}
-        )
+add_executable(wolf3d ${SOURCES} ${HEADERS} ${HEADERS2} ${SOURCES2})
 target_link_libraries(wolf3d "-F /Users/$ENV{USER}/Library/Frameworks/ -framework SDL2")

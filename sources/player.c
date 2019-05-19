@@ -6,6 +6,8 @@ void	player_init(t_player *player)
 	player->speed = 4;
 	player->x_v = 0;
 	player->y_v = 0;
+	player->shade_dist = 840.0;
+	player->max_dist = 900;
 }
 
 void	player_rotate(t_player *player, const Uint8 *state)

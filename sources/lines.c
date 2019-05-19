@@ -29,6 +29,6 @@ static void		line_draw(t_sdl *sdl, t_map *map, t_ipoint start, t_ipoint end)
 		current.y += delta.y;
 		if (map->nodes[(int)current.y / TEXTURE_SIZE][(int)current.x / TEXTURE_SIZE].collidable)
 			return ;
-		SDL_RenderDrawPoint(sdl->ren, (int)current.x, (int)current.y);
+		SDL_RenderDrawPoint(sdl->renderer, (int)current.x, (int)current.y);
 	}
 }

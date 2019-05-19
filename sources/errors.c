@@ -8,7 +8,7 @@ void	ft_error(char *str)
 
 void	quit_properly(t_app *app)
 {
-	SDL_DestroyRenderer(app->sdl.ren);
-	SDL_DestroyWindow(app->sdl.win);
+	//SDL_DestroyRenderer(app->sdl.ren);
+	SDL_DestroyWindow(app->sdl.window);
 	SDL_Quit();
 }

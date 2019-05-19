@@ -2,17 +2,17 @@
 
 void		draw_ray_collision(t_sdl *sdl, t_player *player, int x, int y, int r, int g, int b)
 {
-	SDL_SetRenderDrawColor(sdl->ren, 255, 255, 255, 255);
-	SDL_RenderDrawLine(sdl->ren, player->x, player->y, x, y);
-	SDL_SetRenderDrawColor(sdl->ren, r, g, b, 255);
-	SDL_RenderDrawPoint(sdl->ren, x, y-1);
-	SDL_RenderDrawPoint(sdl->ren, x-1, y);
-	SDL_RenderDrawPoint(sdl->ren, x, y+1);
-	SDL_RenderDrawPoint(sdl->ren, x+1, y);
-	SDL_RenderDrawPoint(sdl->ren, x+1, y-1);
-	SDL_RenderDrawPoint(sdl->ren, x-1, y+1);
-	SDL_RenderDrawPoint(sdl->ren, x+1, y+1);
-	SDL_RenderDrawPoint(sdl->ren, x-1, y-1);
+	SDL_SetRenderDrawColor(sdl->renderer, 255, 255, 255, 255);
+	SDL_RenderDrawLine(sdl->renderer, player->x, player->y, x, y);
+	SDL_SetRenderDrawColor(sdl->renderer, r, g, b, 255);
+	SDL_RenderDrawPoint(sdl->renderer, x, y-1);
+	SDL_RenderDrawPoint(sdl->renderer, x-1, y);
+	SDL_RenderDrawPoint(sdl->renderer, x, y+1);
+	SDL_RenderDrawPoint(sdl->renderer, x+1, y);
+	SDL_RenderDrawPoint(sdl->renderer, x+1, y-1);
+	SDL_RenderDrawPoint(sdl->renderer, x-1, y+1);
+	SDL_RenderDrawPoint(sdl->renderer, x+1, y+1);
+	SDL_RenderDrawPoint(sdl->renderer, x-1, y-1);
 }
 
 float get_dist(int p_x, int p_y, float r_x, float r_y)
@@ -119,11 +119,11 @@ void draw_background(t_sdl *sdl)
 	rect.y = 0;
 	rect.w = sdl->width;
 	rect.h = sdl->height / 2;
-	SDL_SetRenderDrawColor(sdl->ren, 0, 0, 255, 255);
-	SDL_RenderFillRect(sdl->ren, &rect);
+	SDL_SetRenderDrawColor(sdl->renderer, 0, 0, 255, 255);
+	SDL_RenderFillRect(sdl->renderer, &rect);
 	rect.y = sdl->height / 2;
-	SDL_SetRenderDrawColor(sdl->ren, 125, 125, 125, 255);
-	SDL_RenderFillRect(sdl->ren, &rect);
+	SDL_SetRenderDrawColor(sdl->renderer, 125, 125, 125, 255);
+	SDL_RenderFillRect(sdl->renderer, &rect);
 }
 
 double	check_angle(double angle)
@@ -135,35 +135,33 @@ double	check_angle(double angle)
 	return (angle);
 }
 
-void 	color_shade(int dist, SDL_Color *color)
+void 	color_shade(int dist, SDL_Color *color, double shade_dist)
 {
-	if ((int)(color->r) - (dist / 4) < 0)
+	double factor;
+
+	factor = dist / shade_dist;
+	if (factor > 1)
 	{
 		color->r = 0;
-	}
-	else
-		color->r -= dist / 4;
-	if ((int)(color->g) - (dist / 4) < 0)
-	{
 		color->g = 0;
-	}
-	else
-		color->g -= dist / 4;
-	if ((int)(color->b) - (dist / 4) < 0)
-	{
 		color->b = 0;
 	}
 	else
-		color->b -= dist / 4;
+	{
+		color->r = color->r * (1 - factor);
+		color->g = color->g * (1 - factor);
+		color->b = color->b * (1 - factor);
+	}
 }
 
-void	draw_col(t_sdl * sdl, t_ray *ray, int x, int height)
+void	draw_col(t_sdl * sdl, t_ray *ray, int x, int height, double shade_dist)
 {
-	int y;
-	int begin;
-	int end;
-	SDL_Color color;
-	double ratio;
+	int			y;
+	int			begin;
+	int			end;
+	SDL_Color	color;
+	double		ratio;
+	int			offset;
 
 	ratio = 64.0 / (double)height;
 	begin = (int)(sdl->height / 2) - (int)(height / 2);
@@ -171,14 +169,18 @@ void	draw_col(t_sdl * sdl, t_ray *ray, int x, int height)
 	y = begin;
 	while (y < end)
 	{
-		if (y < sdl->height)
+		offset = (y * sdl->screen->pitch) + (x * 4);
+		if (y < sdl->height && offset > 0)
 		{
 			get_rgb(ray->texture, &color, ray->offset, (y - begin) * ratio);
+			color_shade(ray->dist, &color, shade_dist);
+			Uint8 *pixel = (Uint8*)sdl->screen->pixels;
+			pixel += offset;
+			*((Uint32*)pixel) = (Uint32)((color.r << 16) + (color.g << 8) + (color.b << 0));
 			//SDL_SetRenderDrawBlendMode(sdl->ren, SDL_BLENDMODE_BLEND);
-			//color_shade(ray->dist, &color);
 //			SDL_SetRenderDrawColor(sdl->ren, (int)(color.r * ray->dist) % 255, (int)(color.g * ray->dist) % 255, (int)(color.b * ray->dist) % 255, 255);
-			SDL_SetRenderDrawColor(sdl->ren, color.r, color.g, color.b, 255);
-			SDL_RenderDrawPoint(sdl->ren, x, y);
+			//SDL_SetRenderDrawColor(sdl->ren, color.r, color.g, ç, 255);
+			//SDL_RenderDrawPoint(sdl->ren, x, y);
 		}
 		y++;
 	}
@@ -194,7 +196,7 @@ void		cast_rays(t_sdl *sdl, t_map *map, t_player *player)
 	double		dist;
 	int			slice_height;
 
-	draw_background(sdl);
+	//draw_background(sdl);
 	angle = player->direction - 30.0;
 	angle = check_angle(angle);
 	x = 0;
@@ -204,8 +206,11 @@ void		cast_rays(t_sdl *sdl, t_map *map, t_player *player)
 		ray_vert = cast_ray_vert(map, player, angle, sdl);
 		hit_ray = ray_horz->dist < ray_vert->dist ? ray_horz : ray_vert;
 		dist = hit_ray->dist * cos((player->direction - angle) * M_PI / 180.0);
-		slice_height = 64 / dist * sdl->dist_to_pp;
-		draw_col(sdl, hit_ray, x, slice_height);
+		if (dist < player->shade_dist)
+		{
+			slice_height = 64 / dist * sdl->dist_to_pp;
+			draw_col(sdl, hit_ray, x, slice_height, player->shade_dist);
+		}
 		angle = angle + 60.0 / sdl->width;
 		angle = check_angle(angle);
 		x++;

@@ -28,6 +28,7 @@ int		load_texture(t_node *node, char *name)
 	ft_strcat(file_path, name);
 	ft_strcat(file_path, ".bmp");
 	node->texture = SDL_LoadBMP(file_path);
+
 	if (node->texture == NULL)
 	{
 		printf("Failed to load right image!\n");

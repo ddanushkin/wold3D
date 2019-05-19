@@ -38,13 +38,14 @@ typedef struct		s_ray
 
 typedef struct		s_sdl
 {
-	SDL_Window		*win;
 	int 			width;
 	int 			height;
-	SDL_Renderer	*ren;
-	SDL_Event		event;
 	int				dist_to_pp;
 	float			fov;
+	SDL_Event		event;
+	SDL_Window		*window;
+	SDL_Renderer	*renderer;
+	SDL_Surface		*screen;
 }					t_sdl;
 
 typedef struct		s_player
@@ -55,6 +56,8 @@ typedef struct		s_player
 	double			y_v;
 	int				speed;
 	int				direction;
+	double			shade_dist;
+	int 			max_dist;
 }					t_player;
 
 typedef struct		s_node
