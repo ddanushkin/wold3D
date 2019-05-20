@@ -34,6 +34,8 @@ typedef struct		s_ray
 	int				offset;
 	float			dist;
 	SDL_Surface		*texture;
+	int 			x;
+	int 			y;
 }					t_ray;
 
 typedef struct		s_sdl
@@ -42,6 +44,8 @@ typedef struct		s_sdl
 	int 			height;
 	int				dist_to_pp;
 	float			fov;
+	int 			draw_dist;
+	double			ceiling;
 	SDL_Event		event;
 	SDL_Window		*window;
 	SDL_Renderer	*renderer;
@@ -64,7 +68,10 @@ typedef struct		s_node
 {
 	int				x;
 	int				y;
-	SDL_Surface		*texture;
+	SDL_Surface		*texture_n;
+	SDL_Surface		*texture_s;
+	SDL_Surface		*texture_e;
+	SDL_Surface		*texture_w;
 	int 			collidable;
 }					t_node;
 
@@ -82,21 +89,13 @@ typedef struct		s_app
 	t_map			map;
 }					t_app;
 
-typedef struct		s_texture_col
-{
-	SDL_Surface		*surface;
-	SDL_Color		**pixels;
-	int				height;
-}					t_texture_col;
-
 void				init(t_sdl *sdl);
 void				map_read(int fd, t_map *map, t_player *player);
 void				ft_error(char *str);
 void				quit_properly(t_app *sdl);
 void				draw_minimap(t_map *map, t_sdl *sdl, t_player *player);
-int					load_texture(t_node *node, char *name);
 void				player_init(t_player *player);
 void				player_move(t_map *map, const Uint8	*state, t_player *player);
 void				cast_rays(t_sdl *sdl, t_map *map, t_player *player);
-void				get_rgb(SDL_Surface *surface, SDL_Color *c, int x, int y);
+//void				get_color(SDL_Surface *surface, SDL_Color *c, int x, int y);
 #endif

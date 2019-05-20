@@ -2,7 +2,7 @@
 
 void	player_init(t_player *player)
 {
-	player->direction = 270;
+	player->direction = 1;
 	player->speed = 4;
 	player->x_v = 0;
 	player->y_v = 0;
@@ -64,5 +64,4 @@ void	player_move(t_map *map, const Uint8	*state, t_player *player)
 		new_y = player->y - (int)(player->speed * player->x_v);
 		try_move(map, player, new_x, new_y);
 	}
-
 }
