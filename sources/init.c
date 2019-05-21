@@ -1,15 +1,18 @@
 #include "wolf3d.h"
 
-void		init(t_sdl *sdl)
+void		init(t_app *app)
 {
-	sdl->width = 640;
-	sdl->height = 480;
-	sdl->fov = 3.14159 / 3.0; //0.66;
-	sdl->dist_to_pp = sdl->width / (tan(sdl->fov / 2.0) * 2.0);
-	sdl->draw_dist = 900;
+	app->sdl = (t_sdl *)malloc(sizeof(t_sdl));
+	app->map = (t_map *)malloc(sizeof(t_map));
+	app->player = (t_player *)malloc(sizeof(t_player));
+	app->sdl->width = 640;
+	app->sdl->height = 480;
+	app->sdl->fov = 3.14159 / 3.0; //0.66;
+	app->sdl->dist_to_pp = app->sdl->width / (tan(app->sdl->fov / 2.0) * 2.0);
+	app->sdl->draw_dist = 840;
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 		ft_error("SDL initialization error");
-	sdl->window = SDL_CreateWindow("SDL2 Example", 0, 0, sdl->width, sdl->height, 0);
-	sdl->screen = SDL_GetWindowSurface(sdl->window);
-	sdl->ceiling = -5;
+	app->sdl->window = SDL_CreateWindow("SDL2 Example", 0, 0, app->sdl->width, app->sdl->height, 0);
+	app->sdl->screen = SDL_GetWindowSurface(app->sdl->window);
+	app->sdl->ceiling = -5;
 }

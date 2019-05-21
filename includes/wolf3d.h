@@ -46,6 +46,7 @@ typedef struct		s_sdl
 	float			fov;
 	int 			draw_dist;
 	double			ceiling;
+	Uint32 			delta_time;
 	SDL_Event		event;
 	SDL_Window		*window;
 	SDL_Renderer	*renderer;
@@ -84,18 +85,21 @@ typedef struct		s_map
 
 typedef struct		s_app
 {
-	t_sdl			sdl;
-	t_player		player;
-	t_map			map;
+	t_sdl			*sdl;
+	t_player		*player;
+	t_map			*map;
 }					t_app;
 
-void				init(t_sdl *sdl);
+void				init(t_app *app);
 void				map_read(int fd, t_map *map, t_player *player);
 void				ft_error(char *str);
 void				quit_properly(t_app *sdl);
 void				draw_minimap(t_map *map, t_sdl *sdl, t_player *player);
 void				player_init(t_player *player);
 void				player_move(t_map *map, const Uint8	*state, t_player *player);
-void				cast_rays(t_sdl *sdl, t_map *map, t_player *player);
-//void				get_color(SDL_Surface *surface, SDL_Color *c, int x, int y);
+void				cast_rays(t_app *app);
+void				shade_color(double dist, SDL_Color *color, double shade_dist);
+void				get_color(SDL_Surface *surface, SDL_Color *c, int x, int y);
+void				set_pixel(t_sdl *sdl, int x, int y, SDL_Color *color);
+void				draw_col(t_sdl * sdl, t_ray *ray, int x, int height);
 #endif

@@ -3,12 +3,13 @@
 void	ft_error(char *str)
 {
 	ft_putendl(str);
-	exit(0);
 }
 
 void	quit_properly(t_app *app)
 {
-	//SDL_DestroyRenderer(app->sdl.ren);
-	SDL_DestroyWindow(app->sdl.window);
+	SDL_DestroyWindow(app->sdl->window);
 	SDL_Quit();
+	free(app->sdl);
+	free(app->map);
+	free(app->player);
 }
