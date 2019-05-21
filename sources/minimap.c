@@ -1,5 +1,19 @@
 #include "wolf3d.h"
 
+void		draw_player(t_sdl *sdl, t_map *map, t_player *player)
+{
+	SDL_SetRenderDrawColor(sdl->renderer, 195, 0, 255, 255);
+	SDL_RenderDrawPoint(sdl->renderer, player->x, player->y - 1);
+	SDL_RenderDrawPoint(sdl->renderer, player->x - 1, player->y);
+	SDL_RenderDrawPoint(sdl->renderer, player->x, player->y + 1);
+	SDL_RenderDrawPoint(sdl->renderer, player->x + 1, player->y);
+	SDL_RenderDrawPoint(sdl->renderer, player->x + 1, player->y - 1);
+	SDL_RenderDrawPoint(sdl->renderer, player->x - 1, player->y + 1);
+	SDL_RenderDrawPoint(sdl->renderer, player->x + 1, player->y + 1);
+	SDL_RenderDrawPoint(sdl->renderer, player->x - 1, player->y - 1);
+	SDL_RenderDrawPoint(sdl->renderer, player->x, player->y);
+}
+
 void		draw_sector(t_sdl *sdl, int row, int col)
 {
 	int		i;
@@ -16,20 +30,6 @@ void		draw_sector(t_sdl *sdl, int row, int col)
 			SDL_RenderDrawPoint(sdl->renderer, col+i, row+(j++));
 		i++;
 	}
-}
-
-void		draw_player(t_sdl *sdl, t_map *map, t_player *player)
-{
-	SDL_SetRenderDrawColor(sdl->renderer, 195, 0, 255, 255);
-	SDL_RenderDrawPoint(sdl->renderer, player->x, player->y - 1);
-	SDL_RenderDrawPoint(sdl->renderer, player->x - 1, player->y);
-	SDL_RenderDrawPoint(sdl->renderer, player->x, player->y + 1);
-	SDL_RenderDrawPoint(sdl->renderer, player->x + 1, player->y);
-	SDL_RenderDrawPoint(sdl->renderer, player->x + 1, player->y - 1);
-	SDL_RenderDrawPoint(sdl->renderer, player->x - 1, player->y + 1);
-	SDL_RenderDrawPoint(sdl->renderer, player->x + 1, player->y + 1);
-	SDL_RenderDrawPoint(sdl->renderer, player->x - 1, player->y - 1);
-	SDL_RenderDrawPoint(sdl->renderer, player->x, player->y);
 }
 
 void		draw_minimap(t_map *map, t_sdl *sdl, t_player *player)

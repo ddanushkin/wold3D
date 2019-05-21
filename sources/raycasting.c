@@ -35,9 +35,9 @@ int is_wall_h(t_map *map, t_fpoint *pos, t_ray *ray, double angle)
 	if (pos->x < 0 || pos->y < 0 || pos->x >= map->cols * 64 || pos->y >= map->rows * 64)
 		return (1);
 	if (sin(angle) > 0)
-		ray->texture = map->nodes[y][x].texture_w;
+		ray->texture = map->nodes[y][x].texture_n;
 	else
-		ray->texture = map->nodes[y][x].texture_e;
+		ray->texture = map->nodes[y][x].texture_n;
 	ray->x = pos->x;
 	ray->y = pos->y;
 	return map->nodes[y][x].collidable;
@@ -55,7 +55,7 @@ int is_wall_v(t_map *map, t_fpoint *pos, t_ray *ray, double angle)
 	if (cos(angle) < 0)
 		ray->texture = map->nodes[y][x].texture_n;
 	else
-		ray->texture = map->nodes[y][x].texture_s;
+		ray->texture = map->nodes[y][x].texture_n;
 	ray->x = pos->x;
 	ray->y = pos->y;
 	return map->nodes[y][x].collidable;
@@ -151,11 +151,8 @@ void		cast_ray(t_app *app, int x, float angle)
 	ray_vert = cast_ray_vert(app->map, app->player, angle);
 	ray = ray_horz->dist < ray_vert->dist ? ray_horz : ray_vert;
 	ray->dist *= cos((angle - app->player->direction) * M_PI / 180.0);
-	if (ray->dist < app->player->shade_dist)
-	{
-		slice_height = 64 / ray->dist * app->sdl->dist_to_pp;
-		draw_col(app->sdl, ray, x, slice_height);
-	}
+	slice_height = 64 / ray->dist * app->sdl->dist_to_pp;
+	draw_col(app->sdl, ray, x, slice_height);
 	free(ray_horz);
 	free(ray_vert);
 }

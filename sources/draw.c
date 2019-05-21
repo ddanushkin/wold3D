@@ -6,7 +6,7 @@
 /*   By: lglover <lglover@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/21 11:21:57 by lglover           #+#    #+#             */
-/*   Updated: 2019/05/21 11:22:15 by lglover          ###   ########.fr       */
+/*   Updated: 2019/05/21 16:39:37 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ static void	draw_ceiling(t_sdl *sdl, int x, int y)
 			color.r = 31;
 			color.g = 44;
 			color.b = 61;
-			dist = (sdl->height / (2.0 * j - sdl->height)) * -sdl->ceiling;
-			shade_color(dist, &color, 2);
+			dist = (sdl->height / (2.0 * j - sdl->height)) * 5;
+			shade_color(dist, &color, -58);
 			set_pixel(sdl, x, j, &color);
 			j++;
 		}
@@ -48,12 +48,24 @@ static void	draw_floor(t_sdl *sdl, int x, int end)
 			color.r = 21;
 			color.g = 34;
 			color.b = 51;
-			dist = (sdl->height / (2.0 * j - sdl->height)) * sdl->ceiling;
-			shade_color(dist, &color, 2);
+			dist = (sdl->height / (2.0 * j - sdl->height)) * 5;
+			shade_color(dist, &color, 58);
 			set_pixel(sdl, x, j, &color);
 			j++;
 		}
 	}
+}
+
+int		draw_back(t_sdl *sdl, int y, int x, int end)
+{
+	SDL_Color color;
+
+	color.r = 0;
+	color.g = 0;
+	color.b = 0;
+	while (y < end)
+		set_pixel(sdl, x, y++, &color);
+	return(y);
 }
 
 void		draw_col(t_sdl *sdl, t_ray *ray, int x, int height)
@@ -72,6 +84,8 @@ void		draw_col(t_sdl *sdl, t_ray *ray, int x, int height)
 		y = 0;
 	draw_ceiling(sdl, x, y);
 	draw_floor(sdl, x, end);
+	if (ray->dist > sdl->draw_dist)
+		y = draw_back(sdl, y, x, end);
 	while (y < end)
 	{
 		get_color(ray->texture, &color, ray->offset, (y - begin) * ratio);

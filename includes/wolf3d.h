@@ -8,7 +8,7 @@
 #include "libft.h"
 
 # define TEXTURE_SIZE 64
-# define TICK_INTERVAL 30
+# define TICK_INTERVAL 15
 # define MAX(a,b) (a > b) ? a : b
 
 typedef struct		s_ipoint
@@ -50,6 +50,8 @@ typedef struct		s_sdl
 	SDL_Event		event;
 	SDL_Window		*window;
 	SDL_Renderer	*renderer;
+	SDL_Texture		*texture;
+	Uint32			*pixels;
 	SDL_Surface		*screen;
 }					t_sdl;
 
@@ -57,12 +59,10 @@ typedef struct		s_player
 {
 	int 			x;
 	int 			y;
-	double			x_v;
-	double			y_v;
+	float			x_v;
+	float			y_v;
 	int				speed;
 	int				direction;
-	double			shade_dist;
-	int 			max_dist;
 }					t_player;
 
 typedef struct		s_node

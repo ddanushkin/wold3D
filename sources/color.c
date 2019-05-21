@@ -4,7 +4,7 @@ void 	shade_color(double dist, SDL_Color *color, double shade_dist)
 {
 	double	factor;
 
-	factor = dist / (shade_dist - 60);
+	factor = dist / shade_dist;
 	if (factor > 1)
 	{
 		color->r = 0;
@@ -31,8 +31,6 @@ void	set_pixel(t_sdl *sdl, int x, int y, SDL_Color *color)
 {
 	int		offset;
 
-	offset = (y * sdl->screen->pitch) + (x * 4);
-	Uint8 *pixel = (Uint8*)sdl->screen->pixels;
-	pixel += offset;
-	*((Uint32*)pixel) = (Uint32)((color->r << 16) + (color->g << 8) + (color->b));
+	offset = y * sdl->width + x;
+	sdl->pixels[offset] = (Uint32)((color->r << 16) + (color->g << 8) + (color->b));
 }
