@@ -6,7 +6,7 @@
 /*   By: lglover <lglover@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/21 11:21:57 by lglover           #+#    #+#             */
-/*   Updated: 2019/05/21 16:39:37 by lglover          ###   ########.fr       */
+/*   Updated: 2019/05/22 15:56:19 by ndremora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,19 +56,20 @@ static void	draw_floor(t_sdl *sdl, int x, int end)
 	}
 }
 
-int		draw_back(t_sdl *sdl, int y, int x, int end)
+int			draw_back(t_sdl *sdl, int y, int x, int end)
 {
-	SDL_Color color;
+	int		offset;
 
-	color.r = 0;
-	color.g = 0;
-	color.b = 0;
 	while (y < end)
-		set_pixel(sdl, x, y++, &color);
-	return(y);
+	{
+		offset = y * sdl->width + x;
+		sdl->pixels[offset] = 0;
+		y++;
+	}
+	return (y);
 }
 
-void		draw_col(t_sdl *sdl, t_ray *ray, int x, int height)
+void		draw_column(t_sdl *sdl, t_ray *ray, int x, int height)
 {
 	int			y;
 	int			begin;
@@ -77,11 +78,10 @@ void		draw_col(t_sdl *sdl, t_ray *ray, int x, int height)
 	SDL_Color	color;
 
 	ratio = 64.0 / height;
-	begin = (sdl->height / 2) - (height / 2);
+	begin = (sdl->height - height) / 2;
 	if ((end = begin + height) > sdl->height)
 		end = sdl->height;
-	if ((y = begin) < 0)
-		y = 0;
+	y = (begin < 0) ? 0 : begin;
 	draw_ceiling(sdl, x, y);
 	draw_floor(sdl, x, end);
 	if (ray->dist > sdl->draw_dist)

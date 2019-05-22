@@ -2,13 +2,14 @@
 #define WOLF3D_WOLF3D_H
 
 #include <SDL.h>
+#include <SDL_mixer.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdio.h> /* Delete! */
 #include "libft.h"
 
 # define TEXTURE_SIZE 64
-# define TICK_INTERVAL 15
+# define M_PI_180 0.017453292519943295
 # define MAX(a,b) (a > b) ? a : b
 
 typedef struct		s_ipoint
@@ -34,9 +35,15 @@ typedef struct		s_ray
 	int				offset;
 	float			dist;
 	SDL_Surface		*texture;
-	int 			x;
-	int 			y;
 }					t_ray;
+
+typedef	struct		s_time
+{
+	float		frame;
+	int			prev;
+	int			current;
+	float		delta;
+}					t_time;
 
 typedef struct		s_sdl
 {
@@ -45,8 +52,6 @@ typedef struct		s_sdl
 	int				dist_to_pp;
 	float			fov;
 	int 			draw_dist;
-	double			ceiling;
-	Uint32 			delta_time;
 	SDL_Event		event;
 	SDL_Window		*window;
 	SDL_Renderer	*renderer;
@@ -61,7 +66,7 @@ typedef struct		s_player
 	int 			y;
 	float			x_v;
 	float			y_v;
-	int				speed;
+	float			speed;
 	int				direction;
 }					t_player;
 
@@ -96,10 +101,12 @@ void				ft_error(char *str);
 void				quit_properly(t_app *sdl);
 void				draw_minimap(t_map *map, t_sdl *sdl, t_player *player);
 void				player_init(t_player *player);
-void				player_move(t_map *map, const Uint8	*state, t_player *player);
-void				cast_rays(t_app *app);
+void				move_player(t_map *map, const Uint8 *key, t_player *player);
+void				create_field_of_view(t_app *app);
 void				shade_color(double dist, SDL_Color *color, double shade_dist);
 void				get_color(SDL_Surface *surface, SDL_Color *c, int x, int y);
 void				set_pixel(t_sdl *sdl, int x, int y, SDL_Color *color);
-void				draw_col(t_sdl * sdl, t_ray *ray, int x, int height);
+void				draw_column(t_sdl *sdl, t_ray *ray, int x, int height);
+void				init_time(t_time *time);
+void				update_time(t_time *time, t_app *app);
 #endif

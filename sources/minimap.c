@@ -27,7 +27,7 @@ void		draw_sector(t_sdl *sdl, int row, int col)
 	{
 		j = 0;
 		while (j < TEXTURE_SIZE)
-			SDL_RenderDrawPoint(sdl->renderer, col+i, row+(j++));
+			SDL_RenderDrawPoint(sdl->renderer, col + i, row + (j++));
 		i++;
 	}
 }
