@@ -6,7 +6,7 @@
 /*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/22 15:56:59 by ndremora          #+#    #+#             */
-/*   Updated: 2019/05/22 18:18:35 by ndremora         ###   ########.fr       */
+/*   Updated: 2019/05/23 10:13:34 by ndremora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ static	void	create_stuff(t_sdl *sdl)
 		ft_error("SDL video initialization error");
 	if (SDL_Init(SDL_INIT_AUDIO) < 0)
 		ft_error("SDL audio initialization error");
+	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+		ft_error("Open Audio error");
 	sdl->window = SDL_CreateWindow("SDL2", 0, 0, sdl->width, sdl->height, 0);
 	sdl->renderer = SDL_CreateRenderer(sdl->window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	//app->sdl->screen = SDL_GetWindowSurface(app->sdl->window);
@@ -29,11 +31,13 @@ static	void	create_stuff(t_sdl *sdl)
 
 static	void	init_sdl(t_sdl *sdl)
 {
-	sdl->width = 640;
-	sdl->height = 480;
+	sdl->width = 800;
+	sdl->height = 600;
 	sdl->fov = 3.14159 / 3.0;
 	sdl->dist_to_pp = sdl->width / (tan(sdl->fov / 2.0) * 2.0);
 	sdl->draw_dist = 840;
+	sdl->pixels = (Uint32 *)malloc(sizeof(Uint32) * sdl->width * sdl->height);
+	ft_memset(sdl->pixels, 255, sdl->width * sdl->height * sizeof(Uint32));
 }
 
 void			init(t_app *app)
@@ -43,6 +47,4 @@ void			init(t_app *app)
 	app->player = (t_player *)malloc(sizeof(t_player));
 	init_sdl(app->sdl);
 	create_stuff(app->sdl);
-	app->sdl->pixels = (Uint32 *)malloc(sizeof(Uint32) * app->sdl->width * app->sdl->height);
-	ft_memset(app->sdl->pixels, 255, app->sdl->width * app->sdl->height * sizeof(Uint32));
 }

@@ -6,7 +6,7 @@
 /*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/22 17:57:04 by ndremora          #+#    #+#             */
-/*   Updated: 2019/05/22 18:01:10 by ndremora         ###   ########.fr       */
+/*   Updated: 2019/05/23 10:05:06 by ndremora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ void	player_init(t_player *player)
 	player->direction = 270;
 	player->x_v = 0;
 	player->y_v = 0;
+	player->bgm = Mix_LoadMUS("../resources/bgm.mp3");
+	player->sound_effect = Mix_LoadWAV("../resources/speak.wav");
 }
 
 void	player_rotate(t_player *player, const Uint8 *state)
@@ -38,13 +40,11 @@ void	try_move(t_map *map, t_player *player, int new_x, int new_y)
 	}
 }
 
-void	move_player(t_map *map, const Uint8 *key, t_player *player)
+void	player_movement(t_map *map, const Uint8 *key, t_player *player)
 {
 	int new_x;
 	int new_y;
 
-	if (key[SDL_SCANCODE_LEFT] || key[SDL_SCANCODE_RIGHT])
-		player_rotate(player, key);
 	player->x_v = cos(player->direction * M_PI_180);
 	player->y_v = sin(player->direction * M_PI_180);
 	if (key[SDL_SCANCODE_W])
@@ -71,4 +71,27 @@ void	move_player(t_map *map, const Uint8 *key, t_player *player)
 		new_y = player->y - (int)(player->speed * player->x_v);
 		try_move(map, player, new_x, new_y);
 	}
+}
+
+void	update_sound(const Uint8 *key, t_player *player)
+{
+	if (key[SDL_SCANCODE_M])
+	{
+		if (!Mix_PlayingMusic())
+			Mix_PlayMusic(player->bgm, -1);
+		else if (Mix_PausedMusic())
+			Mix_ResumeMusic();
+	}
+	if (key[SDL_SCANCODE_P])
+		Mix_PauseMusic();
+	if (key[SDL_SCANCODE_SPACE])
+		Mix_PlayChannel(-1, player->sound_effect, 0);
+}
+
+void	keyboard_input(t_map *map, const Uint8 *key, t_player *player)
+{
+	if (key[SDL_SCANCODE_LEFT] || key[SDL_SCANCODE_RIGHT])
+		player_rotate(player, key);
+	player_movement(map, key, player);
+	update_sound(key, player);
 }
