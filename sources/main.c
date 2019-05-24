@@ -6,7 +6,7 @@
 /*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/22 16:01:11 by ndremora          #+#    #+#             */
-/*   Updated: 2019/05/23 10:16:50 by ndremora         ###   ########.fr       */
+/*   Updated: 2019/05/24 11:55:44 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ static void	update_picture(t_sdl *sdl)
 {
 	SDL_UpdateTexture(sdl->texture, NULL, sdl->pixels, sdl->width * sizeof(Uint32));
 	SDL_RenderCopy(sdl->renderer, sdl->texture, NULL, NULL);
+	draw_text(sdl, "Privet Adolf <3!", 100, 100);
 	SDL_RenderPresent(sdl->renderer);
 }
 
@@ -37,13 +38,11 @@ void		start_the_game(t_app *app)
 	key = SDL_GetKeyboardState(NULL);
 	while (1)
 	{
-		update_time(&time, app);
 		if (check_for_quit(app->sdl, key) == 1)
 			break ;
+		update_time(&time, app);
 		if (time.frame >= 0.25)
-		{
-			time.frame = 0; //  для движи
-		}
+			time.frame = 0;
 		create_field_of_view(app);
 		keyboard_input(app->map, key, app->player);
 		update_picture(app->sdl);

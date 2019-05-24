@@ -73,6 +73,7 @@ typedef struct		s_player
 	float			y_v;
 	float			speed;
 	int				direction;
+	int				dist_to_wall;
 	Mix_Music 		*bgm;
 	Mix_Chunk 		*sound_effect;
 }					t_player;
@@ -116,4 +117,5 @@ void				set_pixel(t_sdl *sdl, int x, int y, SDL_Color *color);
 void				draw_column(t_sdl *sdl, t_ray *ray, int x, int height);
 void				init_time(t_time *time);
 void				update_time(t_time *time, t_app *app);
+void				draw_text(t_sdl *sdl, const char *text, int x, int y);
 #endif

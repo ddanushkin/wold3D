@@ -6,7 +6,7 @@
 /*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/22 15:21:40 by ndremora          #+#    #+#             */
-/*   Updated: 2019/05/23 16:10:25 by ndremora         ###   ########.fr       */
+/*   Updated: 2019/05/24 12:53:02 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,12 +91,12 @@ t_ray	*cast_ray_horz(t_map *map, t_player *player, double angle)
 	angle = angle * M_PI_180;
 	if (sin(angle) < 0)
 	{
-		end.y = (player->y / 64) * 64 - 1;
+		end.y = (int)(player->y / 64) * 64.0 - 0.001;
 		step.y = -64;
 	}
 	else if (sin(angle) > 0)
 	{
-		end.y = (player->y / 64) * 64 + 64;
+		end.y = (int)(player->y / 64) * 64.0 + 64.001;
 		step.y = 64;
 	}
 	else
@@ -109,8 +109,7 @@ t_ray	*cast_ray_horz(t_map *map, t_player *player, double angle)
 		end.x += step.x;
 		end.y += step.y;
 	}
-	//ray->dist = get_dist(player->x, player->y, start.x, start.y); // old method
-	ray->dist = fabs((player->y - end.y) / sin(angle)); // new method
+	ray->dist = fabs((player->y - end.y) / sin(angle));
 	ray->offset = (int)end.x % 64;
 	return (ray);
 }
@@ -125,12 +124,12 @@ t_ray	*cast_ray_vert(t_map *map, t_player *player, double angle)
 	angle = angle * M_PI_180;
 	if (cos(angle) > 0)
 	{
-		end.x = (player->x / 64) * 64 + 64;
+		end.x = player->x / 64 * 64 + 64.001;
 		step.x = 64;
 	}
 	else if (cos(angle) < 0)
 	{
-		end.x = (player->x / 64) * 64 - 1;
+		end.x = player->x / 64 * 64 - 0.001;
 		step.x = -64;
 	}
 	else
@@ -143,8 +142,7 @@ t_ray	*cast_ray_vert(t_map *map, t_player *player, double angle)
 		end.x += step.x;
 		end.y += step.y;
 	}
-	//ray->dist = get_dist(player->x, player->y, start.x, start.y); // old method
-	ray->dist = fabs((player->x - end.x) / cos(angle)); // new method
+	ray->dist = fabs((player->x - end.x) / cos(angle));
 	ray->offset = (int)end.y % 64;
 	return (ray);
 }

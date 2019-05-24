@@ -6,7 +6,7 @@
 /*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/22 16:26:31 by ndremora          #+#    #+#             */
-/*   Updated: 2019/05/22 16:59:17 by ndremora         ###   ########.fr       */
+/*   Updated: 2019/05/24 12:17:04 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,17 +29,7 @@ void		map_init(int fd, t_map *map)
 	ft_delarr(data);
 	map->nodes = (t_node **)malloc(sizeof(t_node *) * map->rows);
 	while (i < map->rows)
-	{
-		map->nodes[i] = (t_node *)malloc(sizeof(t_node) * map->cols);
-		j = 0;
-		while (j < map->cols)
-		{
-			map->nodes[i][j].x = j * TEXTURE_SIZE;
-			map->nodes[i][j].y = i * TEXTURE_SIZE;
-			j++;
-		}
-		i++;
-	}
+		map->nodes[i++] = (t_node *)malloc(sizeof(t_node) * map->cols);
 }
 
 SDL_Surface	*load_texture(char *name, char *dir)

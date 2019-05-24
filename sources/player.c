@@ -6,7 +6,7 @@
 /*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/22 17:57:04 by ndremora          #+#    #+#             */
-/*   Updated: 2019/05/23 16:03:33 by ndremora         ###   ########.fr       */
+/*   Updated: 2019/05/24 13:00:25 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,19 +23,18 @@ void	player_init(t_player *player)
 void	player_rotate(t_player *player, const Uint8 *state)
 {
 	if (state[SDL_SCANCODE_LEFT])
-		(player->direction -= player->speed / 2) < 0 ? player->direction = 357 : 0;
+		(player->direction -= player->speed) < 0 ? player->direction = 357 : 0;
 	if (state[SDL_SCANCODE_RIGHT])
-		(player->direction += player->speed / 2) > 359 ? player->direction = 4 : 0;
+		(player->direction += player->speed) > 359 ? player->direction = 4 : 0;
 	if (state[SDL_SCANCODE_LEFT] || state[SDL_SCANCODE_RIGHT])
 		printf("player_dir - %d\n", player->direction);
 }
 
 void	try_move(t_map *map, t_player *player, int new_x, int new_y)
 {
-	if (!map->nodes[new_y / 64][new_x / 64].collidable)
+	if (!map->nodes[(new_y) / 64][new_x / 64].collidable)
 	{
-		player->x = new_x;
-		player->y = new_y;
+		player->x = new_x;player->y = new_y;
 	}
 }
 
