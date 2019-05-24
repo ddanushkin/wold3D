@@ -62,21 +62,40 @@ typedef struct		s_sdl
 	TTF_Font		*font;
 	SDL_Color		text_color;
 	SDL_Surface		*text;
-
+	SDL_Texture		*ui;
 }					t_sdl;
 
 typedef struct		s_player
 {
 	int 			x;
 	int 			y;
+	int				health;
+	int 			score;
+	char			*cur_level;
+	int 			lives;
+	int 			ammo;
 	float			x_v;
 	float			y_v;
 	float			speed;
 	int				direction;
-	int				dist_to_wall;
 	Mix_Music 		*bgm;
 	Mix_Chunk 		*sound_effect;
+	float			dist_w;
+	float			dist_e;
+	float			dist_n;
+	float			dist_s;
+	SDL_Texture		*state_1;
+	SDL_Texture		*state_2;
 }					t_player;
+
+typedef struct		s_ui_elem
+{
+	SDL_Color		*color;
+	int 			x;
+	int 			y;
+	int				size;
+	char			*text;
+}					t_ui_elem;
 
 typedef struct		s_node
 {
@@ -108,7 +127,7 @@ void				map_read(int fd, t_map *map, t_player *player);
 void				ft_error(char *str);
 void				quit_properly(t_app *sdl);
 void				draw_minimap(t_map *map, t_sdl *sdl, t_player *player);
-void				player_init(t_player *player);
+void				player_init(t_sdl *sdl, t_player *player);
 void				keyboard_input(t_map *map, const Uint8 *key, t_player *player);
 void				create_field_of_view(t_app *app);
 void				shade_color(double dist, SDL_Color *color, double shade_dist);
@@ -117,5 +136,9 @@ void				set_pixel(t_sdl *sdl, int x, int y, SDL_Color *color);
 void				draw_column(t_sdl *sdl, t_ray *ray, int x, int height);
 void				init_time(t_time *time);
 void				update_time(t_time *time, t_app *app);
-void				draw_text(t_sdl *sdl, const char *text, int x, int y);
+void				draw_text(t_sdl *sdl, t_ui_elem *ui_elem);
+void 				create_hud(t_sdl *sdl, t_player *player);
+SDL_Texture			*load_texture(t_sdl *sdl, char *name);
+t_ray				*get_ray(t_map *map, t_player *player, double angle);
+void				draw_face(t_sdl *sdl, t_player *player, float delta);
 #endif

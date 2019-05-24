@@ -6,7 +6,7 @@
 /*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/22 15:56:59 by ndremora          #+#    #+#             */
-/*   Updated: 2019/05/24 11:50:35 by lglover          ###   ########.fr       */
+/*   Updated: 2019/05/24 16:57:26 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,28 +29,22 @@ static	void	create_stuff(t_sdl *sdl)
 	check_for_init_errors();
 	sdl->window = SDL_CreateWindow("SDL2", 0, 0, sdl->width, sdl->height, 0);
 	sdl->renderer = SDL_CreateRenderer(sdl->window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-	//app->sdl->screen = SDL_GetWindowSurface(app->sdl->window);
 	sdl->texture = SDL_CreateTexture(sdl->renderer,
 			SDL_PIXELFORMAT_ARGB8888,
 			SDL_TEXTUREACCESS_STATIC,
 			sdl->width, sdl->height);
+	sdl->ui = load_texture(sdl, "main_ui");
 }
 
 static	void	init_sdl(t_sdl *sdl)
 {
 	check_for_init_errors();
-	sdl->width = 800;
-	sdl->height = 600;
+	sdl->width = 1280;
+	sdl->height = 720;
 	sdl->fov = 3.14159 / 3.0;
 	sdl->dist_to_pp = sdl->width / (tan(sdl->fov / 2.0) * 2.0);
 	sdl->draw_dist = 840;
 	sdl->pixels = (Uint32 *)malloc(sizeof(Uint32) * sdl->width * sdl->height);
-	ft_memset(sdl->pixels, 255, sdl->width * sdl->height * sizeof(Uint32));
-	sdl->font = TTF_OpenFont("../resources/direwolf3d.ttf", 36);
-	sdl->text_color.r = 144;
-	sdl->text_color.g = 77;
-	sdl->text_color.b = 255;
-	sdl->text_color.a = 255;
 }
 
 void			init(t_app *app)

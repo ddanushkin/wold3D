@@ -22,6 +22,6 @@ void	update_time(t_time *time, t_app *app)
 	time->prev = time->current;
 	time->current = SDL_GetTicks();
 	time->delta = (time->current - time->prev) * 0.001;
-	time->frame += time->delta;
+	time->frame += time->delta * 1000;
 	app->player->speed = 250 * time->delta;
 }

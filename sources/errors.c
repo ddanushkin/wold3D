@@ -6,7 +6,7 @@
 /*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/22 15:56:41 by ndremora          #+#    #+#             */
-/*   Updated: 2019/05/24 11:50:35 by lglover          ###   ########.fr       */
+/*   Updated: 2019/05/24 15:56:28 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,24 +23,20 @@ void	quit_properly(t_app *app)
 	SDL_DestroyRenderer(app->sdl->renderer);
 	SDL_DestroyTexture(app->sdl->texture);
 
-
 	Mix_FreeChunk(app->player->sound_effect);
 	Mix_FreeMusic(app->player->bgm);
 	app->player->bgm = NULL;
 	app->player->sound_effect = NULL;
 
-
-	app->sdl->window = NULL;
-	app->sdl->renderer = NULL;
-	app->sdl->texture = NULL;
-	app->sdl->pixels = NULL;
-	free(app->sdl);
+	TTF_CloseFont(app->sdl->font);
 	free(app->sdl->pixels);
+	free(app->sdl);
 	free(app->map);
 	free(app->player);
 
 	SDL_Quit();
 	Mix_Quit();
+	TTF_Quit();
 	app = NULL;
-	//exit(0);
+	exit(0);
 }

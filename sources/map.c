@@ -6,7 +6,7 @@
 /*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/22 16:26:31 by ndremora          #+#    #+#             */
-/*   Updated: 2019/05/24 12:17:04 by lglover          ###   ########.fr       */
+/*   Updated: 2019/05/24 18:14:39 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ void		map_init(int fd, t_map *map)
 	char	*line;
 	char	**data;
 	int		i;
-	int		j;
 
 	i = 0;
 	line = NULL;
@@ -32,9 +31,9 @@ void		map_init(int fd, t_map *map)
 		map->nodes[i++] = (t_node *)malloc(sizeof(t_node) * map->cols);
 }
 
-SDL_Surface	*load_texture(char *name, char *dir)
+SDL_Surface	*load_surf(char *name, char *dir)
 {
-	char file_path[50];
+	char	file_path[50];
 
 	file_path[0] = '\0';
 	ft_strcat(file_path, "../resources/");
@@ -53,10 +52,10 @@ void		fill_row(t_map *map, char **data, int row, t_player *player)
 	{
 		if (*data[col] >= '1' && *data[col] <= '9')
 		{
-			map->nodes[row][col].texture_n = load_texture(data[col], "_n");
-			map->nodes[row][col].texture_s = load_texture(data[col], "_s");
-			map->nodes[row][col].texture_w = load_texture(data[col], "_w");
-			map->nodes[row][col].texture_e = load_texture(data[col], "_e");
+			map->nodes[row][col].texture_n = load_surf(data[col], "_n");
+			map->nodes[row][col].texture_s = load_surf(data[col], "_s");
+			map->nodes[row][col].texture_w = load_surf(data[col], "_w");
+			map->nodes[row][col].texture_e = load_surf(data[col], "_e");
 			map->nodes[row][col++].collidable = true;
 		}
 		else if (*data[col] == 'P')
