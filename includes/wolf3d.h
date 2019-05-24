@@ -3,6 +3,7 @@
 
 #include <SDL.h>
 #include <SDL_mixer.h>
+#include <SDL_ttf.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdio.h> /* Delete! */
@@ -58,6 +59,10 @@ typedef struct		s_sdl
 	SDL_Texture		*texture;
 	Uint32			*pixels;
 	SDL_Surface		*screen;
+	TTF_Font		*font;
+	SDL_Color		text_color;
+	SDL_Surface		*text;
+
 }					t_sdl;
 
 typedef struct		s_player

@@ -6,13 +6,13 @@
 /*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/22 15:56:59 by ndremora          #+#    #+#             */
-/*   Updated: 2019/05/23 10:13:34 by ndremora         ###   ########.fr       */
+/*   Updated: 2019/05/24 09:43:08 by ndremora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-static	void	create_stuff(t_sdl *sdl)
+void	check_for_init_errors()
 {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 		ft_error("SDL video initialization error");
@@ -20,6 +20,13 @@ static	void	create_stuff(t_sdl *sdl)
 		ft_error("SDL audio initialization error");
 	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
 		ft_error("Open Audio error");
+	if (TTF_Init() < 0)
+		ft_error("TTF error");
+}
+
+static	void	create_stuff(t_sdl *sdl)
+{
+	check_for_init_errors();
 	sdl->window = SDL_CreateWindow("SDL2", 0, 0, sdl->width, sdl->height, 0);
 	sdl->renderer = SDL_CreateRenderer(sdl->window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	//app->sdl->screen = SDL_GetWindowSurface(app->sdl->window);
@@ -38,6 +45,13 @@ static	void	init_sdl(t_sdl *sdl)
 	sdl->draw_dist = 840;
 	sdl->pixels = (Uint32 *)malloc(sizeof(Uint32) * sdl->width * sdl->height);
 	ft_memset(sdl->pixels, 255, sdl->width * sdl->height * sizeof(Uint32));
+	sdl->font = TTF_OpenFont("../resources/direwolf3d.ttf", 12);
+	sdl->text_color.r = 144;
+	sdl->text_color.g = 77;
+	sdl->text_color.b = 255;
+	sdl->text_color.a = 255;
+	sdl->text = TTF_RenderText_Solid(sdl->font, "Score", sdl->text_color);
+
 }
 
 void			init(t_app *app)

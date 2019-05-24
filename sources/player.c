@@ -6,7 +6,7 @@
 /*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/22 17:57:04 by ndremora          #+#    #+#             */
-/*   Updated: 2019/05/23 10:05:06 by ndremora         ###   ########.fr       */
+/*   Updated: 2019/05/23 16:03:33 by ndremora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,8 @@
 
 void	player_init(t_player *player)
 {
+	//ft_bzero(player, sizeof(t_player));
 	player->direction = 270;
-	player->x_v = 0;
-	player->y_v = 0;
 	player->bgm = Mix_LoadMUS("../resources/bgm.mp3");
 	player->sound_effect = Mix_LoadWAV("../resources/speak.wav");
 }

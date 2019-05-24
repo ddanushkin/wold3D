@@ -6,7 +6,7 @@
 /*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/22 16:01:11 by ndremora          #+#    #+#             */
-/*   Updated: 2019/05/23 09:47:55 by ndremora         ###   ########.fr       */
+/*   Updated: 2019/05/23 10:16:50 by ndremora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static void	update_picture(t_sdl *sdl)
 	SDL_RenderPresent(sdl->renderer);
 }
 
-static int	check_for_quit(t_sdl *sdl, Uint8 *key)
+static int	check_for_quit(t_sdl *sdl, const Uint8 *key)
 {
 	if (SDL_PollEvent(&sdl->event) && sdl->event.type == SDL_QUIT)
 		return (1);

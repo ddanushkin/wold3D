@@ -6,7 +6,7 @@
 /*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/22 15:21:40 by ndremora          #+#    #+#             */
-/*   Updated: 2019/05/22 17:50:22 by ndremora         ###   ########.fr       */
+/*   Updated: 2019/05/23 16:10:25 by ndremora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,6 +190,32 @@ void		cast_single_ray(t_app *app, int x, float angle)
 	draw_column(app->sdl, &ray, x, slice_height);
 }
 
+void 		create_hud(t_sdl *sdl)
+{
+	int 	x;
+	int 	y;
+	int		offset;
+
+
+	y = sdl->height - sdl->height * 0.1;
+	SDL_Color	color;
+
+	color.r = 34;
+	color.g = 46;
+	color.b = 255;
+	while (y < sdl->height)
+	{
+		x = 0;
+		while (x < sdl->width)
+		{
+			offset = y * sdl->width + x;
+			sdl->pixels[offset] = (Uint32)((color.r << 16) + (color.g << 8) + (color.b));
+			x++;
+		}
+		y++;
+	}
+}
+
 void		create_field_of_view(t_app *app)
 {
 	float	angle;
@@ -205,4 +231,5 @@ void		create_field_of_view(t_app *app)
 		angle = angle + next_angle;
 		x++;
 	}
+	create_hud(app->sdl);
 }
