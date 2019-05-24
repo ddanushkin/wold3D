@@ -6,7 +6,7 @@
 /*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/22 15:56:41 by ndremora          #+#    #+#             */
-/*   Updated: 2019/05/24 15:56:28 by lglover          ###   ########.fr       */
+/*   Updated: 2019/05/24 19:35:11 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ void	quit_properly(t_app *app)
 	app->player->bgm = NULL;
 	app->player->sound_effect = NULL;
 
-	TTF_CloseFont(app->sdl->font);
 	free(app->sdl->pixels);
 	free(app->sdl);
 	free(app->map);
