@@ -93,7 +93,12 @@ typedef struct		s_player
 	float			dist_s;
 	SDL_Texture		*state[2];
 	float			shooting;
+	float 			reloading;
 	t_weapon		*weapon;
+	unsigned char	cur_weapon;
+	unsigned char	anim_is_done;
+	unsigned char	change_up;
+	unsigned char	change_down;
 }					t_player;
 
 typedef struct		s_ui_elem
@@ -136,7 +141,7 @@ void				ft_error(char *str);
 void				quit_properly(t_app *sdl);
 void				draw_minimap(t_map *map, t_sdl *sdl, t_player *player);
 void				player_init(t_sdl *sdl, t_player *player);
-void				keyboard_input(t_map *map, const Uint8 *key, t_player *player, float frame);
+void				keyboard_input(t_app *app, const Uint8 *key, float frame);
 void				create_field_of_view(t_app *app);
 void				shade_color(double dist, SDL_Color *color, double shade_dist);
 void				get_color(SDL_Surface *surface, SDL_Color *c, int x, int y);
@@ -148,7 +153,8 @@ void				draw_text(t_sdl *sdl, t_ui_elem *ui_elem);
 void 				create_hud(t_sdl *sdl, t_player *player);
 SDL_Texture			*load_texture(t_sdl *sdl, char *name);
 t_ray				*get_ray(t_map *map, t_player *player, double angle);
-void				draw_face(t_sdl *sdl, t_player *player, float *delta);
-void 				gun_idle(t_sdl *sdl, t_player *player, float *delta);
-void 				gun_shoot(t_sdl *sdl, t_player *player, float *delta);
+void				draw_face(t_sdl *sdl, t_player *player, float delta);
+void 				gun_idle(t_sdl *sdl, t_player *player, float delta);
+void 				gun_shoot(t_sdl *sdl, t_player *player, float delta);
+void				gun_change(t_sdl *sdl, t_player *player, unsigned int next_weapon, float delta);
 #endif

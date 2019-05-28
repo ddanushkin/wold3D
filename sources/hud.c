@@ -90,7 +90,7 @@ void 		create_hud(t_sdl *sdl, t_player *player)
 	free(ui_text);
 
 	ui_elem.x = 150 + 40 + 235 + 260 + 170;
-	ui_text = ft_itoa(player->weapon->ammo);
+	ui_text = ft_itoa(player->weapon[player->cur_weapon].ammo);
 	ui_elem.text = ui_text;
 	draw_text(sdl, &ui_elem);
 	free(ui_text);

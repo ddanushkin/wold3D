@@ -6,24 +6,11 @@
 /*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/22 16:01:11 by ndremora          #+#    #+#             */
-/*   Updated: 2019/05/28 12:59:45 by lglover          ###   ########.fr       */
+/*   Updated: 2019/05/28 18:33:44 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
-
-static void	update_picture(t_sdl *sdl, t_player *player, float delta)
-{
-	SDL_UpdateTexture(sdl->texture, NULL, sdl->pixels, sdl->width * sizeof(Uint32));
-	SDL_RenderCopy(sdl->renderer, sdl->texture, NULL, NULL);
-	if (player->shooting == 0)
-		gun_idle(sdl, player, &delta);
-	else
-		gun_shoot(sdl, player, &delta);
-	create_hud(sdl, player);
-	draw_face(sdl, player, &delta);
-	SDL_RenderPresent(sdl->renderer);
-}
 
 static int	check_for_quit(t_sdl *sdl, const Uint8 *key)
 {
@@ -47,8 +34,24 @@ void		start_the_game(t_app *app)
 			break ;
 		update_time(&time, app);
 		create_field_of_view(app);
-		keyboard_input(app->map, key, app->player, time.frame);
-		update_picture(app->sdl, app->player, time.frame);
+		keyboard_input(app, key, time.frame);
+
+		if (app->player->shooting == 0 && app->player->reloading == 0)
+			gun_idle(app->sdl, app->player, time.frame);
+		if (app->player->shooting != 0 && app->player->reloading == 0)
+		{
+			app->player->anim_is_done = 0;
+			gun_shoot(app->sdl, app->player, time.frame);
+		}
+		if (app->player->reloading != 0 && app->player->shooting == 0)
+		{
+			app->player->anim_is_done = 0;
+			gun_change(app->sdl, app->player, 0, time.frame);
+		}
+
+		create_hud(app->sdl, app->player);
+		draw_face(app->sdl, app->player, time.frame);
+		SDL_RenderPresent(app->sdl->renderer);
 	}
 }
 
