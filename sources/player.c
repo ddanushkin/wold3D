@@ -6,7 +6,7 @@
 /*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/22 17:57:04 by ndremora          #+#    #+#             */
-/*   Updated: 2019/05/28 18:44:09 by lglover          ###   ########.fr       */
+/*   Updated: 2019/05/28 19:42:32 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,9 +185,6 @@ void	gun_shoot(t_sdl *sdl, t_player *player, float delta)
 	int			cur_frame;
 	unsigned char	id;
 
-	if (player->anim_is_done)
-		return ;
-	printf("shoot\n");
 	id = player->cur_weapon;
 	cur_frame = (long)((delta - player->shooting) * 8);
 	area.y = sdl->height - 130 - 550 + (cur_frame % 2 * 5);
@@ -227,8 +224,7 @@ void 	gun_change_down(t_sdl *sdl, t_player *player, float delta)
 	if (area.y > 220)
 	{
 		player->change_down = 1;
-		if (player->change_down)
-			player->cur_weapon = player->cur_weapon ? 0 : 1;
+		player->cur_weapon = player->cur_weapon ? 0 : 1;
 	}
 }
 
@@ -247,16 +243,13 @@ void 	gun_change_up(t_sdl *sdl, t_player *player, float delta)
 	SDL_RenderCopy(sdl->renderer, player->weapon[id].sprites[2], NULL, &area);
 	if (area.y >= 40)
 	{
+		player->change_down = 2;
 		player->anim_is_done = 1;
-		player->change_down = 0;
 	}
 }
 
 void 	gun_change(t_sdl *sdl, t_player *player, unsigned int next_weapon, float delta)
 {
-	if (player->anim_is_done)
-		return ;
-	printf("change\n");
 	if (player->change_down == 0)
 		gun_change_down(sdl, player, delta);
 	if (player->change_down == 1)
@@ -271,12 +264,6 @@ void	keyboard_input(t_app *wolf, const Uint8 *key, float frame)
 		player_shoot(wolf->map, key, wolf->player, frame);
 	else if (key[SDL_SCANCODE_Q] && wolf->player->anim_is_done == 1)
 		player_change(wolf->player, frame);
-	else if (key[SDL_SCANCODE_R] && wolf->player->anim_is_done == 1)
-		player_change(wolf->player, frame);
-	if (frame - wolf->player->reloading > 5)
-		wolf->player->reloading = 0;
-	if (frame - wolf->player->shooting > wolf->player->weapon->firerate)
-		wolf->player->shooting = 0;
 	player_movement(wolf->map, key, wolf->player);
 	update_sound(key, wolf->player);
 }

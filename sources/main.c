@@ -6,7 +6,7 @@
 /*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/22 16:01:11 by ndremora          #+#    #+#             */
-/*   Updated: 2019/05/28 18:33:44 by lglover          ###   ########.fr       */
+/*   Updated: 2019/05/28 19:42:32 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,16 +38,26 @@ void		start_the_game(t_app *app)
 
 		if (app->player->shooting == 0 && app->player->reloading == 0)
 			gun_idle(app->sdl, app->player, time.frame);
+
 		if (app->player->shooting != 0 && app->player->reloading == 0)
 		{
 			app->player->anim_is_done = 0;
 			gun_shoot(app->sdl, app->player, time.frame);
 		}
+
 		if (app->player->reloading != 0 && app->player->shooting == 0)
 		{
 			app->player->anim_is_done = 0;
 			gun_change(app->sdl, app->player, 0, time.frame);
 		}
+
+		if (app->player->reloading > 0 && time.frame - app->player->reloading > 5)
+		{
+			app->player->change_down = 0;
+			app->player->reloading = 0;
+		}
+		if (app->player->shooting > 0 && time.frame - app->player->shooting > app->player->weapon[app->player->cur_weapon].firerate)
+			app->player->shooting = 0;
 
 		create_hud(app->sdl, app->player);
 		draw_face(app->sdl, app->player, time.frame);
