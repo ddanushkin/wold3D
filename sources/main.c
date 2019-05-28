@@ -6,7 +6,7 @@
 /*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/22 16:01:11 by ndremora          #+#    #+#             */
-/*   Updated: 2019/05/24 19:08:53 by lglover          ###   ########.fr       */
+/*   Updated: 2019/05/28 12:59:45 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,12 @@ static void	update_picture(t_sdl *sdl, t_player *player, float delta)
 {
 	SDL_UpdateTexture(sdl->texture, NULL, sdl->pixels, sdl->width * sizeof(Uint32));
 	SDL_RenderCopy(sdl->renderer, sdl->texture, NULL, NULL);
+	if (player->shooting == 0)
+		gun_idle(sdl, player, &delta);
+	else
+		gun_shoot(sdl, player, &delta);
 	create_hud(sdl, player);
-	draw_face(sdl, player, delta);
+	draw_face(sdl, player, &delta);
 	SDL_RenderPresent(sdl->renderer);
 }
 
@@ -34,9 +38,7 @@ void		start_the_game(t_app *app)
 {
 	const Uint8	*key;
 	t_time		time;
-	float		flag;
 
-	flag = 0;
 	init_time(&time);
 	key = SDL_GetKeyboardState(NULL);
 	while (1)
@@ -44,14 +46,9 @@ void		start_the_game(t_app *app)
 		if (check_for_quit(app->sdl, key) == 1)
 			break ;
 		update_time(&time, app);
-		if (time.frame >= 2500)
-		{
-			flag = flag ? 0 : 1;
-			time.frame = 0;
-		}
 		create_field_of_view(app);
-		keyboard_input(app->map, key, app->player);
-		update_picture(app->sdl, app->player, flag);
+		keyboard_input(app->map, key, app->player, time.frame);
+		update_picture(app->sdl, app->player, time.frame);
 	}
 }
 

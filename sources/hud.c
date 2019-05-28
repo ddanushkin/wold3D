@@ -5,12 +5,15 @@ SDL_Texture		*load_texture(t_sdl *sdl, char *name)
 	char		file_path[50];
 	SDL_Surface	*surface;
 	SDL_Texture	*texture;
+	Uint32 key;
 
 	file_path[0] = '\0';
 	ft_strcat(file_path, "../resources/");
 	ft_strcat(file_path, name);
 	ft_strcat(file_path, ".bmp");
 	surface = SDL_LoadBMP(file_path);
+	key = SDL_MapRGB(surface->format, 152, 0, 136);
+	SDL_SetColorKey(surface, SDL_TRUE, key);
 	texture = SDL_CreateTextureFromSurface(sdl->renderer, surface);
 	SDL_FreeSurface(surface);
 	return (texture);
@@ -87,7 +90,7 @@ void 		create_hud(t_sdl *sdl, t_player *player)
 	free(ui_text);
 
 	ui_elem.x = 150 + 40 + 235 + 260 + 170;
-	ui_text = ft_itoa(player->ammo);
+	ui_text = ft_itoa(player->weapon->ammo);
 	ui_elem.text = ui_text;
 	draw_text(sdl, &ui_elem);
 	free(ui_text);

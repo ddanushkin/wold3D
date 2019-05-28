@@ -65,6 +65,13 @@ typedef struct		s_sdl
 	SDL_Texture		*ui;
 }					t_sdl;
 
+typedef struct		s_weapon
+{
+	SDL_Texture		*sprites[11];
+	unsigned char	ammo;
+	unsigned int	firerate;
+}					t_weapon;
+
 typedef struct		s_player
 {
 	int 			x;
@@ -84,8 +91,9 @@ typedef struct		s_player
 	float			dist_e;
 	float			dist_n;
 	float			dist_s;
-	SDL_Texture		*state_1;
-	SDL_Texture		*state_2;
+	SDL_Texture		*state[2];
+	float			shooting;
+	t_weapon		*weapon;
 }					t_player;
 
 typedef struct		s_ui_elem
@@ -128,7 +136,7 @@ void				ft_error(char *str);
 void				quit_properly(t_app *sdl);
 void				draw_minimap(t_map *map, t_sdl *sdl, t_player *player);
 void				player_init(t_sdl *sdl, t_player *player);
-void				keyboard_input(t_map *map, const Uint8 *key, t_player *player);
+void				keyboard_input(t_map *map, const Uint8 *key, t_player *player, float frame);
 void				create_field_of_view(t_app *app);
 void				shade_color(double dist, SDL_Color *color, double shade_dist);
 void				get_color(SDL_Surface *surface, SDL_Color *c, int x, int y);
@@ -140,5 +148,7 @@ void				draw_text(t_sdl *sdl, t_ui_elem *ui_elem);
 void 				create_hud(t_sdl *sdl, t_player *player);
 SDL_Texture			*load_texture(t_sdl *sdl, char *name);
 t_ray				*get_ray(t_map *map, t_player *player, double angle);
-void				draw_face(t_sdl *sdl, t_player *player, float delta);
+void				draw_face(t_sdl *sdl, t_player *player, float *delta);
+void 				gun_idle(t_sdl *sdl, t_player *player, float *delta);
+void 				gun_shoot(t_sdl *sdl, t_player *player, float *delta);
 #endif
