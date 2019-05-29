@@ -54,9 +54,10 @@ void	draw_text(t_sdl *sdl, t_ui_elem *ui_elem)
 
 void 		create_hud(t_sdl *sdl, t_player *player)
 {
-	SDL_Rect area;
-	t_ui_elem ui_elem;
-	char *ui_text;
+	SDL_Rect	area;
+	t_ui_elem	ui_elem;
+	char		*ui_text;
+	char		ammo_text[50];
 
 	area.y = sdl->height - sdl->height/5;
 	area.x = 0;
@@ -90,8 +91,14 @@ void 		create_hud(t_sdl *sdl, t_player *player)
 	free(ui_text);
 
 	ui_elem.x = 150 + 40 + 235 + 260 + 170;
-	ui_text = ft_itoa(player->weapon[player->cur_weapon].ammo);
-	ui_elem.text = ui_text;
-	draw_text(sdl, &ui_elem);
+	ammo_text[0] = '\0';
+	ui_text = ft_itoa(player->weapon[player->cur_weapon].ammo_cur);
+	ft_strcat(ammo_text, ui_text);
 	free(ui_text);
+	ft_strcat(ammo_text, " | ");
+	ui_text = ft_itoa(player->weapon[player->cur_weapon].mag_cur);
+	ft_strcat(ammo_text, ui_text);
+	free(ui_text);
+	ui_elem.text = ammo_text;
+	draw_text(sdl, &ui_elem);
 }

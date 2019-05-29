@@ -6,7 +6,7 @@
 /*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/22 17:57:04 by ndremora          #+#    #+#             */
-/*   Updated: 2019/05/28 19:42:32 by lglover          ###   ########.fr       */
+/*   Updated: 2019/05/29 17:07:45 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,12 @@ void	player_init(t_sdl *sdl, t_player *player)
 	player->state[0] = load_texture(sdl, "fpain L1");
 	player->state[1] = load_texture(sdl, "fpain R1");
 
-	player->anim_is_done = 1;
-
-	player->weapon[0].ammo = 10;
-	player->weapon[0].firerate = 1;
+	player->weapon[0].ammo_cur = 10;
+	player->weapon[0].ammo_max = 10;
+	player->weapon[0].mag_cur = 10 * 4;
+	player->weapon[0].mag_max = 10 * 4;
+	player->weapon[0].firerate = 0.8;
+	player->weapon[0].fired = 0;
 	player->weapon[0].sprites[0] = load_texture(sdl, "Hunterfloor");
 	player->weapon[0].sprites[1] = load_texture(sdl, "Hunter1");
 	player->weapon[0].sprites[2] = load_texture(sdl, "Hunter2");
@@ -43,8 +45,12 @@ void	player_init(t_sdl *sdl, t_player *player)
 	player->weapon[0].sprites[9] = load_texture(sdl, "Hunter9");
 	player->weapon[0].sprites[10] = load_texture(sdl, "Hunter10");
 
-	player->weapon[1].ammo = 6;
-	player->weapon[1].firerate = 2;
+	player->weapon[1].ammo_cur = 6;
+	player->weapon[1].ammo_max = 6;
+	player->weapon[1].mag_cur = 6 * 4;
+	player->weapon[1].mag_max = 6 * 4;
+	player->weapon[1].firerate = 1.7;
+	player->weapon[1].fired = 0;
 	player->weapon[1].sprites[0] = load_texture(sdl, "Rustmagfloor");
 	player->weapon[1].sprites[1] = load_texture(sdl, "Rustmag1");
 	player->weapon[1].sprites[2] = load_texture(sdl, "Rustmag2");
@@ -57,10 +63,14 @@ void	player_init(t_sdl *sdl, t_player *player)
 	player->weapon[1].sprites[9] = load_texture(sdl, "Rustmag9");
 	player->weapon[1].sprites[10] = load_texture(sdl, "Rustmag10");
 
-	player->shooting = 0;
-	player->reloading = 0;
 	player->cur_weapon = 0;
+
+	player->shooting = 0;
+	player->changing = 0;
+	player->reloading = 0;
 	player->change_down = 0;
+	player->anim_is_done = 1;
+	player->anim_frame = 0;
 }
 
 void	draw_face(t_sdl *sdl, t_player *player, float delta)
@@ -160,110 +170,165 @@ void	gun_idle(t_sdl *sdl, t_player *player, float delta)
 	area.x = sdl->width / 2 - area.w + 200;
 	area.h = 116 * 5;
 
-	cur_frame %= 4;
+	cur_frame %= 2;
 	if (cur_frame == 0)
 		cur_frame++;
 	SDL_RenderCopy(sdl->renderer, player->weapon[id].sprites[cur_frame], NULL, &area);
 }
 
-void	player_shoot(t_map *map, const Uint8 *key, t_player *player, float frame)
-{
-		printf("anim shoot - %d\n", player->anim_is_done);
-		if (player->weapon[player->cur_weapon].ammo == 0)
-			return ;
-		if (player->shooting == 0)
-		{
-			if (player->weapon[player->cur_weapon].ammo > 0)
-				player->weapon[player->cur_weapon].ammo--;
-			player->shooting = frame;
-		}
-}
-
 void	gun_shoot(t_sdl *sdl, t_player *player, float delta)
 {
-	SDL_Rect	area;
-	int			cur_frame;
+	SDL_Rect		area;
+	float			cur_frame;
 	unsigned char	id;
 
+	cur_frame = (long)(delta * 14.0) % 11 + 1;
 	id = player->cur_weapon;
-	cur_frame = (long)((delta - player->shooting) * 8);
-	area.y = sdl->height - 130 - 550 + (cur_frame % 2 * 5);
+	area.y = sdl->height - 130 - 550;
 	area.w = 96 * 5;
 	area.x = sdl->width / 2 - area.w + 200;
 	area.h = 116 * 5;
-	cur_frame %= 11;
-	if (cur_frame + 4 < 11)
-		SDL_RenderCopy(sdl->renderer, player->weapon[id].sprites[cur_frame + 4], NULL, &area);
-	else
+	printf("SHOOT: FRAME %d\n", (int)cur_frame);
+	if (cur_frame == 3 && !player->weapon[id].fired)
 	{
-		SDL_RenderCopy(sdl->renderer, player->weapon[id].sprites[2], NULL, &area);
-		player->anim_is_done = 1;
+		player->weapon[id].fired++;
+		player->weapon[id].ammo_cur--;
 	}
+	if (cur_frame > 10)
+	{
+		player->anim_is_done = 1;
+		SDL_RenderCopy(sdl->renderer, player->weapon[id].sprites[1], NULL, &area);
+		return ;
+	}
+	SDL_RenderCopy(sdl->renderer, player->weapon[id].sprites[(int)cur_frame], NULL, &area);
 }
 
-void 	player_change(t_player *player, float frame)
+void 	gun_change_down(t_sdl *sdl, t_player *player, unsigned char next_id, float delta)
 {
-	printf("anim shoot - %d\n", player->anim_is_done);
-	if (player->reloading == 0)
-		player->reloading = frame;
-}
-
-void 	gun_change_down(t_sdl *sdl, t_player *player, float delta)
-{
-	SDL_Rect	area;
-	int			cur_frame;
+	SDL_Rect		area;
+	float			cur_frame;
 	unsigned char	id;
 
+	cur_frame = (long)(delta * 220.0) % 440;
 	id = player->cur_weapon;
-	cur_frame = (long)((delta - player->reloading) * 32);
-	area.y = sdl->height - 130 - 550 + 4 * (cur_frame % 100);
+	area.y = sdl->height - 130 - 550 + (int)cur_frame;
 	area.w = 96 * 5;
 	area.x = sdl->width / 2 - area.w + 200;
 	area.h = 116 * 5;
-	SDL_RenderCopy(sdl->renderer, player->weapon[id].sprites[2], NULL, &area);
-	if (area.y > 220)
+	printf("CNANGE: FRAME %d\n", (int)cur_frame);
+	SDL_RenderCopy(sdl->renderer, player->weapon[id].sprites[1], NULL, &area);
+	if (area.y > 250)
 	{
 		player->change_down = 1;
-		player->cur_weapon = player->cur_weapon ? 0 : 1;
+		player->cur_weapon = next_id;
 	}
 }
 
 void 	gun_change_up(t_sdl *sdl, t_player *player, float delta)
 {
-	SDL_Rect	area;
-	int			cur_frame;
+	SDL_Rect		area;
+	float			cur_frame;
 	unsigned char	id;
 
+	cur_frame = (long)(delta * 220.0) % 440;
 	id = player->cur_weapon;
-	cur_frame = (long)((delta - player->reloading) * 32);
-	area.y = sdl->height - 130 - 150 - 4 * (cur_frame % 100);
+	area.y = sdl->height - 130 - 180 - (int)cur_frame;
 	area.w = 96 * 5;
 	area.x = sdl->width / 2 - area.w + 200;
 	area.h = 116 * 5;
-	SDL_RenderCopy(sdl->renderer, player->weapon[id].sprites[2], NULL, &area);
-	if (area.y >= 40)
+	printf("CNANGE: FRAME %d\n", (int)cur_frame);
+	SDL_RenderCopy(sdl->renderer, player->weapon[id].sprites[1], NULL, &area);
+	if (area.y < 40)
 	{
-		player->change_down = 2;
 		player->anim_is_done = 1;
+		player->change_down = 0;
+		return ;
 	}
 }
 
-void 	gun_change(t_sdl *sdl, t_player *player, unsigned int next_weapon, float delta)
+void 	gun_change(t_sdl *sdl, t_player *player, unsigned int next_weapon, float frame)
+{
+	unsigned char next_id;
+
+	next_id = player->cur_weapon ? 0 : 1;
+	if (player->change_down == 0)
+		gun_change_down(sdl, player, next_id, frame);
+	if (player->change_down == 1)
+		gun_change_up(sdl, player,  frame);
+}
+
+void 	gun_reload_down(t_sdl *sdl, t_player *player, float delta)
+{
+	SDL_Rect		area;
+	float			cur_frame;
+	unsigned char	id;
+	unsigned char	old_ammo;
+
+	cur_frame = (long)(delta * 220.0) % 440;
+	id = player->cur_weapon;
+	area.y = sdl->height - 130 - 550 + (int)cur_frame;
+	area.w = 96 * 5;
+	area.x = sdl->width / 2 - area.w + 200;
+	area.h = 116 * 5;
+	printf("RELOAD: FRAME %d\n", (int)cur_frame);
+	SDL_RenderCopy(sdl->renderer, player->weapon[id].sprites[1], NULL, &area);
+	if (area.y > 250)
+	{
+		player->change_down = 1;
+		old_ammo = player->weapon[id].ammo_cur;
+		if (player->weapon[id].mag_cur >= player->weapon[id].ammo_max)
+		{
+			player->weapon[id].ammo_cur = player->weapon[id].ammo_max;
+			player->weapon[id].mag_cur -= player->weapon[id].ammo_max - old_ammo;
+		}
+		else
+		{
+			player->weapon[id].ammo_cur = player->weapon[id].mag_cur;
+			player->weapon[id].mag_cur = 0;
+		}
+	}
+}
+
+void 	gun_reload(t_sdl *sdl, t_player *player, float frame)
 {
 	if (player->change_down == 0)
-		gun_change_down(sdl, player, delta);
+		gun_reload_down(sdl, player, frame);
 	if (player->change_down == 1)
-		gun_change_up(sdl, player,  delta);
+		gun_change_up(sdl, player,  frame);
 }
 
 void	keyboard_input(t_app *wolf, const Uint8 *key, float frame)
 {
 	if (key[SDL_SCANCODE_LEFT] || key[SDL_SCANCODE_RIGHT])
 		player_rotate(wolf->player, key);
-	if (key[SDL_SCANCODE_SPACE] && wolf->player->anim_is_done == 1)
-		player_shoot(wolf->map, key, wolf->player, frame);
-	else if (key[SDL_SCANCODE_Q] && wolf->player->anim_is_done == 1)
-		player_change(wolf->player, frame);
+	if (key[SDL_SCANCODE_SPACE] && wolf->player->anim_frame == 0)
+	{
+		if (wolf->player->weapon[wolf->player->cur_weapon].ammo_cur > 0)
+		{
+			printf("SHOOT: START\n");
+			wolf->player->anim_frame = frame;
+			wolf->player->anim_is_done = 0;
+			wolf->player->shooting = 1;
+		}
+	}
+	if (key[SDL_SCANCODE_Q] && wolf->player->anim_frame == 0)
+	{
+		printf("CHANGE: START\n");
+		wolf->player->anim_frame = frame;
+		wolf->player->anim_is_done = 0;
+		wolf->player->changing = 1;
+	}
+	if (key[SDL_SCANCODE_R] && wolf->player->anim_frame == 0)
+	{
+		if (wolf->player->weapon[wolf->player->cur_weapon].ammo_cur < wolf->player->weapon[wolf->player->cur_weapon].ammo_max
+			&& wolf->player->weapon[wolf->player->cur_weapon].mag_cur > 0)
+		{
+			printf("RELOAD: START\n");
+			wolf->player->anim_frame = frame;
+			wolf->player->anim_is_done = 0;
+			wolf->player->reloading = 1;
+		}
+	}
 	player_movement(wolf->map, key, wolf->player);
 	update_sound(key, wolf->player);
 }

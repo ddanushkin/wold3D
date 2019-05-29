@@ -68,8 +68,13 @@ typedef struct		s_sdl
 typedef struct		s_weapon
 {
 	SDL_Texture		*sprites[11];
-	unsigned char	ammo;
-	unsigned int	firerate;
+	unsigned char	ammo_cur;
+	unsigned char	ammo_max;
+	float			firerate;
+	unsigned char	fired;
+	unsigned char	loaded;
+	unsigned char	mag_max;
+	unsigned char	mag_cur;
 }					t_weapon;
 
 typedef struct		s_player
@@ -80,7 +85,6 @@ typedef struct		s_player
 	int 			score;
 	char			*cur_level;
 	int 			lives;
-	int 			ammo;
 	float			x_v;
 	float			y_v;
 	float			speed;
@@ -92,12 +96,14 @@ typedef struct		s_player
 	float			dist_n;
 	float			dist_s;
 	SDL_Texture		*state[2];
-	float			shooting;
-	float 			reloading;
+	unsigned char	shooting;
+	unsigned char	changing;
+	unsigned char	reloading;
+	float 			anim_frame;
+
 	t_weapon		*weapon;
 	unsigned char	cur_weapon;
 	unsigned char	anim_is_done;
-	unsigned char	change_up;
 	unsigned char	change_down;
 }					t_player;
 
@@ -157,4 +163,5 @@ void				draw_face(t_sdl *sdl, t_player *player, float delta);
 void 				gun_idle(t_sdl *sdl, t_player *player, float delta);
 void 				gun_shoot(t_sdl *sdl, t_player *player, float delta);
 void				gun_change(t_sdl *sdl, t_player *player, unsigned int next_weapon, float delta);
+void 				gun_reload(t_sdl *sdl, t_player *player, float frame);
 #endif

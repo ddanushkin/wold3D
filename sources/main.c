@@ -6,7 +6,7 @@
 /*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/22 16:01:11 by ndremora          #+#    #+#             */
-/*   Updated: 2019/05/28 19:42:32 by lglover          ###   ########.fr       */
+/*   Updated: 2019/05/29 17:31:39 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,47 +21,96 @@ static int	check_for_quit(t_sdl *sdl, const Uint8 *key)
 	return (0);
 }
 
-void		start_the_game(t_app *app)
+void		redraw(t_app *wolf, t_time *time)
+{
+	SDL_UpdateTexture(wolf->sdl->texture, NULL, wolf->sdl->pixels, wolf->sdl->width * sizeof(Uint32));
+	SDL_RenderCopy(wolf->sdl->renderer, wolf->sdl->texture, NULL, NULL);
+
+	if (wolf->player->shooting)
+	{
+		if (time->frame - wolf->player->anim_frame < wolf->player->weapon[wolf->player->cur_weapon].firerate)
+		{
+			if (!wolf->player->anim_is_done)
+				gun_shoot(wolf->sdl, wolf->player, time->frame - wolf->player->anim_frame);
+			else
+				printf("SHOOT: WAIT\n");
+		}
+		else
+		{
+			wolf->player->shooting = 0;
+			wolf->player->anim_frame = 0;
+			wolf->player->weapon[wolf->player->cur_weapon].fired = 0;
+			printf("SHOOT: DONE\n");
+		}
+	}
+
+	if (wolf->player->changing)
+	{
+		if (time->frame - wolf->player->anim_frame < 1.8)
+		{
+			if (!wolf->player->anim_is_done)
+				gun_change(wolf->sdl, wolf->player, 0, time->frame - wolf->player->anim_frame);
+			else
+				printf("CHANGE: WAIT\n");
+		}
+		else
+		{
+			wolf->player->changing = 0;
+			wolf->player->anim_frame = 0;
+			printf("CHANGE: DONE\n");
+		}
+	}
+
+	if (wolf->player->reloading)
+	{
+		if (time->frame - wolf->player->anim_frame < 1.8)
+		{
+			if (!wolf->player->anim_is_done)
+				gun_reload(wolf->sdl, wolf->player, time->frame - wolf->player->anim_frame);
+			else
+				printf("RELOAD: WAIT\n");
+		}
+		else
+		{
+			wolf->player->reloading = 0;
+			wolf->player->anim_frame = 0;
+			printf("CHANGE: DONE\n");
+		}
+	}
+
+	if (wolf->player->anim_is_done)
+		gun_idle(wolf->sdl, wolf->player, time->frame);
+
+	create_hud(wolf->sdl, wolf->player);
+	draw_face(wolf->sdl, wolf->player, time->frame);
+	SDL_RenderPresent(wolf->sdl->renderer);
+}
+
+void		start_the_game(t_app *wolf)
 {
 	const Uint8	*key;
 	t_time		time;
+	Uint64		start;
+	Uint64		end;
+	float		elapsed;
 
 	init_time(&time);
 	key = SDL_GetKeyboardState(NULL);
+	keyboard_input(wolf, key, time.frame);
 	while (1)
 	{
-		if (check_for_quit(app->sdl, key) == 1)
+		start = SDL_GetPerformanceCounter();
+
+		if (check_for_quit(wolf->sdl, key) == 1)
 			break ;
-		update_time(&time, app);
-		create_field_of_view(app);
-		keyboard_input(app, key, time.frame);
+		update_time(&time, wolf);
+		keyboard_input(wolf, key, time.frame);
+		create_field_of_view(wolf);
+		redraw(wolf, &time);
 
-		if (app->player->shooting == 0 && app->player->reloading == 0)
-			gun_idle(app->sdl, app->player, time.frame);
-
-		if (app->player->shooting != 0 && app->player->reloading == 0)
-		{
-			app->player->anim_is_done = 0;
-			gun_shoot(app->sdl, app->player, time.frame);
-		}
-
-		if (app->player->reloading != 0 && app->player->shooting == 0)
-		{
-			app->player->anim_is_done = 0;
-			gun_change(app->sdl, app->player, 0, time.frame);
-		}
-
-		if (app->player->reloading > 0 && time.frame - app->player->reloading > 5)
-		{
-			app->player->change_down = 0;
-			app->player->reloading = 0;
-		}
-		if (app->player->shooting > 0 && time.frame - app->player->shooting > app->player->weapon[app->player->cur_weapon].firerate)
-			app->player->shooting = 0;
-
-		create_hud(app->sdl, app->player);
-		draw_face(app->sdl, app->player, time.frame);
-		SDL_RenderPresent(app->sdl->renderer);
+		end = SDL_GetPerformanceCounter();
+		elapsed = (float)(end - start) / SDL_GetPerformanceFrequency() * 1000.0;
+		SDL_Delay(elapsed - 16.6666); //60 FPS
 	}
 }
 

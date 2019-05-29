@@ -181,6 +181,4 @@ void		create_field_of_view(t_app *app)
 		angle = angle + next_angle;
 		x++;
 	}
-	SDL_UpdateTexture(app->sdl->texture, NULL, app->sdl->pixels, app->sdl->width * sizeof(Uint32));
-	SDL_RenderCopy(app->sdl->renderer, app->sdl->texture, NULL, NULL);
 }
