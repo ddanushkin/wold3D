@@ -6,7 +6,8 @@
 #include <SDL_ttf.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <stdio.h> /* Delete! */
+#include <stdio.h>
+#include <dirent.h>
 #include "libft.h"
 
 # define TEXTURE_SIZE 64
@@ -164,4 +165,6 @@ void 				gun_idle(t_sdl *sdl, t_player *player, float delta);
 void 				gun_shoot(t_sdl *sdl, t_player *player, float delta);
 void				gun_change(t_sdl *sdl, t_player *player, unsigned int next_weapon, float delta);
 void 				gun_reload(t_sdl *sdl, t_player *player, float frame);
+void				get_weapon_sprites(t_sdl *sdl, t_weapon *weapon, char *weapon_folder);
+void				init_weapon(t_weapon *weapon, u_int ammo, u_int mags, float rate);
 #endif

@@ -12,10 +12,6 @@ double	check_angle(double angle)
 void	init_time(t_time *time)
 {
 	ft_bzero(time, sizeof(*time));
-//	time->frame = 0;
-//	time->prev = 0;
-//	time->current = 0;
-//	time->delta = 0;
 }
 
 void	update_time(t_time *time, t_app *app)

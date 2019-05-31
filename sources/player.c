@@ -6,7 +6,7 @@
 /*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/22 17:57:04 by ndremora          #+#    #+#             */
-/*   Updated: 2019/05/29 17:07:45 by lglover          ###   ########.fr       */
+/*   Updated: 2019/05/31 12:49:31 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,6 @@
 
 void	player_init(t_sdl *sdl, t_player *player)
 {
-	t_weapon *weapon;
-
-	player->weapon = (t_weapon *)malloc(sizeof(t_weapon) * 2);
 	player->direction = 90;
 	player->lives = 99;
 	player->health = 100;
@@ -27,41 +24,13 @@ void	player_init(t_sdl *sdl, t_player *player)
 	player->state[0] = load_texture(sdl, "fpain L1");
 	player->state[1] = load_texture(sdl, "fpain R1");
 
-	player->weapon[0].ammo_cur = 10;
-	player->weapon[0].ammo_max = 10;
-	player->weapon[0].mag_cur = 10 * 4;
-	player->weapon[0].mag_max = 10 * 4;
-	player->weapon[0].firerate = 0.8;
-	player->weapon[0].fired = 0;
-	player->weapon[0].sprites[0] = load_texture(sdl, "Hunterfloor");
-	player->weapon[0].sprites[1] = load_texture(sdl, "Hunter1");
-	player->weapon[0].sprites[2] = load_texture(sdl, "Hunter2");
-	player->weapon[0].sprites[3] = load_texture(sdl, "Hunter3");
-	player->weapon[0].sprites[4] = load_texture(sdl, "Hunter4");
-	player->weapon[0].sprites[5] = load_texture(sdl, "Hunter5");
-	player->weapon[0].sprites[6] = load_texture(sdl, "Hunter6");
-	player->weapon[0].sprites[7] = load_texture(sdl, "Hunter7");
-	player->weapon[0].sprites[8] = load_texture(sdl, "Hunter8");
-	player->weapon[0].sprites[9] = load_texture(sdl, "Hunter9");
-	player->weapon[0].sprites[10] = load_texture(sdl, "Hunter10");
+	player->weapon = (t_weapon *)malloc(sizeof(t_weapon) * 2);
 
-	player->weapon[1].ammo_cur = 6;
-	player->weapon[1].ammo_max = 6;
-	player->weapon[1].mag_cur = 6 * 4;
-	player->weapon[1].mag_max = 6 * 4;
-	player->weapon[1].firerate = 1.7;
-	player->weapon[1].fired = 0;
-	player->weapon[1].sprites[0] = load_texture(sdl, "Rustmagfloor");
-	player->weapon[1].sprites[1] = load_texture(sdl, "Rustmag1");
-	player->weapon[1].sprites[2] = load_texture(sdl, "Rustmag2");
-	player->weapon[1].sprites[3] = load_texture(sdl, "Rustmag3");
-	player->weapon[1].sprites[4] = load_texture(sdl, "Rustmag4");
-	player->weapon[1].sprites[5] = load_texture(sdl, "Rustmag5");
-	player->weapon[1].sprites[6] = load_texture(sdl, "Rustmag6");
-	player->weapon[1].sprites[7] = load_texture(sdl, "Rustmag7");
-	player->weapon[1].sprites[8] = load_texture(sdl, "Rustmag8");
-	player->weapon[1].sprites[9] = load_texture(sdl, "Rustmag9");
-	player->weapon[1].sprites[10] = load_texture(sdl, "Rustmag10");
+	get_weapon_sprites(sdl, &player->weapon[0], "hunter");
+	init_weapon(&player->weapon[0], 10, 4, 0.8);
+
+	get_weapon_sprites(sdl, &player->weapon[1], "rustmag");
+	init_weapon(&player->weapon[0], 6, 4, 1.7);
 
 	player->cur_weapon = 0;
 
@@ -71,6 +40,66 @@ void	player_init(t_sdl *sdl, t_player *player)
 	player->change_down = 0;
 	player->anim_is_done = 1;
 	player->anim_frame = 0;
+}
+
+SDL_Texture	*load_sprite(t_sdl *sdl, char *folder_path, char *sprite_name)
+{
+	char 			file_path[50];
+	Uint32			key;
+	SDL_Texture		*texture;
+	SDL_Surface		*surface;
+
+	file_path[0] = '\0';
+	ft_strcat(file_path, folder_path);
+	ft_strcat(file_path, "/");
+	ft_strcat(file_path, sprite_name);
+	surface = SDL_LoadBMP(file_path);
+	key = SDL_MapRGB(surface->format, 152, 0, 136);
+	SDL_SetColorKey(surface, SDL_TRUE, key);
+	texture = SDL_CreateTextureFromSurface(sdl->renderer, surface);
+	SDL_FreeSurface(surface);
+	return (texture);
+}
+
+void	get_sprites(t_sdl *sdl, t_weapon *weapon, char *path)
+{
+	DIR				*d;
+	struct dirent	*dir;
+	u_int 			i;
+
+	i = 0;
+	d = opendir(path);
+	if (d)
+	{
+		while ((dir = readdir(d)) != NULL)
+		{
+			if (ft_strequ(".", dir->d_name) || ft_strequ("..", dir->d_name))
+				continue ;
+			else
+				weapon->sprites[i++] = load_sprite(sdl, path, dir->d_name);
+		}
+		closedir(d);
+	}
+}
+
+void	get_weapon_sprites(t_sdl *sdl, t_weapon *weapon, char *weapon_folder)
+{
+	char		folder_path[50];
+
+	folder_path[0] = '\0';
+	ft_strcat(folder_path, "../resources/weapons/");
+	ft_strcat(folder_path, weapon_folder);
+	get_sprites(sdl, weapon, folder_path);
+}
+
+void	init_weapon(t_weapon *weapon, u_int ammo, u_int mags, float rate)
+{
+	weapon->ammo_cur = ammo;
+	weapon->ammo_max = ammo;
+	weapon->mag_cur = ammo * mags;
+	weapon->mag_max = ammo * mags;
+	weapon->firerate = rate;
+	weapon->fired = 0;
 }
 
 void	draw_face(t_sdl *sdl, t_player *player, float delta)

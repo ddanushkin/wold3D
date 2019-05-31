@@ -6,26 +6,11 @@
 /*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/22 15:21:40 by ndremora          #+#    #+#             */
-/*   Updated: 2019/05/24 17:50:49 by lglover          ###   ########.fr       */
+/*   Updated: 2019/05/31 11:11:23 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
-
-void	draw_ray_collision(t_sdl *sdl, t_player *player, int x, int y, int r, int g, int b)
-{
-	SDL_SetRenderDrawColor(sdl->renderer, 255, 255, 255, 255);
-	SDL_RenderDrawLine(sdl->renderer, player->x, player->y, x, y);
-	SDL_SetRenderDrawColor(sdl->renderer, r, g, b, 255);
-	SDL_RenderDrawPoint(sdl->renderer, x, y - 1);
-	SDL_RenderDrawPoint(sdl->renderer, x - 1, y);
-	SDL_RenderDrawPoint(sdl->renderer, x, y + 1);
-	SDL_RenderDrawPoint(sdl->renderer, x + 1, y);
-	SDL_RenderDrawPoint(sdl->renderer, x + 1, y - 1);
-	SDL_RenderDrawPoint(sdl->renderer, x - 1, y + 1);
-	SDL_RenderDrawPoint(sdl->renderer, x + 1, y + 1);
-	SDL_RenderDrawPoint(sdl->renderer, x - 1, y - 1);
-}
 
 t_ray	*empty_ray(t_ray *ray)
 {
