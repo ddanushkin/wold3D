@@ -6,7 +6,7 @@
 /*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/22 15:21:40 by ndremora          #+#    #+#             */
-/*   Updated: 2019/05/31 11:11:23 by lglover          ###   ########.fr       */
+/*   Updated: 2019/06/03 21:58:22 by ndremora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,28 @@ t_ray	*empty_ray(t_ray *ray)
 	ray->texture = NULL;
 	return (ray);
 }
+
+/*int		is_wall(t_map *map, t_fpoint *pos, t_ray *ray, double angle)
+{
+	int		y;
+	int		x;
+
+	y = pos->y / 64;
+	x = pos->x / 64;
+	if (pos->x < 0 || pos->y < 0)
+		return (1);
+	if (pos->x >= map->cols * 64 || pos->y >= map->rows * 64)
+		return (1);
+	if (sin(angle) > 0)
+		ray->texture = map->nodes[y][x].texture_w;
+	else
+		ray->texture = map->nodes[y][x].texture_e;
+	if (cos(angle) < 0)
+		ray->texture = map->nodes[y][x].texture_n;
+	else
+		ray->texture = map->nodes[y][x].texture_s;
+	return (map->nodes[y][x].collidable);
+}*/
 
 int		is_wall_h(t_map *map, t_fpoint *pos, t_ray *ray, double angle)
 {
@@ -124,9 +146,9 @@ t_ray	*cast_ray_vert(t_map *map, t_player *player, double angle)
 
 t_ray	*get_ray(t_map *map, t_player *player, double angle)
 {
-	t_ray		*ray_vert;
-	t_ray		*ray_horz;
-	t_ray		*ray;
+	t_ray	*ray_vert;
+	t_ray	*ray_horz;
+	t_ray	*ray;
 
 	ray_horz = cast_ray_horz(map, player, angle);
 	ray_vert = cast_ray_vert(map, player, angle);
@@ -139,25 +161,26 @@ t_ray	*get_ray(t_map *map, t_player *player, double angle)
 	return (ray);
 }
 
-void		cast_single_ray(t_app *app, int x, float angle)
+void	cast_single_ray(t_app *app, int x, float angle)
 {
 	int			slice_height;
 	t_ray		*ray;
 
 	ray = get_ray(app->map, app->player, angle);
-	slice_height = 64 / ray->dist * app->sdl->dist_to_pp;
+	slice_height = (int)(64 / ray->dist * app->sdl->dist_to_pp);
 	draw_column(app->sdl, ray, x, slice_height);
 	free(ray);
 }
 
-void		create_field_of_view(t_app *app)
+void	create_field_of_view(t_app *app)
 {
 	float	angle;
 	float	next_angle;
 	int		x;
-	double	fov = 60;
+	double	fov;
 
-	angle = app->player->direction - (fov/2.0);
+	fov = 60;
+	angle = app->player->direction - (fov / 2.0);
 	next_angle = fov / app->sdl->width;
 	x = 0;
 	while (x < app->sdl->width)

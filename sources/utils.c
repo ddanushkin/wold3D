@@ -1,13 +1,16 @@
-#include "wolf3d.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/06/03 17:08:24 by ndremora          #+#    #+#             */
+/*   Updated: 2019/06/03 17:08:24 by ndremora         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-double	check_angle(double angle)
-{
-	if (angle < 0)
-		angle = 360 + angle;
-	else if (angle > 359)
-		angle = angle - 360;
-	return (angle);
-}
+#include "wolf3d.h"
 
 void	init_time(t_time *time)
 {

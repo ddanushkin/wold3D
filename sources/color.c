@@ -6,7 +6,7 @@
 /*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/22 15:51:10 by ndremora          #+#    #+#             */
-/*   Updated: 2019/05/24 11:50:35 by lglover          ###   ########.fr       */
+/*   Updated: 2019/06/03 15:55:49 by ndremora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,16 @@ void	get_color(SDL_Surface *surface, SDL_Color *c, int x, int y)
 {
 	Uint8	*data;
 
-	data = (Uint8 *)surface->pixels + y * surface->pitch + x * surface->format->BytesPerPixel;
+	data = (Uint8 *)surface->pixels + y * surface->pitch;
+	data += x * surface->format->BytesPerPixel;
 	SDL_GetRGB(*data, surface->format, &c->r, &c->g, &c->b);
 }
 
-void	shade_color(double dist, SDL_Color *color, double shade_dist)
+void	shade_color(double dist, SDL_Color *color, double draw_dist)
 {
 	double	factor;
 
-	factor = dist / shade_dist;
+	factor = dist / draw_dist;
 	if (factor > 1)
 	{
 		color->r = 0;
@@ -39,10 +40,10 @@ void	shade_color(double dist, SDL_Color *color, double shade_dist)
 	}
 }
 
-void	set_pixel(t_sdl *sdl, int x, int y, SDL_Color *color)
+void	set_pixel(t_sdl *sdl, int x, int y, SDL_Color *col)
 {
 	int		offset;
 
 	offset = y * sdl->width + x;
-	sdl->pixels[offset] = (Uint32)((color->r << 16) + (color->g << 8) + (color->b));
+	sdl->pixels[offset] = (Uint32)((col->r << 16) + (col->g << 8) + (col->b));
 }

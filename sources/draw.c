@@ -6,11 +6,29 @@
 /*   By: lglover <lglover@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/21 11:21:57 by lglover           #+#    #+#             */
-/*   Updated: 2019/05/24 16:12:54 by lglover          ###   ########.fr       */
+/*   Updated: 2019/06/03 17:28:19 by ndremora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
+
+SDL_Texture	*load_texture(t_sdl *sdl, char *name)
+{
+	char		file_path[50];
+	SDL_Surface *surface;
+	SDL_Texture	*texture;
+	Uint32		key;
+
+	ft_strcpy(file_path, "../resources/");
+	ft_strcat(file_path, name);
+	ft_strcat(file_path, ".bmp");
+	surface = SDL_LoadBMP(file_path);
+	key = SDL_MapRGB(surface->format, 152, 0, 136);
+	SDL_SetColorKey(surface, SDL_TRUE, key);
+	texture = SDL_CreateTextureFromSurface(sdl->renderer, surface);
+	SDL_FreeSurface(surface);
+	return (texture);
+}
 
 static void	draw_ceiling(t_sdl *sdl, int x, int y)
 {

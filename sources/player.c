@@ -6,52 +6,80 @@
 /*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/22 17:57:04 by ndremora          #+#    #+#             */
-/*   Updated: 2019/05/31 12:49:31 by lglover          ###   ########.fr       */
+/*   Updated: 2019/06/03 21:44:45 by ndremora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-void	player_init(t_sdl *sdl, t_player *player)
+void		load_sounds(t_player *player)
 {
+	player->bgm = Mix_LoadMUS("../resources/sounds/bgm.mp3");
+	player->sound_effect = Mix_LoadWAV("../resources/sounds/speak.wav");
+	player->fx_reload = Mix_LoadWAV("../resources/sounds/GunReload.wav");
+	player->fx_empty = Mix_LoadWAV("../resources/sounds/GunEmpty.wav");
+}
+
+void		load_weapons(t_sdl *sdl, t_player *player)
+{
+	player->weapon = (t_weapon *)malloc(sizeof(t_weapon) * 3);
+	get_weapon_sprites(sdl, &player->weapon[0], "hunter/");
+	init_weapon(&player->weapon[0], 10, 0.8, "Huntershoot.wav");
+	get_weapon_sprites(sdl, &player->weapon[1], "rustmag/");
+	init_weapon(&player->weapon[1], 6, 1.7, "Rustmagshoot.wav");
+	get_weapon_sprites(sdl, &player->weapon[2], "buzzsaw/");
+	init_weapon(&player->weapon[2], 30, 0.8, "Buzzsawshoot.wav");
+}
+
+void		load_faces(t_sdl *sdl, SDL_Texture *state[])
+{
+	state[0] = load_texture(sdl, "/faces/fpain L1");
+	state[1] = load_texture(sdl, "/faces/fpain F1");
+	state[2] = load_texture(sdl, "/faces/fpain R1");
+	state[3] = load_texture(sdl, "/faces/fpain F1");
+	state[4] = load_texture(sdl, "/faces/fpain L4");
+	state[5] = load_texture(sdl, "/faces/fpain F4");
+	state[6] = load_texture(sdl, "/faces/fpain R4");
+	state[7] = load_texture(sdl, "/faces/fpain F4");
+}
+
+void		player_init(t_sdl *sdl, t_player *player)
+{
+	ft_bzero(player, sizeof(t_player));
 	player->direction = 90;
 	player->lives = 99;
-	player->health = 100;
-	player->score = 0;
-	player->cur_level = 0;
-	player->bgm = Mix_LoadMUS("../resources/bgm.mp3");
-	player->sound_effect = Mix_LoadWAV("../resources/speak.wav");
-	player->state[0] = load_texture(sdl, "fpain L1");
-	player->state[1] = load_texture(sdl, "fpain R1");
-
-	player->weapon = (t_weapon *)malloc(sizeof(t_weapon) * 2);
-
-	get_weapon_sprites(sdl, &player->weapon[0], "hunter");
-	init_weapon(&player->weapon[0], 10, 4, 0.8);
-
-	get_weapon_sprites(sdl, &player->weapon[1], "rustmag");
-	init_weapon(&player->weapon[0], 6, 4, 1.7);
-
-	player->cur_weapon = 0;
-
-	player->shooting = 0;
-	player->changing = 0;
-	player->reloading = 0;
-	player->change_down = 0;
+	player->health = 50;
+	player->cur_weapon = 2;
 	player->anim_is_done = 1;
-	player->anim_frame = 0;
+	load_sounds(player);
+	load_faces(sdl, player->state);
+	load_weapons(sdl, player);
+}
+
+void		draw_face(t_sdl *sdl, t_player *player, float delta)
+{
+	SDL_Rect	area;
+	int			cur_frame;
+
+	area.y = sdl->height - 130;
+	area.w = 96;
+	area.x = sdl->width / 2 - area.w + 5;
+	area.h = 116;
+	cur_frame = (long)delta % 4;
+	if (player->health >= 60)
+		SDL_RenderCopy(sdl->renderer, player->state[cur_frame], NULL, &area);
+	else
+		SDL_RenderCopy(sdl->renderer, player->state[cur_frame + 4], NULL, &area);
 }
 
 SDL_Texture	*load_sprite(t_sdl *sdl, char *folder_path, char *sprite_name)
 {
-	char 			file_path[50];
+	char			file_path[50];
 	Uint32			key;
 	SDL_Texture		*texture;
 	SDL_Surface		*surface;
 
-	file_path[0] = '\0';
-	ft_strcat(file_path, folder_path);
-	ft_strcat(file_path, "/");
+	ft_strcpy(file_path, folder_path);
 	ft_strcat(file_path, sprite_name);
 	surface = SDL_LoadBMP(file_path);
 	key = SDL_MapRGB(surface->format, 152, 0, 136);
@@ -61,11 +89,11 @@ SDL_Texture	*load_sprite(t_sdl *sdl, char *folder_path, char *sprite_name)
 	return (texture);
 }
 
-void	get_sprites(t_sdl *sdl, t_weapon *weapon, char *path)
+void		get_sprites(t_sdl *sdl, t_weapon *weapon, char *path)
 {
 	DIR				*d;
 	struct dirent	*dir;
-	u_int 			i;
+	u_int			i;
 
 	i = 0;
 	d = opendir(path);
@@ -82,41 +110,30 @@ void	get_sprites(t_sdl *sdl, t_weapon *weapon, char *path)
 	}
 }
 
-void	get_weapon_sprites(t_sdl *sdl, t_weapon *weapon, char *weapon_folder)
+void		get_weapon_sprites(t_sdl *sdl, t_weapon *weapon, char *weapon_folder)
 {
-	char		folder_path[50];
+	char	folder_path[50];
 
-	folder_path[0] = '\0';
-	ft_strcat(folder_path, "../resources/weapons/");
+	ft_strcpy(folder_path, "../resources/weapons/");
 	ft_strcat(folder_path, weapon_folder);
 	get_sprites(sdl, weapon, folder_path);
 }
 
-void	init_weapon(t_weapon *weapon, u_int ammo, u_int mags, float rate)
+void		init_weapon(t_weapon *weapon, u_int ammo, float rate, char *sound)
 {
+	char	file_path[50];
+
 	weapon->ammo_cur = ammo;
 	weapon->ammo_max = ammo;
-	weapon->mag_cur = ammo * mags;
-	weapon->mag_max = ammo * mags;
+	weapon->mag_cur = ammo * 4;
 	weapon->firerate = rate;
 	weapon->fired = 0;
+	ft_strcpy(file_path, "../resources/sounds/");
+	ft_strcat(file_path, sound);
+	weapon->gun_sound = Mix_LoadWAV(file_path);
 }
 
-void	draw_face(t_sdl *sdl, t_player *player, float delta)
-{
-	SDL_Rect	area;
-	int			cur_frame;
-
-	area.y = sdl->height - 130;
-	area.w = 96;
-	area.x = sdl->width / 2 - area.w + 5;
-	area.h = 116;
-
-	cur_frame = (long)delta % 2;
-	SDL_RenderCopy(sdl->renderer, player->state[cur_frame], NULL, &area);
-}
-
-void	player_rotate(t_player *player, const Uint8 *state)
+void		player_rotate(t_player *player, const Uint8 *state)
 {
 	if (state[SDL_SCANCODE_LEFT])
 		(player->direction -= player->speed * 0.5) < 0 ? player->direction = 359 : 0;
@@ -124,10 +141,10 @@ void	player_rotate(t_player *player, const Uint8 *state)
 		(player->direction += player->speed * 0.5) > 359 ? player->direction = 1 : 0;
 }
 
-float 	get_ray_length(t_map *map, t_player *player, double angle)
+float		get_ray_length(t_map *map, t_player *player, double angle)
 {
-	float dist;
-	t_ray *ray;
+	float	dist;
+	t_ray	*ray;
 
 	angle = (long)(angle) % 360;
 	ray = get_ray(map, player, angle);
@@ -136,7 +153,7 @@ float 	get_ray_length(t_map *map, t_player *player, double angle)
 	return (dist / cos(fabs(angle - player->direction) * M_PI_180));
 }
 
-void	player_update_dist(t_map *map, t_player *player)
+void		player_update_dist(t_map *map, t_player *player)
 {
 	player->dist_n = get_ray_length(map, player, player->direction);
 	player->dist_s = get_ray_length(map, player, player->direction - 180);
@@ -144,7 +161,7 @@ void	player_update_dist(t_map *map, t_player *player)
 	player->dist_w = get_ray_length(map, player, player->direction + 90);
 }
 
-void	player_movement(t_map *map, const Uint8 *key, t_player *player)
+void		player_movement(t_map *map, const Uint8 *key, t_player *player)
 {
 	player_update_dist(map, player);
 	player->x_v = cos(player->direction * M_PI_180);
@@ -171,7 +188,7 @@ void	player_movement(t_map *map, const Uint8 *key, t_player *player)
 	}
 }
 
-void	update_sound(const Uint8 *key, t_player *player)
+void		update_sound(const Uint8 *key, t_player *player)
 {
 	if (key[SDL_SCANCODE_M])
 	{
@@ -182,182 +199,4 @@ void	update_sound(const Uint8 *key, t_player *player)
 	}
 	if (key[SDL_SCANCODE_P])
 		Mix_PauseMusic();
-	//if (key[SDL_SCANCODE_SPACE])
-		//Mix_PlayChannel(-1, player->sound_effect, 0);
-}
-
-void	gun_idle(t_sdl *sdl, t_player *player, float delta)
-{
-	SDL_Rect		area;
-	int				cur_frame;
-	unsigned char	id;
-
-	id = player->cur_weapon;
-	cur_frame = (long)(delta * 1.9);
-	area.y = sdl->height - 130 - 550 + (cur_frame % 2 * 5);
-	area.w = 96 * 5;
-	area.x = sdl->width / 2 - area.w + 200;
-	area.h = 116 * 5;
-
-	cur_frame %= 2;
-	if (cur_frame == 0)
-		cur_frame++;
-	SDL_RenderCopy(sdl->renderer, player->weapon[id].sprites[cur_frame], NULL, &area);
-}
-
-void	gun_shoot(t_sdl *sdl, t_player *player, float delta)
-{
-	SDL_Rect		area;
-	float			cur_frame;
-	unsigned char	id;
-
-	cur_frame = (long)(delta * 14.0) % 11 + 1;
-	id = player->cur_weapon;
-	area.y = sdl->height - 130 - 550;
-	area.w = 96 * 5;
-	area.x = sdl->width / 2 - area.w + 200;
-	area.h = 116 * 5;
-	printf("SHOOT: FRAME %d\n", (int)cur_frame);
-	if (cur_frame == 3 && !player->weapon[id].fired)
-	{
-		player->weapon[id].fired++;
-		player->weapon[id].ammo_cur--;
-	}
-	if (cur_frame > 10)
-	{
-		player->anim_is_done = 1;
-		SDL_RenderCopy(sdl->renderer, player->weapon[id].sprites[1], NULL, &area);
-		return ;
-	}
-	SDL_RenderCopy(sdl->renderer, player->weapon[id].sprites[(int)cur_frame], NULL, &area);
-}
-
-void 	gun_change_down(t_sdl *sdl, t_player *player, unsigned char next_id, float delta)
-{
-	SDL_Rect		area;
-	float			cur_frame;
-	unsigned char	id;
-
-	cur_frame = (long)(delta * 220.0) % 440;
-	id = player->cur_weapon;
-	area.y = sdl->height - 130 - 550 + (int)cur_frame;
-	area.w = 96 * 5;
-	area.x = sdl->width / 2 - area.w + 200;
-	area.h = 116 * 5;
-	printf("CNANGE: FRAME %d\n", (int)cur_frame);
-	SDL_RenderCopy(sdl->renderer, player->weapon[id].sprites[1], NULL, &area);
-	if (area.y > 250)
-	{
-		player->change_down = 1;
-		player->cur_weapon = next_id;
-	}
-}
-
-void 	gun_change_up(t_sdl *sdl, t_player *player, float delta)
-{
-	SDL_Rect		area;
-	float			cur_frame;
-	unsigned char	id;
-
-	cur_frame = (long)(delta * 220.0) % 440;
-	id = player->cur_weapon;
-	area.y = sdl->height - 130 - 180 - (int)cur_frame;
-	area.w = 96 * 5;
-	area.x = sdl->width / 2 - area.w + 200;
-	area.h = 116 * 5;
-	printf("CNANGE: FRAME %d\n", (int)cur_frame);
-	SDL_RenderCopy(sdl->renderer, player->weapon[id].sprites[1], NULL, &area);
-	if (area.y < 40)
-	{
-		player->anim_is_done = 1;
-		player->change_down = 0;
-		return ;
-	}
-}
-
-void 	gun_change(t_sdl *sdl, t_player *player, unsigned int next_weapon, float frame)
-{
-	unsigned char next_id;
-
-	next_id = player->cur_weapon ? 0 : 1;
-	if (player->change_down == 0)
-		gun_change_down(sdl, player, next_id, frame);
-	if (player->change_down == 1)
-		gun_change_up(sdl, player,  frame);
-}
-
-void 	gun_reload_down(t_sdl *sdl, t_player *player, float delta)
-{
-	SDL_Rect		area;
-	float			cur_frame;
-	unsigned char	id;
-	unsigned char	old_ammo;
-
-	cur_frame = (long)(delta * 220.0) % 440;
-	id = player->cur_weapon;
-	area.y = sdl->height - 130 - 550 + (int)cur_frame;
-	area.w = 96 * 5;
-	area.x = sdl->width / 2 - area.w + 200;
-	area.h = 116 * 5;
-	printf("RELOAD: FRAME %d\n", (int)cur_frame);
-	SDL_RenderCopy(sdl->renderer, player->weapon[id].sprites[1], NULL, &area);
-	if (area.y > 250)
-	{
-		player->change_down = 1;
-		old_ammo = player->weapon[id].ammo_cur;
-		if (player->weapon[id].mag_cur >= player->weapon[id].ammo_max)
-		{
-			player->weapon[id].ammo_cur = player->weapon[id].ammo_max;
-			player->weapon[id].mag_cur -= player->weapon[id].ammo_max - old_ammo;
-		}
-		else
-		{
-			player->weapon[id].ammo_cur = player->weapon[id].mag_cur;
-			player->weapon[id].mag_cur = 0;
-		}
-	}
-}
-
-void 	gun_reload(t_sdl *sdl, t_player *player, float frame)
-{
-	if (player->change_down == 0)
-		gun_reload_down(sdl, player, frame);
-	if (player->change_down == 1)
-		gun_change_up(sdl, player,  frame);
-}
-
-void	keyboard_input(t_app *wolf, const Uint8 *key, float frame)
-{
-	if (key[SDL_SCANCODE_LEFT] || key[SDL_SCANCODE_RIGHT])
-		player_rotate(wolf->player, key);
-	if (key[SDL_SCANCODE_SPACE] && wolf->player->anim_frame == 0)
-	{
-		if (wolf->player->weapon[wolf->player->cur_weapon].ammo_cur > 0)
-		{
-			printf("SHOOT: START\n");
-			wolf->player->anim_frame = frame;
-			wolf->player->anim_is_done = 0;
-			wolf->player->shooting = 1;
-		}
-	}
-	if (key[SDL_SCANCODE_Q] && wolf->player->anim_frame == 0)
-	{
-		printf("CHANGE: START\n");
-		wolf->player->anim_frame = frame;
-		wolf->player->anim_is_done = 0;
-		wolf->player->changing = 1;
-	}
-	if (key[SDL_SCANCODE_R] && wolf->player->anim_frame == 0)
-	{
-		if (wolf->player->weapon[wolf->player->cur_weapon].ammo_cur < wolf->player->weapon[wolf->player->cur_weapon].ammo_max
-			&& wolf->player->weapon[wolf->player->cur_weapon].mag_cur > 0)
-		{
-			printf("RELOAD: START\n");
-			wolf->player->anim_frame = frame;
-			wolf->player->anim_is_done = 0;
-			wolf->player->reloading = 1;
-		}
-	}
-	player_movement(wolf->map, key, wolf->player);
-	update_sound(key, wolf->player);
 }

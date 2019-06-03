@@ -6,7 +6,7 @@
 /*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/22 16:26:31 by ndremora          #+#    #+#             */
-/*   Updated: 2019/05/24 18:14:39 by lglover          ###   ########.fr       */
+/*   Updated: 2019/06/03 17:51:06 by ndremora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,7 @@ SDL_Surface	*load_surf(char *name, char *dir)
 {
 	char	file_path[50];
 
-	file_path[0] = '\0';
-	ft_strcat(file_path, "../resources/");
+	ft_strcpy(file_path, "../resources/walls/");
 	ft_strcat(file_path, name);
 	ft_strcat(file_path, dir);
 	ft_strcat(file_path, ".bmp");
