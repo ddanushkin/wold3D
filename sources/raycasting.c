@@ -6,7 +6,7 @@
 /*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/22 15:21:40 by ndremora          #+#    #+#             */
-/*   Updated: 2019/06/03 21:58:22 by ndremora         ###   ########.fr       */
+/*   Updated: 2019/06/05 09:47:48 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,9 @@ int		is_wall_h(t_map *map, t_fpoint *pos, t_ray *ray, double angle)
 	if (pos->x >= map->cols * 64 || pos->y >= map->rows * 64)
 		return (1);
 	if (sin(angle) > 0)
-		ray->texture = map->nodes[y][x].texture_w;
+		ray->texture = map->nodes[y][x].texture[2];
 	else
-		ray->texture = map->nodes[y][x].texture_e;
+		ray->texture = map->nodes[y][x].texture[1];
 	return (map->nodes[y][x].collidable);
 }
 
@@ -72,9 +72,9 @@ int		is_wall_v(t_map *map, t_fpoint *pos, t_ray *ray, double angle)
 	if (pos->x >= map->cols * 64 || pos->y >= map->rows * 64)
 		return (1);
 	if (cos(angle) < 0)
-		ray->texture = map->nodes[y][x].texture_n;
+		ray->texture = map->nodes[y][x].texture[0];
 	else
-		ray->texture = map->nodes[y][x].texture_s;
+		ray->texture = map->nodes[y][x].texture[3];
 	return (map->nodes[y][x].collidable);
 }
 
@@ -148,17 +148,21 @@ t_ray	*get_ray(t_map *map, t_player *player, double angle)
 {
 	t_ray	*ray_vert;
 	t_ray	*ray_horz;
-	t_ray	*ray;
 
 	ray_horz = cast_ray_horz(map, player, angle);
 	ray_vert = cast_ray_vert(map, player, angle);
-	ray = ray_horz->dist <= ray_vert->dist ? ray_horz : ray_vert;
 	if (ray_horz->dist <= ray_vert->dist)
+	{
+		ray_horz->dist *= cos(fabs(angle - player->direction) * M_PI_180);
 		free(ray_vert);
+		return (ray_horz);
+	}
 	else
+	{
+		ray_vert->dist *= cos(fabs(angle - player->direction) * M_PI_180);
 		free(ray_horz);
-	ray->dist *= cos(fabs(angle - player->direction) * M_PI_180);
-	return (ray);
+		return (ray_vert);
+	}
 }
 
 void	cast_single_ray(t_app *app, int x, float angle)

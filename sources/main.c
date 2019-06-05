@@ -6,7 +6,7 @@
 /*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/22 16:01:11 by ndremora          #+#    #+#             */
-/*   Updated: 2019/06/03 15:51:52 by ndremora         ###   ########.fr       */
+/*   Updated: 2019/06/05 12:18:48 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,20 @@ static	int	check_for_quit(t_sdl *sdl, const Uint8 *key)
 	if (key[SDL_SCANCODE_ESCAPE])
 		return (1);
 	return (0);
+}
+
+void		player_debug(const Uint8 *key, t_player *player)
+{
+	if (key[SDL_SCANCODE_EQUALS])
+		player->health++;
+	if (key[SDL_SCANCODE_MINUS])
+		player->health--;
+	if (player->health < 0)
+		player->health = 0;
+	if (player->health > 100)
+		player->health = 100;
+	if (key[SDL_SCANCODE_EQUALS] || key[SDL_SCANCODE_MINUS])
+		printf("%d\n", 6 - ((player->health) / 14) % 7);
 }
 
 void		start_the_game(t_app *wolf)
@@ -38,6 +52,7 @@ void		start_the_game(t_app *wolf)
 			break ;
 		update_time(&time, wolf);
 		keyboard_input(wolf, key, time.frame);
+		player_debug(key, wolf->player);
 		create_field_of_view(wolf);
 		redraw(wolf->sdl, wolf->player, &time);
 		end = SDL_GetPerformanceCounter();
@@ -46,12 +61,19 @@ void		start_the_game(t_app *wolf)
 	}
 }
 
-void		load_level(t_app *wolf)
+void		load_level(t_app *wolf, int level)
 {
 	int		fd;
+	char *level_char;
+	char level_path[50];
 
-	wolf->player->cur_level = "1";
-	if ((fd = open("../levels/1.wolf3d", O_RDONLY)) != -1)
+	ft_strdel(&wolf->player->cur_level);
+	level_char = ft_itoa(level);
+	wolf->player->cur_level = level_char;
+	ft_strcpy(level_path, "../levels/");
+	ft_strcat(level_path, level_char);
+	ft_strcat(level_path, ".wolf3d");
+	if ((fd = open(level_path, O_RDONLY)) != -1)
 		map_read(fd, wolf->map, wolf->player);
 	else
 		ft_error("Map path error.");
@@ -63,7 +85,7 @@ int			main(void)
 
 	init(&wolf);
 	player_init(wolf.sdl, wolf.player);
-	load_level(&wolf);
+	load_level(&wolf, 1);
 	start_the_game(&wolf);
 	quit_properly(&wolf);
 	return (0);

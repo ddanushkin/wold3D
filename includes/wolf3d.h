@@ -37,6 +37,8 @@ typedef struct		s_ray
 	int				offset;
 	float			dist;
 	SDL_Surface		*texture;
+	u_int 			type;
+	u_int 			door;
 }					t_ray;
 
 typedef	struct		s_time
@@ -93,7 +95,7 @@ typedef struct		s_player
 	float			dist_e;
 	float			dist_n;
 	float			dist_s;
-	SDL_Texture		*state[8];
+	SDL_Texture		*state[28];
 	unsigned char	shooting;
 	unsigned char	changing;
 	unsigned char	reloading;
@@ -117,11 +119,9 @@ typedef struct		s_node
 {
 	int				x;
 	int				y;
-	SDL_Surface		*texture_n;
-	SDL_Surface		*texture_s;
-	SDL_Surface		*texture_e;
-	SDL_Surface		*texture_w;
-	int 			collidable;
+	SDL_Surface		*texture[4]; //[n, s, e, w];
+	u_int			collidable;
+	u_int			door;
 }					t_node;
 
 typedef struct		s_map

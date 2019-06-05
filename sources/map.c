@@ -6,7 +6,7 @@
 /*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/22 16:26:31 by ndremora          #+#    #+#             */
-/*   Updated: 2019/06/03 17:51:06 by ndremora         ###   ########.fr       */
+/*   Updated: 2019/06/05 09:47:48 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,10 @@ void		fill_row(t_map *map, char **data, int row, t_player *player)
 	{
 		if (*data[col] >= '1' && *data[col] <= '9')
 		{
-			map->nodes[row][col].texture_n = load_surf(data[col], "_n");
-			map->nodes[row][col].texture_s = load_surf(data[col], "_s");
-			map->nodes[row][col].texture_w = load_surf(data[col], "_w");
-			map->nodes[row][col].texture_e = load_surf(data[col], "_e");
+			map->nodes[row][col].texture[0] = load_surf(data[col], "_n");
+			map->nodes[row][col].texture[1] = load_surf(data[col], "_s");
+			map->nodes[row][col].texture[2] = load_surf(data[col], "_w");
+			map->nodes[row][col].texture[3] = load_surf(data[col], "_e");
 			map->nodes[row][col++].collidable = true;
 		}
 		else if (*data[col] == 'P')

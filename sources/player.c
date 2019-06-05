@@ -6,7 +6,7 @@
 /*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/22 17:57:04 by ndremora          #+#    #+#             */
-/*   Updated: 2019/06/03 21:44:45 by ndremora         ###   ########.fr       */
+/*   Updated: 2019/06/05 12:48:31 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,31 +31,6 @@ void		load_weapons(t_sdl *sdl, t_player *player)
 	init_weapon(&player->weapon[2], 30, 0.8, "Buzzsawshoot.wav");
 }
 
-void		load_faces(t_sdl *sdl, SDL_Texture *state[])
-{
-	state[0] = load_texture(sdl, "/faces/fpain L1");
-	state[1] = load_texture(sdl, "/faces/fpain F1");
-	state[2] = load_texture(sdl, "/faces/fpain R1");
-	state[3] = load_texture(sdl, "/faces/fpain F1");
-	state[4] = load_texture(sdl, "/faces/fpain L4");
-	state[5] = load_texture(sdl, "/faces/fpain F4");
-	state[6] = load_texture(sdl, "/faces/fpain R4");
-	state[7] = load_texture(sdl, "/faces/fpain F4");
-}
-
-void		player_init(t_sdl *sdl, t_player *player)
-{
-	ft_bzero(player, sizeof(t_player));
-	player->direction = 90;
-	player->lives = 99;
-	player->health = 50;
-	player->cur_weapon = 2;
-	player->anim_is_done = 1;
-	load_sounds(player);
-	load_faces(sdl, player->state);
-	load_weapons(sdl, player);
-}
-
 void		draw_face(t_sdl *sdl, t_player *player, float delta)
 {
 	SDL_Rect	area;
@@ -65,11 +40,12 @@ void		draw_face(t_sdl *sdl, t_player *player, float delta)
 	area.w = 96;
 	area.x = sdl->width / 2 - area.w + 5;
 	area.h = 116;
-	cur_frame = (long)delta % 4;
-	if (player->health >= 60)
-		SDL_RenderCopy(sdl->renderer, player->state[cur_frame], NULL, &area);
-	else
-		SDL_RenderCopy(sdl->renderer, player->state[cur_frame + 4], NULL, &area);
+	cur_frame = (long)delta % 4 * 7;
+	if (cur_frame == 14)
+		cur_frame = 0;
+	if (player->health < 85)
+		cur_frame += 6 - ((player->health) / 14) % 7;
+	SDL_RenderCopy(sdl->renderer, player->state[cur_frame], NULL, &area);
 }
 
 SDL_Texture	*load_sprite(t_sdl *sdl, char *folder_path, char *sprite_name)
@@ -89,25 +65,47 @@ SDL_Texture	*load_sprite(t_sdl *sdl, char *folder_path, char *sprite_name)
 	return (texture);
 }
 
-void		get_sprites(t_sdl *sdl, t_weapon *weapon, char *path)
+void		get_sprites(t_sdl *sdl, SDL_Texture *sprites[], char *path)
 {
 	DIR				*d;
 	struct dirent	*dir;
 	u_int			i;
 
 	i = 0;
+	printf("Load from: %s\n", path);
 	d = opendir(path);
 	if (d)
 	{
 		while ((dir = readdir(d)) != NULL)
 		{
-			if (ft_strequ(".", dir->d_name) || ft_strequ("..", dir->d_name))
+			if (dir->d_name[0] == '.')
 				continue ;
 			else
-				weapon->sprites[i++] = load_sprite(sdl, path, dir->d_name);
+			{
+				sprites[i++] = load_sprite(sdl, path, dir->d_name);
+				printf("Sprite loaded: %s\n", dir->d_name);
+			}
 		}
 		closedir(d);
 	}
+}
+
+void		load_faces(t_sdl *sdl, t_player *player)
+{
+	get_sprites(sdl, player->state, "../resources/player/faces/");
+}
+
+void		player_init(t_sdl *sdl, t_player *player)
+{
+	ft_bzero(player, sizeof(t_player));
+	player->direction = 90;
+	player->lives = 99;
+	player->health = 100;
+	player->cur_weapon = 0;
+	player->anim_is_done = 1;
+	load_sounds(player);
+	load_faces(sdl, player);
+	load_weapons(sdl, player);
 }
 
 void		get_weapon_sprites(t_sdl *sdl, t_weapon *weapon, char *weapon_folder)
@@ -116,7 +114,7 @@ void		get_weapon_sprites(t_sdl *sdl, t_weapon *weapon, char *weapon_folder)
 
 	ft_strcpy(folder_path, "../resources/weapons/");
 	ft_strcat(folder_path, weapon_folder);
-	get_sprites(sdl, weapon, folder_path);
+	get_sprites(sdl, weapon->sprites, folder_path);
 }
 
 void		init_weapon(t_weapon *weapon, u_int ammo, float rate, char *sound)
