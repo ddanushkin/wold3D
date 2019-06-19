@@ -6,7 +6,7 @@
 /*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/22 17:57:04 by ndremora          #+#    #+#             */
-/*   Updated: 2019/06/05 12:48:31 by lglover          ###   ########.fr       */
+/*   Updated: 2019/06/19 10:30:43 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,10 +99,13 @@ void		player_init(t_sdl *sdl, t_player *player)
 {
 	ft_bzero(player, sizeof(t_player));
 	player->direction = 90;
+	player->x_v = cos(player->direction * M_PI_180);
+	player->y_v = sin(player->direction * M_PI_180);
 	player->lives = 99;
 	player->health = 100;
 	player->cur_weapon = 0;
 	player->anim_is_done = 1;
+	player->max_dist = 25;
 	load_sounds(player);
 	load_faces(sdl, player);
 	load_weapons(sdl, player);
@@ -137,52 +140,10 @@ void		player_rotate(t_player *player, const Uint8 *state)
 		(player->direction -= player->speed * 0.5) < 0 ? player->direction = 359 : 0;
 	if (state[SDL_SCANCODE_RIGHT])
 		(player->direction += player->speed * 0.5) > 359 ? player->direction = 1 : 0;
-}
-
-float		get_ray_length(t_map *map, t_player *player, double angle)
-{
-	float	dist;
-	t_ray	*ray;
-
-	angle = (long)(angle) % 360;
-	ray = get_ray(map, player, angle);
-	dist = ray->dist;
-	free(ray);
-	return (dist / cos(fabs(angle - player->direction) * M_PI_180));
-}
-
-void		player_update_dist(t_map *map, t_player *player)
-{
-	player->dist_n = get_ray_length(map, player, player->direction);
-	player->dist_s = get_ray_length(map, player, player->direction - 180);
-	player->dist_e = get_ray_length(map, player, player->direction - 90);
-	player->dist_w = get_ray_length(map, player, player->direction + 90);
-}
-
-void		player_movement(t_map *map, const Uint8 *key, t_player *player)
-{
-	player_update_dist(map, player);
-	player->x_v = cos(player->direction * M_PI_180);
-	player->y_v = sin(player->direction * M_PI_180);
-	if (key[SDL_SCANCODE_W] && player->dist_n > 30)
+	if (state[SDL_SCANCODE_LEFT] || state[SDL_SCANCODE_RIGHT])
 	{
-		player->x += (int)(player->speed * player->x_v);
-		player->y += (int)(player->speed * player->y_v);
-	}
-	if (key[SDL_SCANCODE_S] && player->dist_s > 30)
-	{
-		player->x -= (int)(player->speed * player->x_v);
-		player->y -= (int)(player->speed * player->y_v);
-	}
-	if (key[SDL_SCANCODE_D] && player->dist_w > 30)
-	{
-		player->x -= (int)(player->speed * player->y_v);
-		player->y += (int)(player->speed * player->x_v);
-	}
-	if (key[SDL_SCANCODE_A] && player->dist_e > 30)
-	{
-		player->x += (int)(player->speed * player->y_v);
-		player->y -= (int)(player->speed * player->x_v);
+		player->x_v = cos(player->direction * M_PI_180);
+		player->y_v = sin(player->direction * M_PI_180);
 	}
 }
 

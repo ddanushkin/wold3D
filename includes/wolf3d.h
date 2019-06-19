@@ -13,6 +13,7 @@
 # define TEXTURE_SIZE 64
 # define M_PI_180 0.017453292519943295
 # define MAX(a,b) (a > b) ? a : b
+# define DIST_TO_WALL 0
 
 typedef struct		s_ipoint
 {
@@ -91,10 +92,7 @@ typedef struct		s_player
 	Mix_Chunk 		*sound_effect;
 	Mix_Chunk 		*fx_reload;
 	Mix_Chunk 		*fx_empty;
-	float			dist_w;
-	float			dist_e;
-	float			dist_n;
-	float			dist_s;
+	int				max_dist;
 	SDL_Texture		*state[28];
 	unsigned char	shooting;
 	unsigned char	changing;
