@@ -6,7 +6,7 @@
 /*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/22 15:21:40 by ndremora          #+#    #+#             */
-/*   Updated: 2019/06/05 09:47:48 by lglover          ###   ########.fr       */
+/*   Updated: 2019/06/19 15:22:51 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,28 +19,6 @@ t_ray	*empty_ray(t_ray *ray)
 	ray->texture = NULL;
 	return (ray);
 }
-
-/*int		is_wall(t_map *map, t_fpoint *pos, t_ray *ray, double angle)
-{
-	int		y;
-	int		x;
-
-	y = pos->y / 64;
-	x = pos->x / 64;
-	if (pos->x < 0 || pos->y < 0)
-		return (1);
-	if (pos->x >= map->cols * 64 || pos->y >= map->rows * 64)
-		return (1);
-	if (sin(angle) > 0)
-		ray->texture = map->nodes[y][x].texture_w;
-	else
-		ray->texture = map->nodes[y][x].texture_e;
-	if (cos(angle) < 0)
-		ray->texture = map->nodes[y][x].texture_n;
-	else
-		ray->texture = map->nodes[y][x].texture_s;
-	return (map->nodes[y][x].collidable);
-}*/
 
 int		is_wall_h(t_map *map, t_fpoint *pos, t_ray *ray, double angle)
 {
@@ -165,15 +143,43 @@ t_ray	*get_ray(t_map *map, t_player *player, double angle)
 	}
 }
 
-void	cast_single_ray(t_app *app, int x, float angle)
+float	 cast_single_ray(t_app *app, int x, float angle)
 {
 	int			slice_height;
 	t_ray		*ray;
+	float 		dist;
 
 	ray = get_ray(app->map, app->player, angle);
 	slice_height = (int)(64 / ray->dist * app->sdl->dist_to_pp);
 	draw_column(app->sdl, ray, x, slice_height);
+	dist = ray->dist;
 	free(ray);
+	return (dist);
+}
+
+void draw_objects(t_app *app)
+{
+	int i;
+	float dist;
+	int slice_height;
+	t_ray ray;
+
+	i = 0;
+	while (i < app->map->obj_count)
+	{
+		dist = sqrt((app->player->x - app->map->objects[i].x) * (app->player->x - app->map->objects[i].x)
+				+ (app->player->y - app->map->objects[i].y) * (app->player->y - app->map->objects[i].y));
+		slice_height = (int)(64 / dist * app->sdl->dist_to_pp);
+		ray.texture = app->map->objects[i].texture;
+		ray.dist = dist;
+		ray.offset = 0;
+		while (ray.offset < 64)
+		{
+			draw_column(app->sdl, &ray, app->map->objects[i].x + ray.offset, slice_height);
+			ray.offset++;
+		}
+		i++;
+	}
 }
 
 void	create_field_of_view(t_app *app)
@@ -189,8 +195,9 @@ void	create_field_of_view(t_app *app)
 	x = 0;
 	while (x < app->sdl->width)
 	{
-		cast_single_ray(app, x, angle);
+		app->sdl->dist_per_x[x] = cast_single_ray(app, x, angle);
 		angle = angle + next_angle;
 		x++;
 	}
+	draw_objects(app);
 }

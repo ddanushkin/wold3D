@@ -50,6 +50,7 @@ static	void	init_sdl(t_sdl *sdl)
 	sdl->dist_to_pp = (int)(sdl->width / (tan(sdl->fov / 2.0) * 2.0));
 	sdl->draw_dist = 840;
 	sdl->pixels = (Uint32 *)malloc(sizeof(Uint32) * sdl->width * sdl->height);
+	sdl->dist_per_x = (float *)malloc(sizeof(float) * sdl->width);
 }
 
 void			init(t_app *app)

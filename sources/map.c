@@ -6,7 +6,7 @@
 /*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/22 16:26:31 by ndremora          #+#    #+#             */
-/*   Updated: 2019/06/19 10:28:45 by lglover          ###   ########.fr       */
+/*   Updated: 2019/06/19 15:06:10 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,17 +27,20 @@ void		map_init(int fd, t_map *map)
 	map->cols = ft_atoi(data[1]);
 	ft_delarr(data);
 	map->nodes = (t_node **)malloc(sizeof(t_node *) * map->rows);
+	map->objects = (t_obj *)malloc(sizeof(t_obj) * map->rows * map->cols);
+	map->obj_count = 0;
 	while (i < map->rows)
 		map->nodes[i++] = (t_node *)malloc(sizeof(t_node) * map->cols);
 }
 
-SDL_Surface	*load_surf(char *name, char *dir)
+SDL_Surface	*load_surf(char *dir, char *name, char *add)
 {
 	char	file_path[50];
 
-	ft_strcpy(file_path, "../resources/walls/");
-	ft_strcat(file_path, name);
+	ft_strcpy(file_path, "../resources/");
 	ft_strcat(file_path, dir);
+	ft_strcat(file_path, name);
+	ft_strcat(file_path, add);
 	ft_strcat(file_path, ".bmp");
 	return (SDL_LoadBMP(file_path));
 }
@@ -51,11 +54,19 @@ void		fill_row(t_map *map, char **data, int row, t_player *player)
 	{
 		if (*data[col] >= '1' && *data[col] <= '9')
 		{
-			map->nodes[row][col].texture[0] = load_surf(data[col], "_n");
-			map->nodes[row][col].texture[1] = load_surf(data[col], "_s");
-			map->nodes[row][col].texture[2] = load_surf(data[col], "_w");
-			map->nodes[row][col].texture[3] = load_surf(data[col], "_e");
+			map->nodes[row][col].texture[0] = load_surf("walls/", data[col], "_n");
+			map->nodes[row][col].texture[1] = load_surf("walls/", data[col], "_s");
+			map->nodes[row][col].texture[2] = load_surf("walls/", data[col], "_w");
+			map->nodes[row][col].texture[3] = load_surf("walls/", data[col], "_e");
 			map->nodes[row][col++].collidable = true;
+		}
+		else if (*data[col] >= 'A' && *data[col] <= 'F')
+		{
+			map->objects[map->obj_count].y = row * TEXTURE_SIZE + (TEXTURE_SIZE / 2);
+			map->objects[map->obj_count].x = col * TEXTURE_SIZE + (TEXTURE_SIZE / 2);
+			map->objects[map->obj_count].texture = load_surf("interior/", data[col], "");
+			map->nodes[row][col++].collidable = false;
+			map->obj_count++;
 		}
 		else if (*data[col] == 'P')
 		{

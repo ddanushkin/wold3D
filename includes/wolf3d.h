@@ -57,6 +57,7 @@ typedef struct		s_sdl
 	int				dist_to_pp;
 	float			fov;
 	int 			draw_dist;
+	float			*dist_per_x;
 	SDL_Event		event;
 	SDL_Window		*window;
 	SDL_Renderer	*renderer;
@@ -113,6 +114,15 @@ typedef struct		s_ui_elem
 	char			*text;
 }					t_ui_elem;
 
+typedef struct		s_obj
+{
+	int				x;
+	int				y;
+	SDL_Surface		*texture; //[n, s, e, w];
+	u_int			collidable;
+	u_int 			visible;
+}					t_obj;
+
 typedef struct		s_node
 {
 	int				x;
@@ -127,6 +137,8 @@ typedef struct		s_map
 	int				rows;
 	int 			cols;
 	t_node			**nodes;
+	t_obj			*objects;
+	int				obj_count;
 }					t_map;
 
 typedef struct		s_app

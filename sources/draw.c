@@ -107,8 +107,11 @@ void		draw_column(t_sdl *sdl, t_ray *ray, int x, int height)
 	while (y < end)
 	{
 		get_color(ray->texture, &color, ray->offset, (y - begin) * ratio);
-		shade_color(ray->dist, &color, sdl->draw_dist);
-		set_pixel(sdl, x, y, &color);
+		if (!(color.r == 152 && color.g == 0 && color.b == 136))
+		{
+			shade_color(ray->dist, &color, sdl->draw_dist);
+			set_pixel(sdl, x, y, &color);
+		}
 		y++;
 	}
 }
