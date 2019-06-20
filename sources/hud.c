@@ -6,7 +6,7 @@
 /*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/03 15:57:40 by ndremora          #+#    #+#             */
-/*   Updated: 2019/06/05 09:46:32 by lglover          ###   ########.fr       */
+/*   Updated: 2019/06/20 13:04:52 by ndremora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,6 @@ void		update_ammo2(SDL_Renderer *renderer, t_player *player, t_ui_elem *ui_elem)
 	free(ui_text);
 	ui_elem->text = ammo_text;
 	draw_text(renderer, ui_elem);
-
 }
 
 void		create_hud(t_sdl *sdl, t_player *player)
