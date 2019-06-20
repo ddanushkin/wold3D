@@ -6,7 +6,7 @@
 /*   By: lglover <lglover@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/21 11:21:57 by lglover           #+#    #+#             */
-/*   Updated: 2019/06/19 10:28:45 by lglover          ###   ########.fr       */
+/*   Updated: 2019/06/20 12:31:09 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int			draw_back(t_sdl *sdl, int y, int x, int end)
 	return (y);
 }
 
-void		draw_column(t_sdl *sdl, t_ray *ray, int x, int height)
+void		draw_column(t_sdl *sdl, t_ray *ray, int x, int height, int idx)
 {
 	int			y;
 	int			begin;

@@ -6,7 +6,7 @@
 /*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/22 15:21:40 by ndremora          #+#    #+#             */
-/*   Updated: 2019/06/19 15:22:51 by lglover          ###   ########.fr       */
+/*   Updated: 2019/06/20 12:53:19 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,30 @@ t_ray	*empty_ray(t_ray *ray)
 	return (ray);
 }
 
-int		is_wall(t_map *map, t_fpoint *pos, t_ray *ray, double angle)
+void	set_wall_texture(t_map *map, t_fpoint *pos, t_ray *ray, double angle)
+{
+	int		y;
+	int		x;
+
+	y = pos->y / 64;
+	x = pos->x / 64;
+	if ((ft_strcmp(ray->type, "horz")) == 0)
+	{
+		if (sin(angle) > 0)
+			ray[ray[0].count].texture = map->nodes[y][x].texture[2];
+		else
+			ray[ray[0].count].texture = map->nodes[y][x].texture[1];
+	}
+	else
+	{
+		if (cos(angle) < 0)
+			ray[ray[0].count].texture = map->nodes[y][x].texture[0];
+		else
+			ray[ray[0].count].texture = map->nodes[y][x].texture[3];
+	}
+}
+
+int		is_wall(t_map *map, t_fpoint *pos, t_ray *ray, double angle, t_player *player)
 {
 	int		y;
 	int		x;
@@ -31,21 +54,16 @@ int		is_wall(t_map *map, t_fpoint *pos, t_ray *ray, double angle)
 		return (1);
 	y = pos->y / 64;
 	x = pos->x / 64;
-	if ((ft_strcmp(ray->type, "horz")) == 0)
+	if (map->nodes[y][x].type == 2)
 	{
-		if (sin(angle) > 0)
-			ray->texture = map->nodes[y][x].texture[2];
-		else
-			ray->texture = map->nodes[y][x].texture[1];
+		ray[ray[0].count].texture = map->nodes[y][x].texture[0];
+		ray[ray[0].count].offset = (int)pos->x % 64;
+		ray[ray[0].count].dist = sqrt(ft_powd(player->x - map->nodes[y][x].center.x, 2) + ft_powd(player->y - map->nodes[y][x].center.y, 2));
+		ray[0].count++;
 	}
-	else
-	{
-		if (cos(angle) < 0)
-			ray->texture = map->nodes[y][x].texture[0];
-		else
-			ray->texture = map->nodes[y][x].texture[3];
-	}
-	return (map->nodes[y][x].collidable);
+	if (map->nodes[y][x].type == 1)
+		set_wall_texture(map, pos, ray, angle);
+	return (map->nodes[y][x].type == 1);
 }
 
 t_ray	*cast_ray_horz(t_map *map, t_player *player, double angle)
@@ -54,8 +72,9 @@ t_ray	*cast_ray_horz(t_map *map, t_player *player, double angle)
 	t_fpoint	step;
 	t_ray		*ray;
 
-	ray = (t_ray *)malloc(sizeof(t_ray));
+	ray = (t_ray *)malloc(sizeof(t_ray) * 10);
 	ray->type = "horz";
+	ray->count = 0;
 	angle = angle * M_PI_180;
 	if (sin(angle) < 0)
 	{
@@ -72,13 +91,14 @@ t_ray	*cast_ray_horz(t_map *map, t_player *player, double angle)
 	step.x = 64 / tan(angle);
 	step.x = (cos(angle) <= 0) ? -fabsf(step.x) : fabsf(step.x);
 	end.x = player->x + (end.y - player->y) / tan(angle);
-	while (!is_wall(map, &end, ray, angle))
+	while (!is_wall(map, &end, ray, angle, player))
 	{
 		end.x += step.x;
 		end.y += step.y;
 	}
-	ray->dist = fabs((player->y - end.y) / sin(angle));
-	ray->offset = (int)end.x % 64;
+	ray[ray[0].count].dist = fabs((player->y - end.y) / sin(angle));
+	ray[ray[0].count].offset = (int)end.x % 64;
+	ray[0].count++;
 	return (ray);
 }
 
@@ -88,8 +108,9 @@ t_ray	*cast_ray_vert(t_map *map, t_player *player, double angle)
 	t_fpoint	step;
 	t_ray		*ray;
 
-	ray = (t_ray *)malloc(sizeof(t_ray));
+	ray = (t_ray *)malloc(sizeof(t_ray) * 10);
 	ray->type = "vert";
+	ray->count = 0;
 	angle = angle * M_PI_180;
 	if (cos(angle) > 0)
 	{
@@ -106,13 +127,14 @@ t_ray	*cast_ray_vert(t_map *map, t_player *player, double angle)
 	step.y = 64 * tan(angle);
 	step.y = (sin(angle) >= 0) ? fabsf(step.y) : -fabsf(step.y);
 	end.y = player->y + (end.x - player->x) * tan(angle);
-	while (!is_wall(map, &end, ray, angle))
+	while (!is_wall(map, &end, ray, angle, player))
 	{
 		end.x += step.x;
 		end.y += step.y;
 	}
-	ray->dist = fabs((player->x - end.x) / cos(angle));
-	ray->offset = (int)end.y % 64;
+	ray[ray[0].count].dist = fabs((player->x - end.x) / cos(angle));
+	ray[ray[0].count].offset = (int)end.y % 64;
+	ray[0].count++;
 	return (ray);
 }
 
@@ -140,40 +162,43 @@ t_ray	*get_ray(t_map *map, t_player *player, double angle)
 float	cast_single_ray(t_app *app, int x, float angle)
 {
 	int		slice_height;
-	t_ray	*ray;
-	float	dist;
+	t_ray	*rays;
+	int 	i;
 
-	ray = get_ray(app->map, app->player, angle);
-	slice_height = (int)(64 / ray->dist * app->sdl->dist_to_pp);
-	draw_column(app->sdl, ray, x, slice_height);
-	dist = ray->dist;
-	free(ray);
-	return (dist);
-}
-
-void	draw_objects(t_app *app)
-{
-	int i;
-	float dist;
-	int slice_height;
-	t_ray ray;
-
-	i = 0;
-	while (i < app->map->obj_count)
+	rays = get_ray(app->map, app->player, angle);
+	i = rays->count;
+	while (i > 0)
 	{
-		dist = sqrt(ft_powd(app->player->x - app->map->objects[i].x, 2) + ft_powd(app->player->y - app->map->objects[i].y, 2));
-		slice_height = (int)(64 / dist * app->sdl->dist_to_pp);
-		ray.texture = app->map->objects[i].texture;
-		ray.dist = dist;
-		ray.offset = 0;
-		while (ray.offset < 64)
-		{
-			draw_obj_column(app->sdl, &ray, app->map->objects[i].x + ray.offset, slice_height);
-			ray.offset++;
-		}
-		i++;
+		slice_height = (int)(64 / rays[i - 1].dist * app->sdl->dist_to_pp);
+		draw_column(app->sdl, &rays[i - 1], x, slice_height, i - 1);
+		i--;
 	}
+	free(rays);
 }
+
+//void	draw_objects(t_app *app)
+//{
+//	int i;
+//	float dist;
+//	int slice_height;
+//	t_ray ray;
+//
+//	i = 0;
+//	while (i < app->map->obj_count)
+//	{
+//		dist = sqrt(ft_powd(app->player->x - app->map->objects[i].x, 2) + ft_powd(app->player->y - app->map->objects[i].y, 2));
+//		slice_height = (int)(64 / dist * app->sdl->dist_to_pp);
+//		ray.texture = app->map->objects[i].texture;
+//		ray.dist = dist;
+//		ray.offset = 0;
+//		while (ray.offset < app->sdl->width)
+//		{
+//			draw_obj_column(app->sdl, &ray, app->map->objects[i].x + ray.offset, slice_height);
+//			ray.offset++;
+//		}
+//		i++;
+//	}
+//}
 
 void	create_field_of_view(t_app *app)
 {
@@ -188,9 +213,9 @@ void	create_field_of_view(t_app *app)
 	x = 0;
 	while (x < app->sdl->width)
 	{
-		app->sdl->dist_per_x[x] = cast_single_ray(app, x, angle);
+		cast_single_ray(app, x, angle);
 		angle = angle + next_angle;
 		x++;
 	}
-	draw_objects(app);
+	//draw_objects(app);
 }

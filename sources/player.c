@@ -6,7 +6,7 @@
 /*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/22 17:57:04 by ndremora          #+#    #+#             */
-/*   Updated: 2019/06/19 10:30:43 by lglover          ###   ########.fr       */
+/*   Updated: 2019/06/20 12:47:07 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ void		player_init(t_sdl *sdl, t_player *player)
 	player->lives = 99;
 	player->health = 100;
 	player->anim_is_done = 1;
-	player->max_dist = 25;
+	player->max_dist = 50;
 	load_sounds(player);
 	load_faces(sdl, player);
 	load_weapons(sdl, player);

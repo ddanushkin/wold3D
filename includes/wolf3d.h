@@ -32,15 +32,6 @@ typedef struct		s_dpoint
 	double			y;
 }					t_dpoint;
 
-typedef struct		s_ray
-{
-	int				offset;
-	float			dist;
-	SDL_Surface		*texture;
-	char 			*type;
-	u_int 			door;
-}					t_ray;
-
 typedef	struct		s_time
 {
 	float			frame;
@@ -133,16 +124,24 @@ typedef struct		s_node
 	int				y;
 	SDL_Surface		*texture[4]; //[n, s, e, w];
 	u_int			collidable;
-	u_int			door;
+	u_int			type;
+	t_ipoint		center;
 }					t_node;
+
+typedef struct		s_ray
+{
+	int				offset;
+	float			dist;
+	SDL_Surface		*texture;
+	int 			count;
+	char 			*type;
+}					t_ray;
 
 typedef struct		s_map
 {
 	int				rows;
 	int 			cols;
 	t_node			**nodes;
-	t_obj			*objects;
-	int				obj_count;
 }					t_map;
 
 typedef struct		s_app
@@ -163,7 +162,7 @@ void				create_field_of_view(t_app *app);
 void				shade_color(double dist, SDL_Color *color, double draw_dist);
 void				get_color(SDL_Surface *surface, SDL_Color *c, int x, int y);
 void				set_pixel(t_sdl *sdl, int x, int y, SDL_Color *color);
-void				draw_column(t_sdl *sdl, t_ray *ray, int x, int height);
+void				draw_column(t_sdl *sdl, t_ray *ray, int x, int height, int i);
 void				draw_obj_column(t_sdl *sdl, t_ray *ray, int x, int height);
 void				init_time(t_time *time);
 void				update_time(t_time *time, t_app *app);
