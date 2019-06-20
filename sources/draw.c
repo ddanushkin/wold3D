@@ -6,7 +6,7 @@
 /*   By: lglover <lglover@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/21 11:21:57 by lglover           #+#    #+#             */
-/*   Updated: 2019/06/20 15:17:59 by lglover          ###   ########.fr       */
+/*   Updated: 2019/06/20 18:31:20 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int			draw_back(t_sdl *sdl, int y, int x, int end)
 	return (y);
 }
 
-void		draw_column(t_sdl *sdl, t_ray *ray, int x, int height, int idx)
+void		draw_column(t_sdl *sdl, t_cross *obj, int x, int height)
 {
 	int			y;
 	int			begin;
@@ -102,41 +102,14 @@ void		draw_column(t_sdl *sdl, t_ray *ray, int x, int height, int idx)
 	y = (begin < 0) ? 0 : begin;
 	draw_ceiling(sdl, x, y);
 	draw_floor(sdl, x, end);
-	if (ray->dist > sdl->draw_dist)
+	if (obj->dist > sdl->draw_dist)
 		y = draw_back(sdl, y, x, end);
 	while (y < end)
 	{
-		get_color(ray->texture, &color, ray->offset, (y - begin) * ratio);
+		get_color(obj->texture, &color, obj->offset, (y - begin) * ratio);
 		if (!(color.r == 152 && color.g == 0 && color.b == 136))
 		{
-			shade_color(ray->dist, &color, sdl->draw_dist);
-			set_pixel(sdl, x, y, &color);
-		}
-		y++;
-	}
-}
-
-void		draw_obj_column(t_sdl *sdl, t_ray *ray, int x, int height)
-{
-	int			y;
-	int			begin;
-	int			end;
-	double		ratio;
-	SDL_Color	color;
-
-	ratio = 64.0 / height;
-	begin = (sdl->height - height) / 2;
-	if ((end = begin + height) > sdl->height)
-		end = sdl->height;
-	y = (begin < 0) ? 0 : begin;
-	if (ray->dist > sdl->draw_dist)
-		y = draw_back(sdl, y, x, end);
-	while (y < end)
-	{
-		get_color(ray->texture, &color, ray->offset, (y - begin) * ratio);
-		if (!(color.r == 152 && color.g == 0 && color.b == 136))
-		{
-			shade_color(ray->dist, &color, sdl->draw_dist);
+			shade_color(obj->dist, &color, sdl->draw_dist);
 			set_pixel(sdl, x, y, &color);
 		}
 		y++;
