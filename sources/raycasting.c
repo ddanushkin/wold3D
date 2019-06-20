@@ -20,39 +20,31 @@ t_ray	*empty_ray(t_ray *ray)
 	return (ray);
 }
 
-int		is_wall_h(t_map *map, t_fpoint *pos, t_ray *ray, double angle)
+int		is_wall(t_map *map, t_fpoint *pos, t_ray *ray, double angle)
 {
 	int		y;
 	int		x;
 
-	y = pos->y / 64;
-	x = pos->x / 64;
 	if (pos->x < 0 || pos->y < 0)
 		return (1);
 	if (pos->x >= map->cols * 64 || pos->y >= map->rows * 64)
 		return (1);
-	if (sin(angle) > 0)
-		ray->texture = map->nodes[y][x].texture[2];
-	else
-		ray->texture = map->nodes[y][x].texture[1];
-	return (map->nodes[y][x].collidable);
-}
-
-int		is_wall_v(t_map *map, t_fpoint *pos, t_ray *ray, double angle)
-{
-	int		y;
-	int		x;
-
 	y = pos->y / 64;
 	x = pos->x / 64;
-	if (pos->x < 0 || pos->y < 0)
-		return (1);
-	if (pos->x >= map->cols * 64 || pos->y >= map->rows * 64)
-		return (1);
-	if (cos(angle) < 0)
-		ray->texture = map->nodes[y][x].texture[0];
+	if ((ft_strcmp(ray->type, "horz")) == 0)
+	{
+		if (sin(angle) > 0)
+			ray->texture = map->nodes[y][x].texture[2];
+		else
+			ray->texture = map->nodes[y][x].texture[1];
+	}
 	else
-		ray->texture = map->nodes[y][x].texture[3];
+	{
+		if (cos(angle) < 0)
+			ray->texture = map->nodes[y][x].texture[0];
+		else
+			ray->texture = map->nodes[y][x].texture[3];
+	}
 	return (map->nodes[y][x].collidable);
 }
 
@@ -63,6 +55,7 @@ t_ray	*cast_ray_horz(t_map *map, t_player *player, double angle)
 	t_ray		*ray;
 
 	ray = (t_ray *)malloc(sizeof(t_ray));
+	ray->type = "horz";
 	angle = angle * M_PI_180;
 	if (sin(angle) < 0)
 	{
@@ -79,7 +72,7 @@ t_ray	*cast_ray_horz(t_map *map, t_player *player, double angle)
 	step.x = 64 / tan(angle);
 	step.x = (cos(angle) <= 0) ? -fabsf(step.x) : fabsf(step.x);
 	end.x = player->x + (end.y - player->y) / tan(angle);
-	while (!is_wall_h(map, &end, ray, angle))
+	while (!is_wall(map, &end, ray, angle))
 	{
 		end.x += step.x;
 		end.y += step.y;
@@ -96,6 +89,7 @@ t_ray	*cast_ray_vert(t_map *map, t_player *player, double angle)
 	t_ray		*ray;
 
 	ray = (t_ray *)malloc(sizeof(t_ray));
+	ray->type = "vert";
 	angle = angle * M_PI_180;
 	if (cos(angle) > 0)
 	{
@@ -112,7 +106,7 @@ t_ray	*cast_ray_vert(t_map *map, t_player *player, double angle)
 	step.y = 64 * tan(angle);
 	step.y = (sin(angle) >= 0) ? fabsf(step.y) : -fabsf(step.y);
 	end.y = player->y + (end.x - player->x) * tan(angle);
-	while (!is_wall_v(map, &end, ray, angle))
+	while (!is_wall(map, &end, ray, angle))
 	{
 		end.x += step.x;
 		end.y += step.y;
@@ -143,11 +137,11 @@ t_ray	*get_ray(t_map *map, t_player *player, double angle)
 	}
 }
 
-float	 cast_single_ray(t_app *app, int x, float angle)
+float	cast_single_ray(t_app *app, int x, float angle)
 {
-	int			slice_height;
-	t_ray		*ray;
-	float 		dist;
+	int		slice_height;
+	t_ray	*ray;
+	float	dist;
 
 	ray = get_ray(app->map, app->player, angle);
 	slice_height = (int)(64 / ray->dist * app->sdl->dist_to_pp);
@@ -157,7 +151,7 @@ float	 cast_single_ray(t_app *app, int x, float angle)
 	return (dist);
 }
 
-void draw_objects(t_app *app)
+void	draw_objects(t_app *app)
 {
 	int i;
 	float dist;
@@ -167,15 +161,14 @@ void draw_objects(t_app *app)
 	i = 0;
 	while (i < app->map->obj_count)
 	{
-		dist = sqrt((app->player->x - app->map->objects[i].x) * (app->player->x - app->map->objects[i].x)
-				+ (app->player->y - app->map->objects[i].y) * (app->player->y - app->map->objects[i].y));
+		dist = sqrt(ft_powd(app->player->x - app->map->objects[i].x, 2) + ft_powd(app->player->y - app->map->objects[i].y, 2));
 		slice_height = (int)(64 / dist * app->sdl->dist_to_pp);
 		ray.texture = app->map->objects[i].texture;
 		ray.dist = dist;
 		ray.offset = 0;
 		while (ray.offset < 64)
 		{
-			draw_column(app->sdl, &ray, app->map->objects[i].x + ray.offset, slice_height);
+			draw_obj_column(app->sdl, &ray, app->map->objects[i].x + ray.offset, slice_height);
 			ray.offset++;
 		}
 		i++;

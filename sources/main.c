@@ -12,25 +12,16 @@
 
 #include "wolf3d.h"
 
-static	int	check_for_quit(t_sdl *sdl, const Uint8 *key)
-{
-	if (SDL_PollEvent(&sdl->event) && sdl->event.type == SDL_QUIT)
-		return (1);
-	if (key[SDL_SCANCODE_ESCAPE])
-		return (1);
-	return (0);
-}
-
 void		player_debug(const Uint8 *key, t_player *player)
 {
-	if (key[SDL_SCANCODE_EQUALS])
+	if (key[SDL_SCANCODE_EQUALS] && player->health < 100)
 		player->health++;
-	if (key[SDL_SCANCODE_MINUS])
+	if (key[SDL_SCANCODE_MINUS] && player->health > 0)
+	{
 		player->health--;
-	if (player->health < 0)
-		player->health = 0;
-	if (player->health > 100)
-		player->health = 100;
+		if (player->health == 0)
+			Mix_PlayChannel(-1, player->fx_die, 0);
+	}
 	if (key[SDL_SCANCODE_EQUALS] || key[SDL_SCANCODE_MINUS])
 		printf("%d\n", 6 - ((player->health) / 14) % 7);
 }
@@ -64,8 +55,8 @@ void		start_the_game(t_app *wolf)
 void		load_level(t_app *wolf, int level)
 {
 	int		fd;
-	char *level_char;
-	char level_path[50];
+	char	*level_char;
+	char	level_path[50];
 
 	ft_strdel(&wolf->player->cur_level);
 	level_char = ft_itoa(level);

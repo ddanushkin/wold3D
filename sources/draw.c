@@ -15,7 +15,7 @@
 SDL_Texture	*load_texture(t_sdl *sdl, char *name)
 {
 	char		file_path[50];
-	SDL_Surface *surface;
+	SDL_Surface	*surface;
 	SDL_Texture	*texture;
 	Uint32		key;
 
@@ -102,6 +102,33 @@ void		draw_column(t_sdl *sdl, t_ray *ray, int x, int height)
 	y = (begin < 0) ? 0 : begin;
 	draw_ceiling(sdl, x, y);
 	draw_floor(sdl, x, end);
+	if (ray->dist > sdl->draw_dist)
+		y = draw_back(sdl, y, x, end);
+	while (y < end)
+	{
+		get_color(ray->texture, &color, ray->offset, (y - begin) * ratio);
+		if (!(color.r == 152 && color.g == 0 && color.b == 136))
+		{
+			shade_color(ray->dist, &color, sdl->draw_dist);
+			set_pixel(sdl, x, y, &color);
+		}
+		y++;
+	}
+}
+
+void		draw_obj_column(t_sdl *sdl, t_ray *ray, int x, int height)
+{
+	int			y;
+	int			begin;
+	int			end;
+	double		ratio;
+	SDL_Color	color;
+
+	ratio = 64.0 / height;
+	begin = (sdl->height - height) / 2;
+	if ((end = begin + height) > sdl->height)
+		end = sdl->height;
+	y = (begin < 0) ? 0 : begin;
 	if (ray->dist > sdl->draw_dist)
 		y = draw_back(sdl, y, x, end);
 	while (y < end)

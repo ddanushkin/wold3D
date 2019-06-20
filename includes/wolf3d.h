@@ -13,7 +13,6 @@
 # define TEXTURE_SIZE 64
 # define M_PI_180 0.017453292519943295
 # define MAX(a,b) (a > b) ? a : b
-# define DIST_TO_WALL 0
 
 typedef struct		s_ipoint
 {
@@ -38,7 +37,7 @@ typedef struct		s_ray
 	int				offset;
 	float			dist;
 	SDL_Surface		*texture;
-	u_int 			type;
+	char 			*type;
 	u_int 			door;
 }					t_ray;
 
@@ -93,6 +92,11 @@ typedef struct		s_player
 	Mix_Chunk 		*sound_effect;
 	Mix_Chunk 		*fx_reload;
 	Mix_Chunk 		*fx_empty;
+	Mix_Chunk		*fx_die;
+	float			dist_w;
+	float			dist_e;
+	float			dist_n;
+	float			dist_s;
 	int				max_dist;
 	SDL_Texture		*state[28];
 	unsigned char	shooting;
@@ -118,7 +122,7 @@ typedef struct		s_obj
 {
 	int				x;
 	int				y;
-	SDL_Surface		*texture; //[n, s, e, w];
+	SDL_Surface		*texture;
 	u_int			collidable;
 	u_int 			visible;
 }					t_obj;
@@ -160,6 +164,7 @@ void				shade_color(double dist, SDL_Color *color, double draw_dist);
 void				get_color(SDL_Surface *surface, SDL_Color *c, int x, int y);
 void				set_pixel(t_sdl *sdl, int x, int y, SDL_Color *color);
 void				draw_column(t_sdl *sdl, t_ray *ray, int x, int height);
+void				draw_obj_column(t_sdl *sdl, t_ray *ray, int x, int height);
 void				init_time(t_time *time);
 void				update_time(t_time *time, t_app *app);
 void				draw_text(SDL_Renderer	*renderer, t_ui_elem *ui_elem);
@@ -177,4 +182,5 @@ void				update_sound(const Uint8 *key, t_player *player);
 void				player_movement(t_map *map, const Uint8 *key, t_player *player);
 void				player_rotate(t_player *player, const Uint8 *state);
 void				redraw(t_sdl *sdl, t_player *player, t_time *time);
+int					check_for_quit(t_sdl *sdl, const Uint8 *key);
 #endif

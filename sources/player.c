@@ -18,6 +18,7 @@ void		load_sounds(t_player *player)
 	player->sound_effect = Mix_LoadWAV("../resources/sounds/speak.wav");
 	player->fx_reload = Mix_LoadWAV("../resources/sounds/GunReload.wav");
 	player->fx_empty = Mix_LoadWAV("../resources/sounds/GunEmpty.wav");
+	player->fx_die = Mix_LoadWAV("../resources/sounds/Player Dies.wav");
 }
 
 void		load_weapons(t_sdl *sdl, t_player *player)
@@ -98,12 +99,11 @@ void		load_faces(t_sdl *sdl, t_player *player)
 void		player_init(t_sdl *sdl, t_player *player)
 {
 	ft_bzero(player, sizeof(t_player));
-	player->direction = 90;
+	player->direction = 270;
 	player->x_v = cos(player->direction * M_PI_180);
 	player->y_v = sin(player->direction * M_PI_180);
 	player->lives = 99;
 	player->health = 100;
-	player->cur_weapon = 0;
 	player->anim_is_done = 1;
 	player->max_dist = 25;
 	load_sounds(player);

@@ -36,8 +36,10 @@ static	void	player_change_weapon(t_player *player, float frame)
 
 static	void	player_reloading(t_player *player, float frame)
 {
-	if (player->weapon[player->cur_weapon].ammo_cur < player->weapon[player->cur_weapon].ammo_max
-		&& player->weapon[player->cur_weapon].mag_cur > 0)
+	unsigned char	id;
+
+	id = player->cur_weapon;
+	if (player->weapon[id].ammo_cur < player->weapon[id].ammo_max && player->weapon[id].mag_cur > 0)
 	{
 		printf("RELOAD: START\n");
 		player->anim_frame = frame;
@@ -58,5 +60,6 @@ void			keyboard_input(t_app *wolf, const Uint8 *key, float frame)
 	if (key[SDL_SCANCODE_R] && wolf->player->anim_frame == 0)
 		player_reloading(wolf->player, frame);
 	player_movement(wolf->map, key, wolf->player);
-	update_sound(key, wolf->player);
+	if (key[SDL_SCANCODE_M] || key[SDL_SCANCODE_P])
+		update_sound(key, wolf->player);
 }
