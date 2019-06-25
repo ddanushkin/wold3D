@@ -1,16 +1,6 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   player.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/22 17:57:04 by ndremora          #+#    #+#             */
-/*   Updated: 2019/06/20 15:17:59 by lglover          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "wolf3d.h"
+
+void		fill_table(t_player *player);
 
 void		load_sounds(t_player *player)
 {
@@ -106,9 +96,12 @@ void		player_init(t_sdl *sdl, t_player *player)
 	player->health = 100;
 	player->anim_is_done = 1;
 	player->max_dist = 50;
+	player->door_frame = 0;
+	player->door_closing = 0;
 	load_sounds(player);
 	load_faces(sdl, player);
 	load_weapons(sdl, player);
+	fill_table(player);
 }
 
 void		get_weapon_sprites(t_sdl *sdl, t_weapon *weapon, char *weapon_folder)
@@ -134,6 +127,24 @@ void		init_weapon(t_weapon *weapon, u_int ammo, float rate, char *sound)
 	weapon->gun_sound = Mix_LoadWAV(file_path);
 }
 
+void		fill_table(t_player *player)
+{
+	int	i;
+	double rad;
+
+	i = 0;
+	while (i <= 360)
+	{
+		rad = i * M_PI_180;
+		player->cos_table180[i] = cos(rad);
+		player->sin_table180[i] = sin(rad);
+		player->cos_table[i] = cos(i);
+		player->sin_table[i] = sin(i);
+		player->tan_table[i] = tan(i);
+		i++;
+	}
+}
+
 void		player_rotate(t_player *player, const Uint8 *state)
 {
 	if (state[SDL_SCANCODE_LEFT])
@@ -142,8 +153,10 @@ void		player_rotate(t_player *player, const Uint8 *state)
 		(player->direction += player->speed * 0.5) > 359 ? player->direction = 1 : 0;
 	if (state[SDL_SCANCODE_LEFT] || state[SDL_SCANCODE_RIGHT])
 	{
-		player->x_v = cos(player->direction * M_PI_180);
-		player->y_v = sin(player->direction * M_PI_180);
+		//player->x_v = cos(player->direction * M_PI_180);
+		player->x_v = player->cos_table180[player->direction];
+		//player->y_v = sin(player->direction * M_PI_180);
+		player->y_v = player->sin_table180[player->direction];
 	}
 }
 

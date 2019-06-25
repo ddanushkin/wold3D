@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   init.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/22 15:56:59 by ndremora          #+#    #+#             */
-/*   Updated: 2019/06/20 15:17:59 by lglover          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "wolf3d.h"
 
 static	void	check_for_init_errors(void)
@@ -47,7 +35,8 @@ static	void	init_sdl(t_sdl *sdl)
 	sdl->width = 1280;
 	sdl->height = 720;
 	sdl->fov = 3.14159 / 3.0;
-	sdl->dist_to_pp = (int)(sdl->width / (tan(sdl->fov / 2.0) * 2.0));
+	//sdl->dist_to_pp = (int)(sdl->width / (tan(sdl->fov / 2.0) * 2.0));
+	sdl->dist_to_pp = (int)((sdl->width / 2.0) / (tan(sdl->fov / 2.0)));
 	sdl->draw_dist = 840;
 	sdl->pixels = (Uint32 *)malloc(sizeof(Uint32) * sdl->width * sdl->height);
 	sdl->dist_per_x = (float *)malloc(sizeof(float) * sdl->width);

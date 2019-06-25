@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   map.c                                              :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/22 16:26:31 by ndremora          #+#    #+#             */
-/*   Updated: 2019/06/20 15:17:59 by lglover          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "wolf3d.h"
 
 void		map_init(int fd, t_map *map)
@@ -65,6 +53,12 @@ void		fill_row(t_map *map, char **data, int row, t_player *player)
 			map->nodes[row][col].center.x = col * TEXTURE_SIZE + (TEXTURE_SIZE / 2);
 			map->nodes[row][col].texture[0] = load_surf("interior/", data[col], "");
 			map->nodes[row][col].type = 2;
+			map->nodes[row][col++].collidable = true;
+		}
+		else if (*data[col] == 'D')
+		{
+			map->nodes[row][col].texture[0] = load_surf("doors/", data[col], "1");
+			map->nodes[row][col].type = 3;
 			map->nodes[row][col++].collidable = true;
 		}
 		else if (*data[col] == 'P')

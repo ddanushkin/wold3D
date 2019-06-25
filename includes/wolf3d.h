@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <dirent.h>
 #include "libft.h"
+#include "sins&cons.h"
 
 # define TEXTURE_SIZE 64
 # define M_PI_180 0.017453292519943295
@@ -84,10 +85,6 @@ typedef struct		s_player
 	Mix_Chunk 		*fx_reload;
 	Mix_Chunk 		*fx_empty;
 	Mix_Chunk		*fx_die;
-	float			dist_w;
-	float			dist_e;
-	float			dist_n;
-	float			dist_s;
 	int				max_dist;
 	SDL_Texture		*state[28];
 	unsigned char	shooting;
@@ -98,6 +95,15 @@ typedef struct		s_player
 	unsigned char	cur_weapon;
 	unsigned char	anim_is_done;
 	unsigned char	change_down;
+	int				door_frame;
+	int				door_closing;
+	float 			*end_x;
+	float 			*end_y;
+	float			cos_table180[361];
+	float			sin_table180[361];
+	float			cos_table[361];
+	float			sin_table[361];
+	float			tan_table[361];
 }					t_player;
 
 typedef struct		s_ui_elem
