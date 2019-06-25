@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/05/22 16:01:11 by ndremora          #+#    #+#             */
+/*   Updated: 2019/06/20 16:36:37 by lglover          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "wolf3d.h"
 
 void		player_debug(const Uint8 *key, t_player *player)
@@ -12,10 +24,6 @@ void		player_debug(const Uint8 *key, t_player *player)
 	}
 	if (key[SDL_SCANCODE_EQUALS] || key[SDL_SCANCODE_MINUS])
 		printf("%d\n", 6 - ((player->health) / 14) % 7);
-	if (key[SDL_SCANCODE_F1] && player->door_frame > 0)
-		player->door_frame--;
-	if (key[SDL_SCANCODE_F2] && player->door_frame < 64)
-		player->door_frame++;
 }
 
 void		start_the_game(t_app *wolf)
@@ -36,21 +44,6 @@ void		start_the_game(t_app *wolf)
 		update_time(&time, wolf);
 		keyboard_input(wolf, key, time.frame);
 		player_debug(key, wolf->player);
-
-		if (wolf->player->door_closing)
-			wolf->player->door_frame -= 5;
-		else
-			wolf->player->door_frame += 5;
-		if (wolf->player->door_frame > 63)
-		{
-			wolf->player->door_closing = 1;
-			wolf->player->door_frame = 63;
-		}
-		if (wolf->player->door_frame < 0)
-		{
-			wolf->player->door_closing = 0;
-			wolf->player->door_frame = 0;
-		}
 		create_field_of_view(wolf);
 		redraw(wolf->sdl, wolf->player, &time);
 		end = SDL_GetPerformanceCounter();

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   map.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/05/22 16:26:31 by ndremora          #+#    #+#             */
+/*   Updated: 2019/06/20 16:36:37 by lglover          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "wolf3d.h"
 
 void		map_init(int fd, t_map *map)
@@ -44,7 +56,7 @@ void		fill_row(t_map *map, char **data, int row, t_player *player)
 			map->nodes[row][col].texture[1] = load_surf("walls/", data[col], "_s");
 			map->nodes[row][col].texture[2] = load_surf("walls/", data[col], "_w");
 			map->nodes[row][col].texture[3] = load_surf("walls/", data[col], "_e");
-			map->nodes[row][col].type = 1;
+			map->nodes[row][col].type = MAP_TYPE_WALL;
 			map->nodes[row][col++].collidable = true;
 		}
 		else if (*data[col] >= 'A' && *data[col] <= 'F')
@@ -52,20 +64,14 @@ void		fill_row(t_map *map, char **data, int row, t_player *player)
 			map->nodes[row][col].center.y = row * TEXTURE_SIZE + (TEXTURE_SIZE / 2);
 			map->nodes[row][col].center.x = col * TEXTURE_SIZE + (TEXTURE_SIZE / 2);
 			map->nodes[row][col].texture[0] = load_surf("interior/", data[col], "");
-			map->nodes[row][col].type = 2;
-			map->nodes[row][col++].collidable = true;
-		}
-		else if (*data[col] == 'D')
-		{
-			map->nodes[row][col].texture[0] = load_surf("doors/", data[col], "1");
-			map->nodes[row][col].type = 3;
+			map->nodes[row][col].type = MAP_TYPE_INTERIOR;
 			map->nodes[row][col++].collidable = true;
 		}
 		else if (*data[col] == 'P')
 		{
 			player->y = row * TEXTURE_SIZE + (TEXTURE_SIZE / 2);
 			player->x = col * TEXTURE_SIZE + (TEXTURE_SIZE / 2);
-			map->nodes[row][col].type = 0;
+			map->nodes[row][col].type = MAP_TYPE_EMPTY;
 			map->nodes[row][col++].collidable = false;
 		}
 		else
