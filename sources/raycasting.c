@@ -16,15 +16,15 @@ t_ray	*init_horz(t_player *player, double angle)
 
 	ray = (t_ray *)malloc(sizeof(t_ray));
 	ray->dist = 999999;
-	ray->type = 1;
+	ray->type = RAY_TYPE_HORZ;
 	if (sin(angle) < 0)
 	{
-		ray->start.y = (int)(player->y / 64) * 64.0 - 0.001;
+		ray->start.y = (player->y & 0xffc0) - 0.001;
 		ray->step.y = -64;
 	}
 	else if (sin(angle) > 0)
 	{
-		ray->start.y = (int)(player->y / 64) * 64.0 + 64.001;
+		ray->start.y = (player->y & 0xffc0) + 64.001;
 		ray->step.y = 64;
 	}
 	else
@@ -40,15 +40,15 @@ t_ray	*init_vert(t_player *player, double angle)
 
 	ray = (t_ray *)malloc(sizeof(t_ray));
 	ray->dist = 999999;
-	ray->type = 0;
+	ray->type = RAY_TYPE_VERT;
 	if (cos(angle) > 0)
 	{
-		ray->start.x = player->x / 64 * 64 + 64.001;
+		ray->start.x = (player->x & 0xffc0) + 64.001;
 		ray->step.x = 64;
 	}
 	else if (cos(angle) < 0)
 	{
-		ray->start.x = player->x / 64 * 64 - 0.001;
+		ray->start.x = (player->x & 0xffc0) - 0.001;
 		ray->step.x = -64;
 	}
 	else
@@ -116,9 +116,9 @@ void	calc_ray_data(t_app *app, t_ray *ray, float angle)
 				  (int)ray->start.x % 64 :
 				  (int)ray->start.y % 64;
 	if (ray->type == RAY_TYPE_HORZ)
-		ray->texture = ray->node->texture[(sin(angle) > 0 ? 2 : 1)];
+		ray->texture = ray->node->texture[(sin(angle) > 0 ? 0 : 1)];
 	else
-		ray->texture = ray->node->texture[(cos(angle) < 0 ? 0 : 3)];
+		ray->texture = ray->node->texture[(cos(angle) < 0 ? 3 : 2)];
 	ray->dist *= cos(angle - app->player->direction * M_PI_180);
 }
 

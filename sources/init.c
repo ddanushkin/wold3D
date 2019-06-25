@@ -6,7 +6,7 @@
 /*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/22 15:56:59 by ndremora          #+#    #+#             */
-/*   Updated: 2019/06/25 14:56:46 by lglover          ###   ########.fr       */
+/*   Updated: 2019/06/25 20:57:11 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ static	void	create_stuff(t_sdl *sdl)
 
 static	void	init_sdl(t_sdl *sdl)
 {
-	check_for_init_errors();
 	sdl->width = 1280;
 	sdl->height = 720;
 	sdl->fov = 3.14159 / 3.0;
@@ -58,6 +57,8 @@ void			init(t_app *app)
 	app->sdl = (t_sdl *)malloc(sizeof(t_sdl));
 	app->map = (t_map *)malloc(sizeof(t_map));
 	app->player = (t_player *)malloc(sizeof(t_player));
+	app->threads = 4;//sysconf(_SC_NPROCESSORS_ONLN);
+	app->thread_w = app->sdl->width / app->threads;
 	init_sdl(app->sdl);
 	create_stuff(app->sdl);
 }

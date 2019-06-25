@@ -6,7 +6,7 @@
 /*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/22 16:01:11 by ndremora          #+#    #+#             */
-/*   Updated: 2019/06/25 19:05:06 by lglover          ###   ########.fr       */
+/*   Updated: 2019/06/25 21:06:00 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void		start_the_game(t_app *wolf)
 		redraw(wolf->sdl, wolf->player, &time);
 		end = SDL_GetPerformanceCounter();
 		elapsed = (float)(end - start) / SDL_GetPerformanceFrequency() * 1000.0;
-		SDL_Delay((Uint32)(elapsed - 16.6666)); //60 FPS
+		SDL_Delay((Uint32)(elapsed - 16.6666));
 	}
 }
 

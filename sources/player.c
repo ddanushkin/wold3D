@@ -6,7 +6,7 @@
 /*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/22 17:57:04 by ndremora          #+#    #+#             */
-/*   Updated: 2019/06/25 14:56:46 by lglover          ###   ########.fr       */
+/*   Updated: 2019/06/25 22:00:20 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,13 +99,13 @@ void		load_faces(t_sdl *sdl, t_player *player)
 void		player_init(t_sdl *sdl, t_player *player)
 {
 	ft_bzero(player, sizeof(t_player));
-	player->direction = 270;
+	player->direction = 90;
 	player->x_v = cos(player->direction * M_PI_180);
 	player->y_v = sin(player->direction * M_PI_180);
 	player->lives = 99;
 	player->health = 100;
 	player->anim_is_done = 1;
-	player->max_dist = 50;
+	player->max_dist = 25;
 	load_sounds(player);
 	load_faces(sdl, player);
 	load_weapons(sdl, player);

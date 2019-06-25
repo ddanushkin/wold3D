@@ -8,19 +8,19 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <dirent.h>
+# include <pthread.h>
 #include "libft.h"
 #include "sins&cons.h"
-
 # define TEXTURE_SIZE 64
 # define M_PI_180 0.017453292519943295
 # define MAX(a,b) (a > b) ? a : b
-# define MAP_TYPE_DOOR 3
-# define MAP_TYPE_WALL 2
-# define MAP_TYPE_INTERIOR 1
 # define MAP_TYPE_EMPTY 0
+# define MAP_TYPE_WALL 1
+# define MAP_TYPE_INTERIOR 2
+# define MAP_TYPE_DOOR 3
 # define MAP_TYPE_OUTOFBOUND -1
 # define RAY_TYPE_HORZ 1
-# define RAY_TYPE_VERT 2
+# define RAY_TYPE_VERT 0
 
 typedef struct		s_ipoint
 {
@@ -160,9 +160,19 @@ typedef struct		s_app
 	t_sdl			*sdl;
 	t_player		*player;
 	t_map			*map;
+	int				threads;
+	int				thread_w;
 }					t_app;
 
+typedef struct	s_thread_data
+{
+	int			index;
+	t_app		*app;
+	pthread_t	pth;
+}				t_thread_data;
+
 void				init(t_app *app);
+void				parallel(t_app *app);
 void				map_read(int fd, t_map *map, t_player *player);
 void				ft_error(char *str);
 void				quit_properly(t_app *sdl);

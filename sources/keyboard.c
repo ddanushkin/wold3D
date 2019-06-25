@@ -6,7 +6,7 @@
 /*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/03 12:14:29 by ndremora          #+#    #+#             */
-/*   Updated: 2019/06/25 19:09:32 by lglover          ###   ########.fr       */
+/*   Updated: 2019/06/25 21:33:42 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,11 @@ void			keyboard_input(t_app *wolf, const Uint8 *key, float frame)
 		player_change_weapon(wolf->player, frame);
 	if (key[SDL_SCANCODE_R] && wolf->player->anim_frame == 0)
 		player_reloading(wolf->player, frame);
-	if (key[SDL_SCANCODE_SPACE] && frame - wolf->player->last_space >= 0.2)
+	if (key[SDL_SCANCODE_SPACE] && frame - wolf->player->last_space >= 0.3)
 	{
 		wolf->player->last_space = frame;
-		near_coord.x = wolf->player->x + cos(wolf->player->direction * M_PI_180) * 63;
-		near_coord.y = wolf->player->y + sin(wolf->player->direction * M_PI_180) * 63;
+		near_coord.x = wolf->player->x + cos(wolf->player->direction * M_PI_180) * 64;
+		near_coord.y = wolf->player->y + sin(wolf->player->direction * M_PI_180) * 64;
 		near_node = &wolf->map->nodes[near_coord.y / 64][near_coord.x / 64];
 		if (near_node->type == MAP_TYPE_DOOR)
 		{
