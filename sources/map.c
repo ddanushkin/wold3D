@@ -6,7 +6,7 @@
 /*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/22 16:26:31 by ndremora          #+#    #+#             */
-/*   Updated: 2019/06/20 16:36:37 by lglover          ###   ########.fr       */
+/*   Updated: 2019/06/25 18:17:12 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,23 @@ void		fill_row(t_map *map, char **data, int row, t_player *player)
 			map->nodes[row][col].type = MAP_TYPE_WALL;
 			map->nodes[row][col++].collidable = true;
 		}
-		else if (*data[col] >= 'A' && *data[col] <= 'F')
+		else if (*data[col] >= 'X' && *data[col] <= 'Z')
 		{
 			map->nodes[row][col].center.y = row * TEXTURE_SIZE + (TEXTURE_SIZE / 2);
 			map->nodes[row][col].center.x = col * TEXTURE_SIZE + (TEXTURE_SIZE / 2);
 			map->nodes[row][col].texture[0] = load_surf("interior/", data[col], "");
 			map->nodes[row][col].type = MAP_TYPE_INTERIOR;
+			map->nodes[row][col++].collidable = true;
+		}
+		else if (*data[col] == 'D')
+		{
+			map->nodes[row][col].x = col;
+			map->nodes[row][col].y = row;
+			map->nodes[row][col].texture[0] = load_surf("doors/", data[col], "1");
+			map->nodes[row][col].type = MAP_TYPE_DOOR;
+			map->nodes[row][col].door_frame = 0;
+			map->nodes[row][col].door_closing = false;
+			map->nodes[row][col].door_opening = false;
 			map->nodes[row][col++].collidable = true;
 		}
 		else if (*data[col] == 'P')

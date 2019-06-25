@@ -6,7 +6,7 @@
 /*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/22 16:01:11 by ndremora          #+#    #+#             */
-/*   Updated: 2019/06/20 16:36:37 by lglover          ###   ########.fr       */
+/*   Updated: 2019/06/25 19:05:06 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,9 @@ void		start_the_game(t_app *wolf)
 	Uint64		start;
 	Uint64		end;
 	float		elapsed;
+	t_node		*door_node;
 
+	door_node = &wolf->map->nodes[13][6];
 	init_time(&time);
 	key = SDL_GetKeyboardState(NULL);
 	while (1)
@@ -42,8 +44,26 @@ void		start_the_game(t_app *wolf)
 		if (check_for_quit(wolf->sdl, key) == 1)
 			break ;
 		update_time(&time, wolf);
-		keyboard_input(wolf, key, time.frame);
 		player_debug(key, wolf->player);
+		keyboard_input(wolf, key, time.frame);
+		if (door_node->door_closing)
+			door_node->door_frame--;
+		if (door_node->door_opening)
+			door_node->door_frame++;
+		if (door_node->door_frame > 64)
+		{
+			door_node->collidable = false;
+			door_node->door_opening = false;
+			door_node->door_closing = false;
+			door_node->door_frame = 64;
+		}
+		if (door_node->door_frame < 0)
+		{
+			door_node->collidable = true;
+			door_node->door_opening = false;
+			door_node->door_closing = false;
+			door_node->door_frame = 0;
+		}
 		create_field_of_view(wolf);
 		redraw(wolf->sdl, wolf->player, &time);
 		end = SDL_GetPerformanceCounter();

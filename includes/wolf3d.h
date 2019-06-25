@@ -14,6 +14,7 @@
 # define TEXTURE_SIZE 64
 # define M_PI_180 0.017453292519943295
 # define MAX(a,b) (a > b) ? a : b
+# define MAP_TYPE_DOOR 3
 # define MAP_TYPE_WALL 2
 # define MAP_TYPE_INTERIOR 1
 # define MAP_TYPE_EMPTY 0
@@ -74,6 +75,31 @@ typedef struct		s_weapon
 	Mix_Chunk 		*gun_sound;
 }					t_weapon;
 
+typedef struct		s_node
+{
+	int				x;
+	int				y;
+	SDL_Surface		*texture[4]; //[n, s, e, w];
+	u_int			collidable;
+	u_int			type;
+	t_ipoint		center;
+	int				door_frame;
+	int				door_opening;
+	int				door_closing;
+	int				door_visible;
+}					t_node;
+
+typedef struct		s_ray
+{
+	t_fpoint		start;
+	t_fpoint 		step;
+	float			dist;
+	int				offset;
+	t_node			*node;
+	SDL_Surface		*texture;
+	int 			type;
+}					t_ray;
+
 typedef struct		s_player
 {
 	int 			x;
@@ -101,15 +127,7 @@ typedef struct		s_player
 	unsigned char	cur_weapon;
 	unsigned char	anim_is_done;
 	unsigned char	change_down;
-	int				door_frame;
-	int				door_closing;
-	float 			*end_x;
-	float 			*end_y;
-	float			cos_table180[361];
-	float			sin_table180[361];
-	float			cos_table[361];
-	float			sin_table[361];
-	float			tan_table[361];
+	float 			last_space;
 }					t_player;
 
 typedef struct		s_ui_elem
@@ -129,33 +147,6 @@ typedef struct		s_obj
 	u_int			collidable;
 	u_int 			visible;
 }					t_obj;
-
-typedef struct		s_node
-{
-	int				x;
-	int				y;
-	SDL_Surface		*texture[4]; //[n, s, e, w];
-	u_int			collidable;
-	u_int			type;
-	t_ipoint		center;
-}					t_node;
-
-typedef struct		s_cross
-{
-	int				offset;
-	float			dist;
-	SDL_Surface		*texture;
-}					t_cross;
-
-typedef struct		s_ray_data
-{
-	t_fpoint		start;
-	t_fpoint 		step;
-	int 			count;
-	float			dist;
-	t_cross			*objects;
-	int 			type;
-}					t_ray_data;
 
 typedef struct		s_map
 {
@@ -182,14 +173,14 @@ void				create_field_of_view(t_app *app);
 void				shade_color(double dist, SDL_Color *color, double draw_dist);
 void				get_color(SDL_Surface *surface, SDL_Color *c, int x, int y);
 void				set_pixel(t_sdl *sdl, int x, int y, SDL_Color *color);
-void				draw_column(t_sdl *sdl, t_cross *obj, int x, int height);
-void				draw_obj_column(t_sdl *sdl, t_ray_data *ray, int x, int height);
+void				draw_column(t_sdl *sdl, t_ray *ray, int x, int height);
+void				draw_obj_column(t_sdl *sdl, t_ray *ray, int x, int height);
 void				init_time(t_time *time);
 void				update_time(t_time *time, t_app *app);
 void				draw_text(SDL_Renderer	*renderer, t_ui_elem *ui_elem);
 void 				create_hud(t_sdl *sdl, t_player *player);
 SDL_Texture			*load_texture(t_sdl *sdl, char *name);
-t_ray_data			*get_ray(t_app *app, double angle);
+t_ray				*get_ray(t_app *app, double angle);
 void				draw_face(t_sdl *sdl, t_player *player, float delta);
 void 				idle_gun_animation(t_sdl *sdl, t_player *player, float delta);
 void 				gun_shoot(t_sdl *sdl, t_player *player, float delta);

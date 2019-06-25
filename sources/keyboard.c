@@ -6,7 +6,7 @@
 /*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/03 12:14:29 by ndremora          #+#    #+#             */
-/*   Updated: 2019/06/20 16:36:37 by lglover          ###   ########.fr       */
+/*   Updated: 2019/06/25 19:09:32 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,39 @@ static	void	player_reloading(t_player *player, float frame)
 
 void			keyboard_input(t_app *wolf, const Uint8 *key, float frame)
 {
+	t_ipoint near_coord;
+	t_node *near_node;
+
 	if (key[SDL_SCANCODE_LEFT] || key[SDL_SCANCODE_RIGHT])
 		player_rotate(wolf->player, key);
-	if (key[SDL_SCANCODE_SPACE] && wolf->player->anim_frame == 0)
+	if (key[SDL_SCANCODE_LSHIFT] && wolf->player->anim_frame == 0)
 		player_shoot(wolf->player, frame);
 	if (key[SDL_SCANCODE_Q] && wolf->player->anim_frame == 0)
 		player_change_weapon(wolf->player, frame);
 	if (key[SDL_SCANCODE_R] && wolf->player->anim_frame == 0)
 		player_reloading(wolf->player, frame);
+	if (key[SDL_SCANCODE_SPACE] && frame - wolf->player->last_space >= 0.2)
+	{
+		wolf->player->last_space = frame;
+		near_coord.x = wolf->player->x + cos(wolf->player->direction * M_PI_180) * 63;
+		near_coord.y = wolf->player->y + sin(wolf->player->direction * M_PI_180) * 63;
+		near_node = &wolf->map->nodes[near_coord.y / 64][near_coord.x / 64];
+		if (near_node->type == MAP_TYPE_DOOR)
+		{
+			if (!near_node->door_closing && !near_node->door_opening)
+			{
+				if (near_node->door_frame == 0)
+					near_node->door_opening = true;
+				if (near_node->door_frame == 64)
+					near_node->door_closing = true;
+			}
+			else
+			{
+				near_node->door_opening = !near_node->door_opening;
+				near_node->door_closing = !near_node->door_closing;
+			}
+		}
+	}
 	player_movement(wolf->map, key, wolf->player);
 	if (key[SDL_SCANCODE_M] || key[SDL_SCANCODE_P])
 		update_sound(key, wolf->player);
