@@ -7,6 +7,14 @@ void		load_sounds(t_player *player)
 	player->fx_reload = Mix_LoadWAV("../resources/sounds/GunReload.wav");
 	player->fx_empty = Mix_LoadWAV("../resources/sounds/GunEmpty.wav");
 	player->fx_die = Mix_LoadWAV("../resources/sounds/Player Dies.wav");
+	player->steps[0] = Mix_LoadWAV("../resources/sounds/step-01.wav");
+	player->steps[1] = Mix_LoadWAV("../resources/sounds/step-02.wav");
+	player->steps[2] = Mix_LoadWAV("../resources/sounds/step-03.wav");
+	player->steps[3] = Mix_LoadWAV("../resources/sounds/step-04.wav");
+	player->steps[4] = Mix_LoadWAV("../resources/sounds/step-05.wav");
+	player->steps[5] = Mix_LoadWAV("../resources/sounds/step-06.wav");
+	player->steps[6] = Mix_LoadWAV("../resources/sounds/step-07.wav");
+	player->steps[7] = Mix_LoadWAV("../resources/sounds/step-08.wav");
 }
 
 void		load_weapons(t_sdl *sdl, t_player *player)
@@ -94,9 +102,6 @@ void		player_init(t_sdl *sdl, t_player *player)
 	player->health = 100;
 	player->anim_is_done = 1;
 	player->max_dist = 25;
-	player->acc = 0;
-	player->head_offset = 0;
-	player->idle_frame = 0;
 	load_sounds(player);
 	load_faces(sdl, player);
 	load_weapons(sdl, player);

@@ -14,31 +14,6 @@ void		player_debug(const Uint8 *key, t_player *player)
 		printf("%d\n", 6 - ((player->health) / 14) % 7);
 }
 
-void		update_doors(t_map *map)
-{
-	t_node		*door_node;
-
-	door_node = &map->nodes[13][6];
-	if (door_node->door_closing)
-		door_node->door_frame--;
-	if (door_node->door_opening)
-		door_node->door_frame++;
-	if (door_node->door_frame > 64)
-	{
-		door_node->collidable = false;
-		door_node->door_opening = false;
-		door_node->door_closing = false;
-		door_node->door_frame = 64;
-	}
-	if (door_node->door_frame < 0)
-	{
-		door_node->collidable = true;
-		door_node->door_opening = false;
-		door_node->door_closing = false;
-		door_node->door_frame = 0;
-	}
-}
-
 void		start_the_game(t_app *app)
 {
 	const Uint8	*key;
@@ -57,6 +32,7 @@ void		start_the_game(t_app *app)
 		update_time(&time, app);
 		player_debug(key, app->player);
 		keyboard_input(app, key, time.frame);
+		update_doors(app->map, app->player, time.frame);
 		create_field_of_view(app);
 		redraw(app->sdl, app->player, &time);
 		end = SDL_GetPerformanceCounter();

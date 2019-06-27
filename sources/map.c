@@ -17,6 +17,8 @@ void		map_init(int fd, t_map *map)
 	map->nodes = (t_node **)malloc(sizeof(t_node *) * map->rows);
 	while (i < map->rows)
 		map->nodes[i++] = (t_node *)malloc(sizeof(t_node) * map->cols);
+	map->doors = (t_node **)malloc(sizeof(t_node *) * 100);
+	map->doors_count = 0;
 }
 
 SDL_Surface	*load_surf(char *dir, char *name, char *add)
@@ -64,6 +66,11 @@ void		fill_row(t_map *map, char **data, int row, t_player *player)
 			map->nodes[row][col].door_frame = 0;
 			map->nodes[row][col].door_closing = false;
 			map->nodes[row][col].door_opening = false;
+			map->nodes[row][col].last_open = 0;
+			map->nodes[row][col].blocked = 0;
+			map->nodes[row][col].center.x = col * TEXTURE_SIZE + (TEXTURE_SIZE / 2);
+			map->nodes[row][col].center.y = row * TEXTURE_SIZE + (TEXTURE_SIZE / 2);
+			map->doors[map->doors_count++] = &map->nodes[row][col];
 			map->nodes[row][col++].collidable = true;
 		}
 		else if (*data[col] == 'P')

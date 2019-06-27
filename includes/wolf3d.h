@@ -1,16 +1,14 @@
 #ifndef WOLF3D_WOLF3D_H
 #define WOLF3D_WOLF3D_H
 
-#include <SDL.h>
-#include <SDL_mixer.h>
-#include <SDL_ttf.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <stdio.h>
-#include <dirent.h>
-# include <pthread.h>
-#include "libft.h"
-#include "sins&cons.h"
+# include <SDL.h>
+# include <SDL_mixer.h>
+# include <SDL_ttf.h>
+# include <stdlib.h>
+# include <stdbool.h>
+# include <stdio.h>
+# include <dirent.h>
+# include "libft.h"
 # define TEXTURE_SIZE 64
 # define M_PI_180 0.017453292519943295
 # define MAX(a,b) (a > b) ? a : b
@@ -86,7 +84,8 @@ typedef struct		s_node
 	int				door_frame;
 	int				door_opening;
 	int				door_closing;
-	int				door_visible;
+	float			last_open;
+	int 			blocked;
 }					t_node;
 
 typedef struct		s_ray
@@ -120,6 +119,7 @@ typedef struct		s_player
 	Mix_Chunk 		*fx_reload;
 	Mix_Chunk 		*fx_empty;
 	Mix_Chunk		*fx_die;
+	Mix_Chunk		*steps[8];
 	int				max_dist;
 	SDL_Texture		*state[28];
 	unsigned char	shooting;
@@ -131,6 +131,8 @@ typedef struct		s_player
 	unsigned char	anim_is_done;
 	unsigned char	change_down;
 	float 			last_space;
+	float 			last_shift;
+	float 			last_step;
 }					t_player;
 
 typedef struct		s_ui_elem
@@ -156,6 +158,8 @@ typedef struct		s_map
 	int				rows;
 	int 			cols;
 	t_node			**nodes;
+	t_node			**doors;
+	int				doors_count;
 }					t_map;
 
 typedef struct		s_app
@@ -206,4 +210,8 @@ void				player_movement(t_map *map, const Uint8 *key, t_player *player);
 void				player_rotate(t_player *player, const Uint8 *state);
 void				redraw(t_sdl *sdl, t_player *player, t_time *time);
 int					check_for_quit(t_sdl *sdl, const Uint8 *key);
+void				update_doors(t_map *map, t_player *player, float frame);
+void				door_interaction(t_app *app, float frame);
+void 				door_move_sound();
+void 				door_close_open_sound();
 #endif

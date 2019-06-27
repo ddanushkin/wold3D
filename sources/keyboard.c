@@ -2,7 +2,7 @@
 
 static	void	player_shoot(t_player *player, float frame)
 {
-	if (player->weapon[player->cur_weapon].ammo_cur > 0)
+	if (player->weapon[player->cur_weapon].ammo_cur > 0 && player->anim_frame == 0)
 	{
 		printf("SHOOT: START\n");
 		player->anim_frame = frame;
@@ -10,8 +10,11 @@ static	void	player_shoot(t_player *player, float frame)
 		player->shooting = 1;
 		Mix_PlayChannel(-1, player->weapon[player->cur_weapon].gun_sound, 0);
 	}
-	/*else if (player->weapon[player->cur_weapon].ammo_cur == 0)
-		Mix_PlayChannel(-1, player->fx_empty, 0);*/
+	else if (player->anim_frame == 0 && player->weapon[player->cur_weapon].ammo_cur == 0)
+	{
+		Mix_PlayChannel(-1, player->fx_empty, 0);
+		player->last_shift = frame;
+	}
 }
 
 static	void	player_change_weapon(t_player *player, float frame)
@@ -37,37 +40,11 @@ static	void	player_reloading(t_player *player, float frame)
 	}
 }
 
-void			door_interaction(t_app *app, float frame)
-{
-	t_ipoint	near_coord;
-	t_node		*near_node;
-
-	app->player->last_space = frame;
-	near_coord.x = app->player->x + cos(app->player->direction * M_PI_180) * 64;
-	near_coord.y = app->player->y + sin(app->player->direction * M_PI_180) * 64;
-	near_node = &app->map->nodes[near_coord.y / 64][near_coord.x / 64];
-	if (near_node->type == MAP_TYPE_DOOR)
-	{
-		if (!near_node->door_closing && !near_node->door_opening)
-		{
-			if (near_node->door_frame == 0)
-				near_node->door_opening = true;
-			if (near_node->door_frame == 64)
-				near_node->door_closing = true;
-		}
-		else
-		{
-			near_node->door_opening = !near_node->door_opening;
-			near_node->door_closing = !near_node->door_closing;
-		}
-	}
-}
-
 void			keyboard_input(t_app *app, const Uint8 *key, float frame)
 {
 	if (key[SDL_SCANCODE_LEFT] || key[SDL_SCANCODE_RIGHT])
 		player_rotate(app->player, key);
-	if (key[SDL_SCANCODE_LSHIFT] && app->player->anim_frame == 0)
+	if (key[SDL_SCANCODE_LSHIFT] && frame - app->player->last_shift >= 2.5)
 		player_shoot(app->player, frame);
 	if (key[SDL_SCANCODE_Q] && app->player->anim_frame == 0)
 		player_change_weapon(app->player, frame);
