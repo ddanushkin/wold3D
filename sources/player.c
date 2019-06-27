@@ -2,7 +2,6 @@
 
 void		load_sounds(t_player *player)
 {
-	player->bgm = Mix_LoadMUS("../resources/sounds/bgm.mp3");
 	player->sound_effect = Mix_LoadWAV("../resources/sounds/speak.wav");
 	player->fx_reload = Mix_LoadWAV("../resources/sounds/GunReload.wav");
 	player->fx_empty = Mix_LoadWAV("../resources/sounds/GunEmpty.wav");
@@ -143,12 +142,12 @@ void		player_rotate(t_player *player, const Uint8 *state)
 	}
 }
 
-void		update_sound(const Uint8 *key, t_player *player)
+void		update_sound(const Uint8 *key, t_sfx *sfx)
 {
 	if (key[SDL_SCANCODE_M])
 	{
 		if (!Mix_PlayingMusic())
-			Mix_PlayMusic(player->bgm, -1);
+			Mix_PlayMusic(sfx->background, -1);
 		else if (Mix_PausedMusic())
 			Mix_ResumeMusic();
 	}

@@ -45,8 +45,10 @@ void			init(t_app *app)
 	app->sdl = (t_sdl *)malloc(sizeof(t_sdl));
 	app->map = (t_map *)malloc(sizeof(t_map));
 	app->player = (t_player *)malloc(sizeof(t_player));
-	app->threads = 4;//sysconf(_SC_NPROCESSORS_ONLN);
-	app->thread_w = app->sdl->width / app->threads;
 	init_sdl(app->sdl);
 	create_stuff(app->sdl);
+	app->sfx = (t_sfx *)malloc(sizeof(t_sfx));
+	app->sfx->background = Mix_LoadMUS("../resources/sounds/bgm.mp3");
+	app->sfx->door_open_close = Mix_LoadWAV("../resources/sounds/door_open_close.wav");
+	app->sfx->door_move = Mix_LoadWAV("../resources/sounds/door_move.wav");
 }

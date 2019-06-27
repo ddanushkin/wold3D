@@ -11,8 +11,10 @@ void	quit_properly(t_app *app)
 	SDL_DestroyRenderer(app->sdl->renderer);
 	SDL_DestroyTexture(app->sdl->texture);
 	Mix_FreeChunk(app->player->sound_effect);
-	Mix_FreeMusic(app->player->bgm);
-	app->player->bgm = NULL;
+	Mix_FreeMusic(app->sfx->background);
+	Mix_FreeChunk(app->sfx->door_move);
+	Mix_FreeChunk(app->sfx->door_open_close);
+	app->sfx->background = NULL;
 	app->player->sound_effect = NULL;
 	free(app->sdl->pixels);
 	free(app->sdl);

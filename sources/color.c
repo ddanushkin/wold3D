@@ -4,7 +4,7 @@ void	get_color(SDL_Surface *surface, SDL_Color *c, int x, int y)
 {
 	Uint8	*data;
 
-	data = (Uint8 *)surface->pixels + y * surface->pitch;
+	data = surface->pixels + y * surface->pitch;
 	data += x * surface->format->BytesPerPixel;
 	SDL_GetRGB(*data, surface->format, &c->r, &c->g, &c->b);
 }

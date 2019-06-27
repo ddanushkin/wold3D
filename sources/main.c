@@ -32,7 +32,7 @@ void		start_the_game(t_app *app)
 		update_time(&time, app);
 		player_debug(key, app->player);
 		keyboard_input(app, key, time.frame);
-		update_doors(app->map, app->player, time.frame);
+		update_doors(app, time.frame);
 		create_field_of_view(app);
 		redraw(app->sdl, app->player, &time);
 		end = SDL_GetPerformanceCounter();
@@ -41,32 +41,32 @@ void		start_the_game(t_app *app)
 	}
 }
 
-void		load_level(t_app *wolf, int level)
+void		load_level(t_app *app, int level)
 {
 	int		fd;
 	char	*level_char;
 	char	level_path[50];
 
-	ft_strdel(&wolf->player->cur_level);
+	ft_strdel(&app->player->cur_level);
 	level_char = ft_itoa(level);
-	wolf->player->cur_level = level_char;
+	app->player->cur_level = level_char;
 	ft_strcpy(level_path, "../levels/");
 	ft_strcat(level_path, level_char);
 	ft_strcat(level_path, ".wolf3d");
 	if ((fd = open(level_path, O_RDONLY)) != -1)
-		map_read(fd, wolf->map, wolf->player);
+		map_read(fd, app->map, app->player);
 	else
 		ft_error("Map path error.");
 }
 
 int			main(void)
 {
-	t_app	wolf;
+	t_app	app;
 
-	init(&wolf);
-	player_init(wolf.sdl, wolf.player);
-	load_level(&wolf, 1);
-	start_the_game(&wolf);
-	quit_properly(&wolf);
+	init(&app);
+	player_init(app.sdl, app.player);
+	load_level(&app, 1);
+	start_the_game(&app);
+	quit_properly(&app);
 	return (0);
 }

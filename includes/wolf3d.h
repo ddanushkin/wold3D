@@ -16,7 +16,6 @@
 # define MAP_TYPE_WALL 1
 # define MAP_TYPE_INTERIOR 2
 # define MAP_TYPE_DOOR 3
-# define MAP_TYPE_OUTOFBOUND -1
 # define RAY_TYPE_HORZ 1
 # define RAY_TYPE_VERT 0
 
@@ -162,21 +161,34 @@ typedef struct		s_map
 	int				doors_count;
 }					t_map;
 
+typedef struct		s_sfx
+{
+	Mix_Chunk		*door_move;
+	Mix_Chunk		*door_open_close;
+	Mix_Music		*background;
+}					t_sfx;
+
+typedef struct		s_textures
+{
+	SDL_Surface		**walls;
+	SDL_Surface		*doors;
+	SDL_Surface		*sprites;
+}					t_textures;
 typedef struct		s_app
 {
 	t_sdl			*sdl;
 	t_player		*player;
 	t_map			*map;
-	int				threads;
-	int				thread_w;
+	t_sfx			*sfx;
+	t_textures		*textures;
 }					t_app;
 
-typedef struct	s_thread_data
+typedef struct		s_color
 {
-	int			index;
-	t_app		*app;
-	pthread_t	pth;
-}				t_thread_data;
+	Uint8			r;
+	Uint8			g;
+	Uint8			b;
+}					t_color;
 
 void				init(t_app *app);
 void				parallel(t_app *app);
@@ -189,7 +201,7 @@ void				keyboard_input(t_app *app, const Uint8 *key, float frame);
 void				create_field_of_view(t_app *app);
 void				shade_color(double dist, SDL_Color *color, double draw_dist);
 void				get_color(SDL_Surface *surface, SDL_Color *c, int x, int y);
-void				set_pixel(t_sdl *sdl, int x, int y, SDL_Color *color);
+void				set_pixel(t_sdl *sdl, int x, int y, SDL_Color *c);
 void				draw_column(t_app *app, t_ray *ray, int x, int height);
 void				draw_obj_column(t_sdl *sdl, t_ray *ray, int x, int height);
 void				init_time(t_time *time);
@@ -205,13 +217,11 @@ void				gun_change(t_sdl *sdl, t_player *player, float delta);
 void 				gun_reload(t_sdl *sdl, t_player *player, float frame);
 void				get_weapon_sprites(t_sdl *sdl, t_weapon *weapon, char *weapon_folder);
 void				init_weapon(t_weapon *weapon, u_int ammo, float rate, char *sound);
-void				update_sound(const Uint8 *key, t_player *player);
+void				update_sound(const Uint8 *key, t_sfx *sfx);
 void				player_movement(t_map *map, const Uint8 *key, t_player *player);
 void				player_rotate(t_player *player, const Uint8 *state);
 void				redraw(t_sdl *sdl, t_player *player, t_time *time);
 int					check_for_quit(t_sdl *sdl, const Uint8 *key);
-void				update_doors(t_map *map, t_player *player, float frame);
+void				update_doors(t_app *app, float frame);
 void				door_interaction(t_app *app, float frame);
-void 				door_move_sound();
-void 				door_close_open_sound();
 #endif

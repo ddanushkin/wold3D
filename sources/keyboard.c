@@ -54,5 +54,5 @@ void			keyboard_input(t_app *app, const Uint8 *key, float frame)
 		door_interaction(app, frame);
 	player_movement(app->map, key, app->player);
 	if (key[SDL_SCANCODE_M] || key[SDL_SCANCODE_P])
-		update_sound(key, app->player);
+		update_sound(key, app->sfx);
 }
