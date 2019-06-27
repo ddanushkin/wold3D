@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/22 16:01:11 by ndremora          #+#    #+#             */
-/*   Updated: 2019/06/25 21:06:00 by lglover          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "wolf3d.h"
 
 void		player_debug(const Uint8 *key, t_player *player)
@@ -26,46 +14,51 @@ void		player_debug(const Uint8 *key, t_player *player)
 		printf("%d\n", 6 - ((player->health) / 14) % 7);
 }
 
-void		start_the_game(t_app *wolf)
+void		update_doors(t_map *map)
+{
+	t_node		*door_node;
+
+	door_node = &map->nodes[13][6];
+	if (door_node->door_closing)
+		door_node->door_frame--;
+	if (door_node->door_opening)
+		door_node->door_frame++;
+	if (door_node->door_frame > 64)
+	{
+		door_node->collidable = false;
+		door_node->door_opening = false;
+		door_node->door_closing = false;
+		door_node->door_frame = 64;
+	}
+	if (door_node->door_frame < 0)
+	{
+		door_node->collidable = true;
+		door_node->door_opening = false;
+		door_node->door_closing = false;
+		door_node->door_frame = 0;
+	}
+}
+
+void		start_the_game(t_app *app)
 {
 	const Uint8	*key;
 	t_time		time;
 	Uint64		start;
 	Uint64		end;
 	float		elapsed;
-	t_node		*door_node;
 
-	door_node = &wolf->map->nodes[13][6];
 	init_time(&time);
 	key = SDL_GetKeyboardState(NULL);
 	while (1)
 	{
 		start = SDL_GetPerformanceCounter();
-		if (check_for_quit(wolf->sdl, key) == 1)
+		if (check_for_quit(app->sdl, key) == 1)
 			break ;
-		update_time(&time, wolf);
-		player_debug(key, wolf->player);
-		keyboard_input(wolf, key, time.frame);
-		if (door_node->door_closing)
-			door_node->door_frame--;
-		if (door_node->door_opening)
-			door_node->door_frame++;
-		if (door_node->door_frame > 64)
-		{
-			door_node->collidable = false;
-			door_node->door_opening = false;
-			door_node->door_closing = false;
-			door_node->door_frame = 64;
-		}
-		if (door_node->door_frame < 0)
-		{
-			door_node->collidable = true;
-			door_node->door_opening = false;
-			door_node->door_closing = false;
-			door_node->door_frame = 0;
-		}
-		create_field_of_view(wolf);
-		redraw(wolf->sdl, wolf->player, &time);
+		update_time(&time, app);
+		player_debug(key, app->player);
+		keyboard_input(app, key, time.frame);
+		create_field_of_view(app);
+		redraw(app->sdl, app->player, &time);
 		end = SDL_GetPerformanceCounter();
 		elapsed = (float)(end - start) / SDL_GetPerformanceFrequency() * 1000.0;
 		SDL_Delay((Uint32)(elapsed - 16.6666));

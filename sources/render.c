@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   render.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/06/03 12:32:51 by ndremora          #+#    #+#             */
-/*   Updated: 2019/06/25 14:56:55 by lglover          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "wolf3d.h"
 
 void	shooting_animation(t_sdl *sdl, t_player *player, float time)
@@ -72,7 +60,13 @@ void	idle_gun_animation(t_sdl *sdl, t_player *player, float delta)
 
 	id = player->cur_weapon;
 	cur_frame = (long)(delta * 1.9);
-	area.y = sdl->height - 130 - 550 + (cur_frame % 2 * 5);
+
+	player->idle_frame += 0.10 + (player->acc / 8);
+	player->head_offset = sinf(player->idle_frame) * (3.5 + player->acc * 2);
+	if (player->idle_frame > M_PI * 2)
+		player->idle_frame = 0;
+	area.y = sdl->height - 130 - 550 + player->head_offset;
+
 	area.w = 96 * 5;
 	area.x = sdl->width / 2 - area.w + 200;
 	area.h = 116 * 5;

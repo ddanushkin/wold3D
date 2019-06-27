@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   keyboard.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/06/03 12:14:29 by ndremora          #+#    #+#             */
-/*   Updated: 2019/06/25 21:33:42 by lglover          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "wolf3d.h"
 
 static	void	player_shoot(t_player *player, float frame)
@@ -49,42 +37,45 @@ static	void	player_reloading(t_player *player, float frame)
 	}
 }
 
-void			keyboard_input(t_app *wolf, const Uint8 *key, float frame)
+void			door_interaction(t_app *app, float frame)
 {
-	t_ipoint near_coord;
-	t_node *near_node;
+	t_ipoint	near_coord;
+	t_node		*near_node;
 
-	if (key[SDL_SCANCODE_LEFT] || key[SDL_SCANCODE_RIGHT])
-		player_rotate(wolf->player, key);
-	if (key[SDL_SCANCODE_LSHIFT] && wolf->player->anim_frame == 0)
-		player_shoot(wolf->player, frame);
-	if (key[SDL_SCANCODE_Q] && wolf->player->anim_frame == 0)
-		player_change_weapon(wolf->player, frame);
-	if (key[SDL_SCANCODE_R] && wolf->player->anim_frame == 0)
-		player_reloading(wolf->player, frame);
-	if (key[SDL_SCANCODE_SPACE] && frame - wolf->player->last_space >= 0.3)
+	app->player->last_space = frame;
+	near_coord.x = app->player->x + cos(app->player->direction * M_PI_180) * 64;
+	near_coord.y = app->player->y + sin(app->player->direction * M_PI_180) * 64;
+	near_node = &app->map->nodes[near_coord.y / 64][near_coord.x / 64];
+	if (near_node->type == MAP_TYPE_DOOR)
 	{
-		wolf->player->last_space = frame;
-		near_coord.x = wolf->player->x + cos(wolf->player->direction * M_PI_180) * 64;
-		near_coord.y = wolf->player->y + sin(wolf->player->direction * M_PI_180) * 64;
-		near_node = &wolf->map->nodes[near_coord.y / 64][near_coord.x / 64];
-		if (near_node->type == MAP_TYPE_DOOR)
+		if (!near_node->door_closing && !near_node->door_opening)
 		{
-			if (!near_node->door_closing && !near_node->door_opening)
-			{
-				if (near_node->door_frame == 0)
-					near_node->door_opening = true;
-				if (near_node->door_frame == 64)
-					near_node->door_closing = true;
-			}
-			else
-			{
-				near_node->door_opening = !near_node->door_opening;
-				near_node->door_closing = !near_node->door_closing;
-			}
+			if (near_node->door_frame == 0)
+				near_node->door_opening = true;
+			if (near_node->door_frame == 64)
+				near_node->door_closing = true;
+		}
+		else
+		{
+			near_node->door_opening = !near_node->door_opening;
+			near_node->door_closing = !near_node->door_closing;
 		}
 	}
-	player_movement(wolf->map, key, wolf->player);
+}
+
+void			keyboard_input(t_app *app, const Uint8 *key, float frame)
+{
+	if (key[SDL_SCANCODE_LEFT] || key[SDL_SCANCODE_RIGHT])
+		player_rotate(app->player, key);
+	if (key[SDL_SCANCODE_LSHIFT] && app->player->anim_frame == 0)
+		player_shoot(app->player, frame);
+	if (key[SDL_SCANCODE_Q] && app->player->anim_frame == 0)
+		player_change_weapon(app->player, frame);
+	if (key[SDL_SCANCODE_R] && app->player->anim_frame == 0)
+		player_reloading(app->player, frame);
+	if (key[SDL_SCANCODE_SPACE] && frame - app->player->last_space >= 0.3)
+		door_interaction(app, frame);
+	player_movement(app->map, key, app->player);
 	if (key[SDL_SCANCODE_M] || key[SDL_SCANCODE_P])
-		update_sound(key, wolf->player);
+		update_sound(key, app->player);
 }

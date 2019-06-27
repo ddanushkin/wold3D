@@ -112,6 +112,9 @@ typedef struct		s_player
 	float			y_v;
 	float			speed;
 	int				direction;
+	float			acc;
+	float			idle_frame;
+	float			head_offset;
 	Mix_Music 		*bgm;
 	Mix_Chunk 		*sound_effect;
 	Mix_Chunk 		*fx_reload;
@@ -183,7 +186,7 @@ void				create_field_of_view(t_app *app);
 void				shade_color(double dist, SDL_Color *color, double draw_dist);
 void				get_color(SDL_Surface *surface, SDL_Color *c, int x, int y);
 void				set_pixel(t_sdl *sdl, int x, int y, SDL_Color *color);
-void				draw_column(t_sdl *sdl, t_ray *ray, int x, int height);
+void				draw_column(t_app *app, t_ray *ray, int x, int height);
 void				draw_obj_column(t_sdl *sdl, t_ray *ray, int x, int height);
 void				init_time(t_time *time);
 void				update_time(t_time *time, t_app *app);

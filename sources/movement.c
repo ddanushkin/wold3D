@@ -86,6 +86,11 @@ static void		move_right(t_map *map, t_player *player)
 
 void			player_movement(t_map *map, const Uint8 *key, t_player *player)
 {
+	int old_x;
+	int old_y;
+
+	old_x = player->x;
+	old_y = player->y;
 	if (key[SDL_SCANCODE_W])
 		move_forward(map, player);
 	if (key[SDL_SCANCODE_S])
@@ -94,4 +99,14 @@ void			player_movement(t_map *map, const Uint8 *key, t_player *player)
 		move_right(map, player);
 	if (key[SDL_SCANCODE_D])
 		move_left(map, player);
+	if (old_x != player->x || old_y != player->y)
+	{
+		if (player->acc < 2)
+			player->acc += 0.35;
+	}
+	else
+	{
+		if (player->acc > 0)
+			player->acc -= 0.15;
+	}
 }
