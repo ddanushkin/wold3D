@@ -35,12 +35,12 @@ void	draw_floor(t_app *app, t_ipoint tile, int x, int y)
 {
 	SDL_Color c;
 
-	if (y - app->player->head_offset > 0 && y - app->player->head_offset < app->sdl->height - app->sdl->height / 5)
+	if (y - app->player->head_offset > 0 &&
+		y - app->player->head_offset < app->sdl->height - app->sdl->height / 5)
 	{
 		get_color(app->textures->floors, &c, tile.x, tile.y);
 		shade_color(app->diag_dist[y], &c, app->sdl->draw_dist - 100);
-		set_pixel(app->sdl, x, y - app->player->head_offset , &c);
-
+		set_pixel(app->sdl, x, y - app->player->head_offset, &c);
 	}
 }
 
@@ -48,7 +48,8 @@ void	draw_ceiling(t_app *app, t_ipoint tile, int x, int y)
 {
 	SDL_Color c;
 
-	if (app->sdl->height - y - app->player->head_offset > 0 && app->sdl->height - y - app->player->head_offset < app->sdl->height)
+	if (app->sdl->height - y - app->player->head_offset > 0 &&
+		app->sdl->height - y - app->player->head_offset < app->sdl->height)
 	{
 		get_color(app->textures->ceilings, &c, tile.x, tile.y);
 		shade_color(app->diag_dist[y], &c, app->sdl->draw_dist - 100);
@@ -70,10 +71,10 @@ void	floor_and_ceiling(t_app *app, int x, int y, float angle)
 		end.x = app->diag_dist[y] * cosf(angle);
 		end.y += app->player->y;
 		end.x += app->player->x;
-
 		cell.x = end.x / 64;
 		cell.y = end.y / 64;
-		if (cell.x >= 0 && cell.y >= 0 && cell.x < app->map->cols && cell.y < app->map->rows)
+		if (cell.x >= 0 && cell.y >= 0 &&
+			cell.x < app->map->cols && cell.y < app->map->rows)
 		{
 			tile.y = (int)end.y % 64;
 			tile.x = (int)end.x % 64;
@@ -110,4 +111,5 @@ void		draw_column(t_app *app, t_ray *ray, int x, int height, float angle)
 		y++;
 	}
 	floor_and_ceiling(app, x, end, angle);
+	app->dist_per_x[x] = ray->dist;
 }

@@ -84,6 +84,7 @@ typedef struct		s_node
 	int				door_opening;
 	int				door_closing;
 	float			last_open;
+	int 			visible;
 }					t_node;
 
 typedef struct		s_ray
@@ -132,6 +133,7 @@ typedef struct		s_player
 	float 			last_shift;
 	float 			last_step;
 	float 			height;
+	float 			head_angle;
 }					t_player;
 
 typedef struct		s_ui_elem
@@ -143,15 +145,6 @@ typedef struct		s_ui_elem
 	char			*text;
 }					t_ui_elem;
 
-typedef struct		s_obj
-{
-	int				x;
-	int				y;
-	SDL_Surface		*texture;
-	u_int			collidable;
-	u_int 			visible;
-}					t_obj;
-
 typedef struct		s_map
 {
 	int				rows;
@@ -159,6 +152,8 @@ typedef struct		s_map
 	t_node			**nodes;
 	t_node			**doors;
 	int				doors_count;
+	t_node			**objects;
+	int				objects_count;
 }					t_map;
 
 typedef struct		s_sfx
@@ -176,14 +171,24 @@ typedef struct		s_textures
 	SDL_Surface		*floors;
 	SDL_Surface		*ceilings;
 }					t_textures;
+
+typedef struct		s_inputs
+{
+	const Uint8		*keyboard;
+	int				x;
+	int				y;
+}					t_inputs;
+
 typedef struct		s_app
 {
 	t_sdl			*sdl;
+	t_inputs 		*inputs;
 	t_player		*player;
 	t_map			*map;
 	t_sfx			*sfx;
 	t_textures		*textures;
 	float 			*diag_dist;
+	float 			*dist_per_x;
 }					t_app;
 
 typedef struct		s_color
@@ -194,7 +199,6 @@ typedef struct		s_color
 }					t_color;
 
 void				init(t_app *app);
-void				parallel(t_app *app);
 void				map_read(int fd, t_map *map, t_player *player);
 void				ft_error(char *str);
 void				quit_properly(t_app *sdl);

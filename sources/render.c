@@ -62,7 +62,7 @@ void	idle_gun_animation(t_sdl *sdl, t_player *player, float delta)
 	cur_frame = (long)(delta * 1.9);
 
 	player->idle_frame += 0.10 + (player->acc / 8);
-	player->head_offset = sinf(player->idle_frame) * (3.5 + player->acc * 2);
+	player->head_offset = sinf(player->idle_frame) * (3.5 + player->acc * 2) + player->head_angle;
 	if (player->idle_frame > M_PI && player->acc > 0 && delta - player->last_step >= 0.3)
 	{
 		Mix_PlayChannel(1, player->steps[rand() % 8], 0);

@@ -41,6 +41,7 @@ static	void	create_stuff(t_app *app)
 	app->sdl->texture = SDL_CreateTexture(app->sdl->renderer, format, access,
 										  app->sdl->width, app->sdl->height);
 	app->sdl->ui = load_texture(app->sdl, "main_ui");
+	app->dist_per_x = (float *)malloc(sizeof(float) * app->sdl->width);
 	fill_diag_dist(app);
 }
 
@@ -57,6 +58,7 @@ static	void	init_sdl(t_sdl *sdl)
 
 void			init(t_app *app)
 {
+	app->inputs = (t_inputs *)malloc(sizeof(t_inputs));
 	app->sdl = (t_sdl *)malloc(sizeof(t_sdl));
 	app->map = (t_map *)malloc(sizeof(t_map));
 	app->player = (t_player *)malloc(sizeof(t_player));

@@ -14,12 +14,6 @@ void	shade_color(double dist, SDL_Color *color, double draw_dist)
 	double	factor;
 
 	factor = dist / draw_dist;
-//	else if (factor < 0.3)
-//	{
-//		color->r = color->r / factor;
-//		color->g = color->g / factor;
-//		color->b = color->b / factor;
-//	}
 	if (factor > 1)
 	{
 		color->r = 0;
@@ -28,9 +22,10 @@ void	shade_color(double dist, SDL_Color *color, double draw_dist)
 	}
 	else
 	{
-		color->r = color->r * (1 - factor);
-		color->g = color->g * (1 - factor);
-		color->b = color->b * (1 - factor);
+		factor = 1 - factor;
+		color->r *= factor;
+		color->g *= factor;
+		color->b *= factor;
 	}
 }
 

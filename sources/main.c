@@ -14,30 +14,50 @@ void		player_debug(const Uint8 *key, t_player *player)
 		printf("%d\n", 6 - ((player->health) / 14) % 7);
 }
 
+float		angle_mapping(long x, long in_min, long in_max, long out_min, long out_max)
+{
+	return (float)(x - in_min) * (float)(out_max - out_min) / (float)(in_max - in_min) + (float)out_min;
+}
+
+void		on_mouse_update(t_app *app)
+{
+	int		old_x;
+	int		old_y;
+
+	old_x = app->inputs->x;
+	old_y = app->inputs->y;
+	SDL_GetMouseState(&app->inputs->x, &app->inputs->y);
+	if (old_x != app->inputs->x || old_y != app->inputs->y)
+	{
+		app->player->head_angle = angle_mapping(app->inputs->y, 0, app->sdl->height - app->sdl->height / 5, -10, 10);
+
+//		if (old_x < app->inputs->x)
+//			(app->player->direction += app->player->speed * 0.5) > 359 ? app->player->direction = 1 : 0;
+//		if (old_x > app->inputs->x)
+//			(app->player->direction -= app->player->speed * 0.5) < 0 ? app->player->direction = 359 : 0;
+//		app->player->x_v = cos(app->player->direction * M_PI_180);
+//		app->player->y_v = sin(app->player->direction * M_PI_180);
+		printf("mouse - x: %d\nmouse - y: %d\n", app->inputs->x, app->inputs->y);
+	}
+}
+
 void		start_the_game(t_app *app)
 {
-	const Uint8	*key;
 	t_time		time;
-	Uint64		start;
-	Uint64		end;
-	float		elapsed;
 
 	init_time(&time);
-	key = SDL_GetKeyboardState(NULL);
+	app->inputs->keyboard = SDL_GetKeyboardState(NULL);
 	while (1)
 	{
-		start = SDL_GetPerformanceCounter();
-		if (check_for_quit(app->sdl, key) == 1)
+		if (check_for_quit(app->sdl, app->inputs->keyboard) == 1)
 			break ;
+		on_mouse_update(app);
 		update_time(&time, app);
-		player_debug(key, app->player);
-		keyboard_input(app, key, time.frame);
+		player_debug(app->inputs->keyboard, app->player);
+		keyboard_input(app, app->inputs->keyboard, time.frame);
 		update_doors(app, time.frame);
 		create_field_of_view(app);
 		redraw(app->sdl, app->player, &time);
-		end = SDL_GetPerformanceCounter();
-		elapsed = (float)(end - start) / SDL_GetPerformanceFrequency() * 1000.0;
-		SDL_Delay((Uint32)(elapsed - 16.6666));
 	}
 }
 
