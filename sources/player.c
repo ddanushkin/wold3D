@@ -94,7 +94,7 @@ void		load_faces(t_sdl *sdl, t_player *player)
 void		player_init(t_sdl *sdl, t_player *player)
 {
 	ft_bzero(player, sizeof(t_player));
-	player->direction = 90;
+	player->direction = 270;
 	player->x_v = cos(player->direction * M_PI_180);
 	player->y_v = sin(player->direction * M_PI_180);
 	player->lives = 99;

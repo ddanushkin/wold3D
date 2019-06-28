@@ -12,15 +12,15 @@ static	void	check_for_init_errors(void)
 		ft_error("TTF error");
 }
 
-void	fill_floor_ration(t_app *app)
+void	fill_diag_dist(t_app *app)
 {
 	int row;
 
-	app->floor_ratio = (float *)malloc(sizeof(float) * app->sdl->height);
+	app->diag_dist = (float *)malloc(sizeof(float) * app->sdl->height);
 	row = app->sdl->height;
 	while (row >= 0)
 	{
-		app->floor_ratio[row] = 32.0 / (row - app->sdl->height / 2);
+		app->diag_dist[row] = app->sdl->dist_to_pp * 32.0 / (row - app->sdl->height / 2);
 		row--;
 	}
 }
@@ -41,7 +41,7 @@ static	void	create_stuff(t_app *app)
 	app->sdl->texture = SDL_CreateTexture(app->sdl->renderer, format, access,
 										  app->sdl->width, app->sdl->height);
 	app->sdl->ui = load_texture(app->sdl, "main_ui");
-	fill_floor_ration(app);
+	fill_diag_dist(app);
 }
 
 static	void	init_sdl(t_sdl *sdl)
@@ -62,8 +62,8 @@ void			init(t_app *app)
 	app->player = (t_player *)malloc(sizeof(t_player));
 	app->sfx = (t_sfx *)malloc(sizeof(t_sfx));
 	app->textures = (t_textures *)malloc(sizeof(t_textures));
-	app->textures->floors = load_surf("walls/", "2", "_n");
-	app->textures->ceilings = load_surf("walls/", "2", "_s");
+	app->textures->floors = load_surf("floors/", "1", "");
+	app->textures->ceilings = load_surf("ceilings/", "1", "");
 	init_sdl(app->sdl);
 	create_stuff(app);
 	app->sfx->background = Mix_LoadMUS("../resources/sounds/bgm.mp3");

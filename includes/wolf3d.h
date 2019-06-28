@@ -183,7 +183,7 @@ typedef struct		s_app
 	t_map			*map;
 	t_sfx			*sfx;
 	t_textures		*textures;
-	float 			*floor_ratio;
+	float 			*diag_dist;
 }					t_app;
 
 typedef struct		s_color
