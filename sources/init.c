@@ -34,10 +34,10 @@ static	void	init_sdl(t_sdl *sdl)
 	sdl->width = 1280;
 	sdl->height = 720;
 	sdl->fov = 3.14159 / 3.0;
-	sdl->dist_to_pp = (int)(sdl->width / (tan(sdl->fov / 2.0) * 2.0));
+	sdl->dist_to_pp = (int) (sdl->width / (tan(sdl->fov / 2.0) * 2.0));
 	sdl->draw_dist = 840;
-	sdl->pixels = (Uint32 *)malloc(sizeof(Uint32) * sdl->width * sdl->height);
-	sdl->dist_per_x = (float *)malloc(sizeof(float) * sdl->width);
+	sdl->pixels = (Uint32 *) malloc(sizeof(Uint32) * sdl->width * sdl->height);
+	sdl->dist_per_x = (float *) malloc(sizeof(float) * sdl->width);
 }
 
 void			init(t_app *app)
@@ -45,10 +45,14 @@ void			init(t_app *app)
 	app->sdl = (t_sdl *)malloc(sizeof(t_sdl));
 	app->map = (t_map *)malloc(sizeof(t_map));
 	app->player = (t_player *)malloc(sizeof(t_player));
+	app->sfx = (t_sfx *)malloc(sizeof(t_sfx));
+	app->textures = (t_textures *)malloc(sizeof(t_textures));
+	app->textures->floors = load_surf("walls/", "2", "_n");
+	app->textures->ceilings = load_surf("walls/", "2", "_s");
 	init_sdl(app->sdl);
 	create_stuff(app->sdl);
-	app->sfx = (t_sfx *)malloc(sizeof(t_sfx));
 	app->sfx->background = Mix_LoadMUS("../resources/sounds/bgm.mp3");
 	app->sfx->door_open_close = Mix_LoadWAV("../resources/sounds/door_open_close.wav");
 	app->sfx->door_move = Mix_LoadWAV("../resources/sounds/door_move.wav");
+
 }

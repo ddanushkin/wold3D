@@ -169,7 +169,7 @@ void	cast_single_ray(t_app *app, int x, float angle)
 
 	ray = get_ray(app, angle);
 	slice_height = (int)(64 / ray->dist * app->sdl->dist_to_pp);
-	draw_column(app, ray, x, slice_height);
+	draw_column(app, ray, x, slice_height, angle);
 	free(ray);
 }
 

@@ -75,7 +75,61 @@ int			draw_back(t_sdl *sdl, int y, int x, int end)
 	return (y);
 }
 
-void		draw_column(t_app *app, t_ray *ray, int x, int height)
+static void	draw_floor2(t_app *app, int x, int y, float angle, int start)
+{
+	int end;
+
+	float ratio;
+	float diagonalDistance;
+	float yEnd;
+	float xEnd;
+	int cellX;
+	int cellY;
+	int tileRow;
+	int tileColumn;
+	SDL_Color c;
+
+
+
+	angle = angle * M_PI_180;
+
+	y =  y + app->player->head_offset;
+	while (y < app->sdl->height)
+	{
+		ratio = app->player->height / (y - app->sdl->height / 2);
+		diagonalDistance = app->sdl->dist_to_pp * ratio;
+
+		yEnd = diagonalDistance * sinf(angle);
+		xEnd = diagonalDistance * cosf(angle);
+
+		yEnd += app->player->y;
+		xEnd += app->player->x;
+
+		cellX = xEnd / 64;
+		cellY = yEnd / 64;
+		if (cellX >= 0 && cellY >= 0 && cellX < app->map->cols && cellY < app->map->rows)
+		{
+			tileRow = (int)yEnd % 64;
+			tileColumn = (int)xEnd % 64;
+			if (y - app->player->head_offset > 0 && y - app->player->head_offset < app->sdl->height - app->sdl->height / 5)
+			{
+				get_color(app->textures->floors, &c,tileColumn, tileRow);
+				shade_color(diagonalDistance, &c, app->sdl->draw_dist - 100);
+				set_pixel(app->sdl, x, y - app->player->head_offset , &c);
+
+			}
+			if (app->sdl->height - y - app->player->head_offset > 0 && app->sdl->height - y - app->player->head_offset < app->sdl->height)
+			{
+				get_color(app->textures->ceilings, &c,tileColumn, tileRow);
+				shade_color(diagonalDistance, &c, app->sdl->draw_dist - 100);
+				set_pixel(app->sdl, x, app->sdl->height - y - app->player->head_offset, &c);
+			}
+		}
+		y++;
+	}
+}
+
+void		draw_column(t_app *app, t_ray *ray, int x, int height, float angle)
 {
 	int			y;
 	int			begin;
@@ -88,10 +142,9 @@ void		draw_column(t_app *app, t_ray *ray, int x, int height)
 	if ((end = begin + height) > app->sdl->height)
 		end = app->sdl->height;
 	y = (begin < 0) ? 0 : begin;
-	draw_ceiling(app->sdl, x, y);
-	draw_floor(app->sdl, x, end);
 	if (ray->dist > app->sdl->draw_dist)
 		y = draw_back(app->sdl, y, x, end);
+	int start = y;
 	while (y < end)
 	{
 		get_color(ray->texture, &color, ray->offset, (y - begin) * ratio);
@@ -102,4 +155,5 @@ void		draw_column(t_app *app, t_ray *ray, int x, int height)
 		}
 		y++;
 	}
+	draw_floor2(app, x, end, angle, start);
 }

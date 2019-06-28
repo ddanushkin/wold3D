@@ -132,6 +132,7 @@ typedef struct		s_player
 	float 			last_space;
 	float 			last_shift;
 	float 			last_step;
+	float 			height;
 }					t_player;
 
 typedef struct		s_ui_elem
@@ -173,6 +174,8 @@ typedef struct		s_textures
 	SDL_Surface		**walls;
 	SDL_Surface		*doors;
 	SDL_Surface		*sprites;
+	SDL_Surface		*floors;
+	SDL_Surface		*ceilings;
 }					t_textures;
 typedef struct		s_app
 {
@@ -202,7 +205,6 @@ void				create_field_of_view(t_app *app);
 void				shade_color(double dist, SDL_Color *color, double draw_dist);
 void				get_color(SDL_Surface *surface, SDL_Color *c, int x, int y);
 void				set_pixel(t_sdl *sdl, int x, int y, SDL_Color *c);
-void				draw_column(t_app *app, t_ray *ray, int x, int height);
 void				draw_obj_column(t_sdl *sdl, t_ray *ray, int x, int height);
 void				init_time(t_time *time);
 void				update_time(t_time *time, t_app *app);
@@ -224,4 +226,6 @@ void				redraw(t_sdl *sdl, t_player *player, t_time *time);
 int					check_for_quit(t_sdl *sdl, const Uint8 *key);
 void				update_doors(t_app *app, float frame);
 void				door_interaction(t_app *app, float frame);
+void				draw_column(t_app *app, t_ray *ray, int x, int height, float angle);
+SDL_Surface			*load_surf(char *dir, char *name, char *add);
 #endif
