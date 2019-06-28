@@ -95,6 +95,7 @@ void		player_init(t_sdl *sdl, t_player *player)
 {
 	ft_bzero(player, sizeof(t_player));
 	player->direction = 270;
+	player->rot_acc = 0;
 	player->x_v = cos(player->direction * M_PI_180);
 	player->y_v = sin(player->direction * M_PI_180);
 	player->lives = 99;
@@ -142,6 +143,25 @@ void		player_rotate(t_player *player, const Uint8 *state)
 		player->x_v = cos(player->direction * M_PI_180);
 		player->y_v = sin(player->direction * M_PI_180);
 	}
+
+	//Test
+	//	if (state[SDL_SCANCODE_LEFT])
+	//		player->rot_acc = -0.5;
+	//	if (state[SDL_SCANCODE_RIGHT])
+	//		player->rot_acc = 0.5;
+	//	if (fabsf(player->rot_acc) > 0)
+	//	{
+	//		player->direction += player->rot_acc * (player->speed * 0.5);
+	//		if (player->direction < 0)
+	//			player->direction = 359;
+	//		else if (player->direction > 359)
+	//			player->direction = 0;
+	//		player->rot_acc *= 0.5;
+	//		if (fabsf(player->rot_acc) < 0.1)
+	//			player->rot_acc = 0;
+	//		player->x_v = cos(player->direction * M_PI_180);
+	//		player->y_v = sin(player->direction * M_PI_180);
+	//		printf("player->rot_acc - %f\n", player->rot_acc);
 }
 
 void		update_sound(const Uint8 *key, t_sfx *sfx)

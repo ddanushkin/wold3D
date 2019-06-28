@@ -109,7 +109,8 @@ typedef struct		s_player
 	float			x_v;
 	float			y_v;
 	float			speed;
-	int				direction;
+	float				direction;
+	float 			rot_acc;
 	float			acc;
 	float			idle_frame;
 	float			head_offset;
@@ -177,6 +178,8 @@ typedef struct		s_inputs
 	const Uint8		*keyboard;
 	int				x;
 	int				y;
+	float 			prev_x;
+	float 			prev_y;
 }					t_inputs;
 
 typedef struct		s_app
@@ -232,4 +235,5 @@ void				update_doors(t_app *app, float frame);
 void				door_interaction(t_app *app, float frame);
 void				draw_column(t_app *app, t_ray *ray, int x, int height, float angle);
 SDL_Surface			*load_surf(char *dir, char *name, char *add);
+float				range_mapping(long x, long in_min, long in_max, long out_min, long out_max);
 #endif

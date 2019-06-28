@@ -55,4 +55,10 @@ void			keyboard_input(t_app *app, const Uint8 *key, float frame)
 	player_movement(app->map, key, app->player);
 	if (key[SDL_SCANCODE_M] || key[SDL_SCANCODE_P])
 		update_sound(key, app->sfx);
+	if (key[SDL_SCANCODE_BACKSPACE])
+	{
+		SDL_ShowCursor(!SDL_ShowCursor(SDL_QUERY));
+		SDL_SetRelativeMouseMode(!SDL_GetRelativeMouseMode());
+	}
+
 }
