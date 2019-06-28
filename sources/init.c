@@ -12,7 +12,21 @@ static	void	check_for_init_errors(void)
 		ft_error("TTF error");
 }
 
-static	void	create_stuff(t_sdl *sdl)
+void	fill_floor_ration(t_app *app)
+{
+	int row;
+
+	app->floor_ratio = (float *)malloc(sizeof(float) * app->sdl->height);
+	row = app->sdl->height;
+	while (row >= 0)
+	{
+		app->floor_ratio[row] = 32.0 / (row - app->sdl->height / 2);
+		row--;
+	}
+}
+
+
+static	void	create_stuff(t_app *app)
 {
 	Uint32	flags;
 	Uint32	format;
@@ -22,11 +36,12 @@ static	void	create_stuff(t_sdl *sdl)
 	access = SDL_TEXTUREACCESS_STATIC;
 	flags = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
 	check_for_init_errors();
-	sdl->window = SDL_CreateWindow("SDL2", 0, 0, sdl->width, sdl->height, 0);
-	sdl->renderer = SDL_CreateRenderer(sdl->window, -1, flags);
-	sdl->texture = SDL_CreateTexture(sdl->renderer, format, access,
-			sdl->width, sdl->height);
-	sdl->ui = load_texture(sdl, "main_ui");
+	app->sdl->window = SDL_CreateWindow("SDL2", 0, 0, app->sdl->width, app->sdl->height, 0);
+	app->sdl->renderer = SDL_CreateRenderer(app->sdl->window, -1, flags);
+	app->sdl->texture = SDL_CreateTexture(app->sdl->renderer, format, access,
+										  app->sdl->width, app->sdl->height);
+	app->sdl->ui = load_texture(app->sdl, "main_ui");
+	fill_floor_ration(app);
 }
 
 static	void	init_sdl(t_sdl *sdl)
@@ -50,9 +65,8 @@ void			init(t_app *app)
 	app->textures->floors = load_surf("walls/", "2", "_n");
 	app->textures->ceilings = load_surf("walls/", "2", "_s");
 	init_sdl(app->sdl);
-	create_stuff(app->sdl);
+	create_stuff(app);
 	app->sfx->background = Mix_LoadMUS("../resources/sounds/bgm.mp3");
 	app->sfx->door_open_close = Mix_LoadWAV("../resources/sounds/door_open_close.wav");
 	app->sfx->door_move = Mix_LoadWAV("../resources/sounds/door_move.wav");
-
 }

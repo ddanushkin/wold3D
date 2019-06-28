@@ -67,7 +67,6 @@ void		fill_row(t_map *map, char **data, int row, t_player *player)
 			map->nodes[row][col].door_closing = false;
 			map->nodes[row][col].door_opening = false;
 			map->nodes[row][col].last_open = 0;
-			map->nodes[row][col].blocked = 0;
 			map->nodes[row][col].center.x = col * TEXTURE_SIZE + (TEXTURE_SIZE / 2);
 			map->nodes[row][col].center.y = row * TEXTURE_SIZE + (TEXTURE_SIZE / 2);
 			map->doors[map->doors_count++] = &map->nodes[row][col];

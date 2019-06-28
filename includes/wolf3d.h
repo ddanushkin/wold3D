@@ -84,7 +84,6 @@ typedef struct		s_node
 	int				door_opening;
 	int				door_closing;
 	float			last_open;
-	int 			blocked;
 }					t_node;
 
 typedef struct		s_ray
@@ -184,6 +183,7 @@ typedef struct		s_app
 	t_map			*map;
 	t_sfx			*sfx;
 	t_textures		*textures;
+	float 			*floor_ratio;
 }					t_app;
 
 typedef struct		s_color
