@@ -109,12 +109,10 @@ typedef struct		s_player
 	float			x_v;
 	float			y_v;
 	float			speed;
-	float				direction;
-	float 			rot_acc;
+	float			direction;
 	float			acc;
 	float			idle_frame;
 	float			head_offset;
-	Mix_Music 		*bgm;
 	Mix_Chunk 		*sound_effect;
 	Mix_Chunk 		*fx_reload;
 	Mix_Chunk 		*fx_empty;
@@ -133,7 +131,6 @@ typedef struct		s_player
 	float 			last_space;
 	float 			last_shift;
 	float 			last_step;
-	float 			height;
 	float 			head_angle;
 }					t_player;
 
@@ -178,8 +175,8 @@ typedef struct		s_inputs
 	const Uint8		*keyboard;
 	int				x;
 	int				y;
-	float 			prev_x;
-	float 			prev_y;
+	int 			left_pressed;
+	float			sensetivity;
 }					t_inputs;
 
 typedef struct		s_app
@@ -190,6 +187,7 @@ typedef struct		s_app
 	t_map			*map;
 	t_sfx			*sfx;
 	t_textures		*textures;
+	t_time			*time;
 	float 			*diag_dist;
 	float 			*dist_per_x;
 }					t_app;
@@ -207,14 +205,14 @@ void				ft_error(char *str);
 void				quit_properly(t_app *sdl);
 void				draw_minimap(t_map *map, t_sdl *sdl, t_player *player);
 void				player_init(t_sdl *sdl, t_player *player);
-void				keyboard_input(t_app *app, const Uint8 *key, float frame);
+void				keyboard_input(t_app *app, float frame);
 void				create_field_of_view(t_app *app);
 void				shade_color(double dist, SDL_Color *color, double draw_dist);
 void				get_color(SDL_Surface *surface, SDL_Color *c, int x, int y);
 void				set_pixel(t_sdl *sdl, int x, int y, SDL_Color *c);
 void				draw_obj_column(t_sdl *sdl, t_ray *ray, int x, int height);
-void				init_time(t_time *time);
-void				update_time(t_time *time, t_app *app);
+void				init_time(t_app *app);
+void				update_time(t_app *app);
 void				draw_text(SDL_Renderer	*renderer, t_ui_elem *ui_elem);
 void 				create_hud(t_sdl *sdl, t_player *player);
 SDL_Texture			*load_texture(t_sdl *sdl, char *name);
@@ -230,7 +228,7 @@ void				update_sound(const Uint8 *key, t_sfx *sfx);
 void				player_movement(t_map *map, const Uint8 *key, t_player *player);
 void				player_rotate(t_player *player, const Uint8 *state);
 void				redraw(t_sdl *sdl, t_player *player, t_time *time);
-int					check_for_quit(t_sdl *sdl, const Uint8 *key);
+int					check_for_quit(t_app *app);
 void				update_doors(t_app *app, float frame);
 void				door_interaction(t_app *app, float frame);
 void				draw_column(t_app *app, t_ray *ray, int x, int height, float angle);

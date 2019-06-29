@@ -95,14 +95,12 @@ void		player_init(t_sdl *sdl, t_player *player)
 {
 	ft_bzero(player, sizeof(t_player));
 	player->direction = 270;
-	player->rot_acc = 0;
 	player->x_v = cos(player->direction * M_PI_180);
 	player->y_v = sin(player->direction * M_PI_180);
 	player->lives = 99;
 	player->health = 100;
 	player->anim_is_done = 1;
 	player->max_dist = 25;
-	player->height = 32;
 	player->head_angle = 0;
 	load_sounds(player);
 	load_faces(sdl, player);

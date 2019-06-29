@@ -1,66 +1,62 @@
 #include "wolf3d.h"
 
-void		player_debug(const Uint8 *key, t_player *player)
+void		player_debug(t_app *app)
 {
-	if (key[SDL_SCANCODE_EQUALS] && player->health < 100)
-		player->health++;
-	if (key[SDL_SCANCODE_MINUS] && player->health > 0)
-	{
-		player->health--;
-		if (player->health == 0)
-			Mix_PlayChannel(-1, player->fx_die, 0);
-	}
+	const Uint8 *key;
+
+	key = app->inputs->keyboard;
+	if (key[SDL_SCANCODE_EQUALS] &&
+		app->inputs->sensetivity < 1)
+		app->inputs->sensetivity += 0.001;
+	if (key[SDL_SCANCODE_MINUS] &&
+			app->inputs->sensetivity > 0)
+		app->inputs->sensetivity -= 0.001;
 	if (key[SDL_SCANCODE_EQUALS] || key[SDL_SCANCODE_MINUS])
-		printf("%d\n", 6 - ((player->health) / 14) % 7);
+	{
+		if (app->inputs->sensetivity < 0)
+			app->inputs->sensetivity = 0;
+		if (app->inputs->sensetivity > 0.05)
+			app->inputs->sensetivity = 0.05;
+		printf("sensetivity -> %f\n", app->inputs->sensetivity);
+	}
 }
 
 void		on_mouse_update(t_app *app)
 {
-	SDL_MouseMotionEvent event;
-
-	event = app->sdl->event.motion;
-	if (app->inputs->prev_x == event.x && app->inputs->prev_y == event.y)
-		return ;
-	if (event.xrel > 0)
-		(app->player->direction += app->player->speed * 0.1) > 359 ? app->player->direction = 1 : 0;
-	else if (event.xrel < 0)
-		(app->player->direction -= app->player->speed * 0.1) < 0 ? app->player->direction = 359 : 0;
-	if (event.xrel != 0)
+	app->inputs->left_pressed =
+			SDL_GetRelativeMouseState(&app->inputs->x, &app->inputs->y) &
+			SDL_BUTTON(SDL_BUTTON_LEFT);
+	if (app->inputs->x != 0)
 	{
+		app->player->direction += app->player->speed *
+				app->inputs->x * app->inputs->sensetivity;
+		if (app->player->direction > 359)
+			app->player->direction = 0;
+		if (app->player->direction < 0)
+			app->player->direction = 359;
 		app->player->x_v = cos(app->player->direction * M_PI_180);
 		app->player->y_v = sin(app->player->direction * M_PI_180);
-		app->inputs->prev_x = event.x;
-		app->inputs->prev_y = event.y;
 	}
 }
 
 void		start_the_game(t_app *app)
 {
-	t_time		time;
-	Uint64		start;
-	Uint64		end;
-	float		elapsed;
-
-	SDL_ShowCursor(SDL_DISABLE);
-	SDL_SetRelativeMouseMode(SDL_TRUE);
-	init_time(&time);
+	init_time(app);
+	printf("SetRelativeMouseMode -> %d\n", SDL_SetRelativeMouseMode(SDL_TRUE));
 	app->inputs->keyboard = SDL_GetKeyboardState(NULL);
 	while (1)
 	{
-		start = SDL_GetPerformanceCounter();
-		if (check_for_quit(app->sdl, app->inputs->keyboard) == 1)
+		update_time(app);
+		SDL_PollEvent(&app->sdl->event);
+		if (check_for_quit(app) == 1)
 			break ;
-		if (app->sdl->event.type == SDL_MOUSEMOTION)
-			on_mouse_update(app);
-		update_time(&time, app);
-		player_debug(app->inputs->keyboard, app->player);
-		keyboard_input(app, app->inputs->keyboard, time.frame);
-		update_doors(app, time.frame);
+		//player_debug(app);
+		app->player->speed = 250 * app->time->delta;
+		on_mouse_update(app);
+		keyboard_input(app, app->time->frame);
+		update_doors(app, app->time->frame);
 		create_field_of_view(app);
-		redraw(app->sdl, app->player, &time);
-		end = SDL_GetPerformanceCounter();
-		elapsed = (float)(end - start) / SDL_GetPerformanceFrequency() * 1000.0;
-		SDL_Delay((Uint32)(elapsed - 16.6666));
+		redraw(app->sdl, app->player, app->time);
 	}
 }
 

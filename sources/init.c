@@ -64,6 +64,7 @@ void			init(t_app *app)
 	app->player = (t_player *)malloc(sizeof(t_player));
 	app->sfx = (t_sfx *)malloc(sizeof(t_sfx));
 	app->textures = (t_textures *)malloc(sizeof(t_textures));
+	app->time = (t_time *)malloc(sizeof(t_time));
 	app->textures->floors = load_surf("floors/", "1", "");
 	app->textures->ceilings = load_surf("ceilings/", "1", "");
 	init_sdl(app->sdl);
@@ -71,4 +72,5 @@ void			init(t_app *app)
 	app->sfx->background = Mix_LoadMUS("../resources/sounds/bgm.mp3");
 	app->sfx->door_open_close = Mix_LoadWAV("../resources/sounds/door_open_close.wav");
 	app->sfx->door_move = Mix_LoadWAV("../resources/sounds/door_move.wav");
+	app->inputs->sensetivity = 0.01;
 }

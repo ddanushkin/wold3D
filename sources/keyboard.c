@@ -40,11 +40,14 @@ static	void	player_reloading(t_player *player, float frame)
 	}
 }
 
-void			keyboard_input(t_app *app, const Uint8 *key, float frame)
+void			keyboard_input(t_app *app, float frame)
 {
+	const Uint8 *key;
+
+	key = app->inputs->keyboard;
 	if (key[SDL_SCANCODE_LEFT] || key[SDL_SCANCODE_RIGHT])
 		player_rotate(app->player, key);
-	if (key[SDL_SCANCODE_LSHIFT] && frame - app->player->last_shift >= 2.5)
+	if (app->inputs->left_pressed && frame - app->player->last_shift >= 2.5)
 		player_shoot(app->player, frame);
 	if (key[SDL_SCANCODE_Q] && app->player->anim_frame == 0)
 		player_change_weapon(app->player, frame);
@@ -56,9 +59,5 @@ void			keyboard_input(t_app *app, const Uint8 *key, float frame)
 	if (key[SDL_SCANCODE_M] || key[SDL_SCANCODE_P])
 		update_sound(key, app->sfx);
 	if (key[SDL_SCANCODE_BACKSPACE])
-	{
-		SDL_ShowCursor(!SDL_ShowCursor(SDL_QUERY));
 		SDL_SetRelativeMouseMode(!SDL_GetRelativeMouseMode());
-	}
-
 }
