@@ -110,7 +110,8 @@ typedef struct		s_player
 	float			y_v;
 	float			speed;
 	float			direction;
-	float			acc;
+	float			head_acc;
+	float			move_acc;
 	float			idle_frame;
 	float			head_offset;
 	Mix_Chunk 		*sound_effect;

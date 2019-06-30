@@ -6,17 +6,17 @@ void		player_debug(t_app *app)
 
 	key = app->inputs->keyboard;
 	if (key[SDL_SCANCODE_EQUALS] &&
-		app->inputs->sensetivity < 1)
-		app->inputs->sensetivity += 0.001;
+		app->inputs->sensetivity < 5)
+		app->inputs->sensetivity += 0.1;
 	if (key[SDL_SCANCODE_MINUS] &&
 			app->inputs->sensetivity > 0)
-		app->inputs->sensetivity -= 0.001;
+		app->inputs->sensetivity -= 0.1;
 	if (key[SDL_SCANCODE_EQUALS] || key[SDL_SCANCODE_MINUS])
 	{
 		if (app->inputs->sensetivity < 0)
 			app->inputs->sensetivity = 0;
-		if (app->inputs->sensetivity > 0.05)
-			app->inputs->sensetivity = 0.05;
+		if (app->inputs->sensetivity > 5)
+			app->inputs->sensetivity = 5;
 		printf("sensetivity -> %f\n", app->inputs->sensetivity);
 	}
 }
@@ -28,8 +28,8 @@ void		on_mouse_update(t_app *app)
 			SDL_BUTTON(SDL_BUTTON_LEFT);
 	if (app->inputs->x != 0)
 	{
-		app->player->direction += app->player->speed *
-				app->inputs->x * app->inputs->sensetivity;
+		app->player->direction += app->inputs->x *
+				app->inputs->sensetivity * app->time->delta;
 		if (app->player->direction > 359)
 			app->player->direction = 0;
 		if (app->player->direction < 0)
@@ -50,8 +50,7 @@ void		start_the_game(t_app *app)
 		SDL_PollEvent(&app->sdl->event);
 		if (check_for_quit(app) == 1)
 			break ;
-		//player_debug(app);
-		app->player->speed = 250 * app->time->delta;
+		player_debug(app);
 		on_mouse_update(app);
 		keyboard_input(app, app->time->frame);
 		update_doors(app, app->time->frame);

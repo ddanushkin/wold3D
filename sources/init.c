@@ -72,5 +72,5 @@ void			init(t_app *app)
 	app->sfx->background = Mix_LoadMUS("../resources/sounds/bgm.mp3");
 	app->sfx->door_open_close = Mix_LoadWAV("../resources/sounds/door_open_close.wav");
 	app->sfx->door_move = Mix_LoadWAV("../resources/sounds/door_move.wav");
-	app->inputs->sensetivity = 0.01;
+	app->inputs->sensetivity = 1.5;
 }

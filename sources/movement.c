@@ -101,12 +101,12 @@ void			player_movement(t_map *map, const Uint8 *key, t_player *player)
 		move_left(map, player);
 	if (old_x != player->x || old_y != player->y)
 	{
-		if (player->acc < 2)
-			player->acc += 0.35;
+		if (player->head_acc < 2)
+			player->head_acc += 0.35;
 	}
 	else
 	{
-		if (player->acc > 0)
-			player->acc -= 0.15;
+		if (player->head_acc > 0)
+			player->head_acc -= 0.15;
 	}
 }

@@ -101,7 +101,6 @@ void		player_init(t_sdl *sdl, t_player *player)
 	player->health = 100;
 	player->anim_is_done = 1;
 	player->max_dist = 25;
-	player->head_angle = 0;
 	load_sounds(player);
 	load_faces(sdl, player);
 	load_weapons(sdl, player);
