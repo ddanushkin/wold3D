@@ -5,19 +5,34 @@ void		player_debug(t_app *app)
 	const Uint8 *key;
 
 	key = app->inputs->keyboard;
+//	if (key[SDL_SCANCODE_EQUALS] &&
+//		app->inputs->sensetivity < 5)
+//		app->inputs->sensetivity += 0.1;
+//	if (key[SDL_SCANCODE_MINUS] &&
+//			app->inputs->sensetivity > 0)
+//		app->inputs->sensetivity -= 0.1;
+//	if (key[SDL_SCANCODE_EQUALS] || key[SDL_SCANCODE_MINUS])
+//	{
+//		if (app->inputs->sensetivity < 0)
+//			app->inputs->sensetivity = 0;
+//		if (app->inputs->sensetivity > 5)
+//			app->inputs->sensetivity = 5;
+//		printf("sensetivity -> %f\n", app->inputs->sensetivity);
+//	}
+
 	if (key[SDL_SCANCODE_EQUALS] &&
-		app->inputs->sensetivity < 5)
-		app->inputs->sensetivity += 0.1;
+		app->player->obj_dist < (64 * 5))
+		app->player->obj_dist += 5;
 	if (key[SDL_SCANCODE_MINUS] &&
-			app->inputs->sensetivity > 0)
-		app->inputs->sensetivity -= 0.1;
+		app->player->obj_dist > 0)
+		app->player->obj_dist -= 5;
 	if (key[SDL_SCANCODE_EQUALS] || key[SDL_SCANCODE_MINUS])
 	{
-		if (app->inputs->sensetivity < 0)
-			app->inputs->sensetivity = 0;
-		if (app->inputs->sensetivity > 5)
-			app->inputs->sensetivity = 5;
-		printf("sensetivity -> %f\n", app->inputs->sensetivity);
+		if (app->player->obj_dist < 0)
+			app->player->obj_dist = 0;
+		if (app->player->obj_dist > 64 * 5)
+			app->player->obj_dist = 64 * 5;
+		printf("obj_dist -> %f\n", app->player->obj_dist);
 	}
 }
 
@@ -41,6 +56,8 @@ void		on_mouse_update(t_app *app)
 
 void		start_the_game(t_app *app)
 {
+	float		dist;
+
 	init_time(app);
 	printf("SetRelativeMouseMode -> %d\n", SDL_SetRelativeMouseMode(SDL_TRUE));
 	app->inputs->keyboard = SDL_GetKeyboardState(NULL);
@@ -55,6 +72,9 @@ void		start_the_game(t_app *app)
 		keyboard_input(app, app->time->frame);
 		update_doors(app, app->time->frame);
 		create_field_of_view(app);
+		dist = sqrtf(ft_powf(app->player->x - app->map->objects[0]->center.x, 2) + ft_powf(app->player->y - app->map->objects[0]->center.y, 2));
+		dist = (int)(64 / dist * app->sdl->dist_to_pp);
+		draw_object(app, app->map->objects[0], dist);
 		redraw(app->sdl, app->player, app->time);
 	}
 }

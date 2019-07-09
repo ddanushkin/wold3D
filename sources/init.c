@@ -48,7 +48,9 @@ static	void	create_stuff(t_app *app)
 static	void	init_sdl(t_sdl *sdl)
 {
 	sdl->width = 1280;
+	sdl->half_width = (int)(sdl->width * 0.5);
 	sdl->height = 720;
+	sdl->half_height = (int)(sdl->height * 0.5);
 	sdl->fov = 3.14159 / 3.0;
 	sdl->dist_to_pp = (int) (sdl->width / (tan(sdl->fov / 2.0) * 2.0));
 	sdl->draw_dist = 840;

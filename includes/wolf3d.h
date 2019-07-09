@@ -48,7 +48,9 @@ typedef	struct		s_time
 typedef struct		s_sdl
 {
 	int 			width;
+	int 			half_width;
 	int 			height;
+	int 			half_height;
 	int				dist_to_pp;
 	float			fov;
 	int 			draw_dist;
@@ -133,6 +135,7 @@ typedef struct		s_player
 	float 			last_shift;
 	float 			last_step;
 	float 			head_angle;
+	float			obj_dist;
 }					t_player;
 
 typedef struct		s_ui_elem
@@ -235,4 +238,6 @@ void				door_interaction(t_app *app, float frame);
 void				draw_column(t_app *app, t_ray *ray, int x, int height, float angle);
 SDL_Surface			*load_surf(char *dir, char *name, char *add);
 float				range_mapping(long x, long in_min, long in_max, long out_min, long out_max);
+void				draw_object(t_app *app, t_node *obj, int custom_height);
+float				angle_from_points(t_ipoint center, t_ipoint target);
 #endif
