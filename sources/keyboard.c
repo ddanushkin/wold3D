@@ -59,7 +59,7 @@ void			keyboard_input(t_app *app, float frame)
 
 	key = app->inputs->keyboard;
 	if (is_move_input(key) && app->player->move_acc < 5)
-		app->player->move_acc += 0.5;
+		app->player->move_acc += 0.2;
 	else if (!is_move_input(key) && app->player->move_acc > 0)
 		app->player->move_acc -= 0.8;
 	if (app->player->move_acc > 0)

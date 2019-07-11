@@ -58,7 +58,7 @@ t_ray	*init_vert(t_player *player, double angle)
 	return (ray);
 }
 
-int		is_wall(t_app *app, t_ray *ray)
+int		is_wall(t_app *app, t_ray *ray, double angle)
 {
 	t_node *node;
 
@@ -87,6 +87,40 @@ int		is_wall(t_app *app, t_ray *ray)
 		}
 		ray->node = node;
 		return (1);
+	}
+	if (node->type == MAP_TYPE_INTERIOR)
+	{
+		int		is_center;
+
+		is_center = false;
+		node->visible = true;
+		ray->start.x += ray->step.x * 0.5;
+		ray->start.y += ray->step.y * 0.5;
+		if (ray->type == RAY_TYPE_HORZ && (int)(ray->start.x) % TEXTURE_SIZE == 31)
+		{
+			printf("x -> %d\n", (int)(ray->start.x) % TEXTURE_SIZE);
+			is_center = true;
+		}
+		else if (ray->type == RAY_TYPE_VERT && (int)(ray->start.y) % TEXTURE_SIZE == 31)
+		{
+			printf("y -> %d\n", (int)(ray->start.y) % TEXTURE_SIZE);
+			is_center = true;
+		}
+		if (is_center)
+		{
+			printf("is_center\n");
+			node->center.x = (int)ray->start.x;
+			node->center.y = (int)ray->start.y;
+			if (ray->type == RAY_TYPE_HORZ)
+				node->dist = fabs((app->player->y - ray->start.y) / sin(angle));
+			if (ray->type == RAY_TYPE_VERT)
+				node->dist = fabs((app->player->x - ray->start.x) / cos(angle));
+			node->dist *= cos(angle - app->player->direction * M_PI_180);
+			node->dist = (int)(64.0 / node->dist * app->sdl->dist_to_pp);
+		}
+		ray->start.x -= ray->step.x * 0.5;
+		ray->start.y -= ray->step.y * 0.5;
+		return (0);
 	}
 	if (node->type == MAP_TYPE_WALL)
 	{
@@ -124,12 +158,12 @@ void	calc_ray_data(t_app *app, t_ray *ray, float angle)
 
 t_ray	*choose_ray(t_app *app, t_ray *horz, t_ray *vert, double angle)
 {
-	while (!is_wall(app, horz))
+	while (!is_wall(app, horz, angle))
 	{
 		horz->start.x += horz->step.x;
 		horz->start.y += horz->step.y;
 	}
-	while (!is_wall(app, vert))
+	while (!is_wall(app, vert, angle))
 	{
 		vert->start.x += vert->step.x;
 		vert->start.y += vert->step.y;
@@ -178,11 +212,9 @@ void	create_field_of_view(t_app *app)
 	float	angle;
 	float	next_angle;
 	int		x;
-	double	fov;
 
-	fov = 60;
-	angle = app->player->direction - (fov / 2.0);
-	next_angle = fov / app->sdl->width;
+	angle = app->player->direction - (60.0 / 2.0);
+	next_angle = 60.0 / app->sdl->width;
 	x = 0;
 	while (x < app->sdl->width)
 	{

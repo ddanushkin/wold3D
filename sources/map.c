@@ -61,10 +61,9 @@ void		fill_row(t_map *map, char **data, int row, t_player *player)
 		else if (*data[col] >= 'X' && *data[col] <= 'Z')
 		{
 			node->type = MAP_TYPE_INTERIOR;
-			node->center.y = row * TEXTURE_SIZE + (TEXTURE_SIZE / 2);
-			node->center.x = col * TEXTURE_SIZE + (TEXTURE_SIZE / 2);
 			node->texture[0] = load_surf("interior/", data[col], "");
 			node->collidable = true;
+			node->visible = false;
 			map->objects[map->objects_count++] = node;
 		}
 		else if (*data[col] == 'D')

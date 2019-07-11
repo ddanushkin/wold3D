@@ -40,7 +40,7 @@ void		on_mouse_update(t_app *app)
 	app->inputs->left_pressed =
 			SDL_GetRelativeMouseState(&app->inputs->x, &app->inputs->y) &
 			SDL_BUTTON(SDL_BUTTON_LEFT);
-	if (app->inputs->x != 0)
+	if (app->inputs->x)
 	{
 		app->player->direction += app->inputs->x *
 				app->inputs->sensetivity * app->time->delta;
@@ -51,12 +51,34 @@ void		on_mouse_update(t_app *app)
 		app->player->x_v = cos(app->player->direction * M_PI_180);
 		app->player->y_v = sin(app->player->direction * M_PI_180);
 	}
+	if (app->inputs->y)
+		app->player->head_angle += app->inputs->y * 0.1 * app->time->delta;
+}
+
+void update_objects(t_app *app)
+{
+	int		i;
+
+	i = 0;
+	while (i < app->map->objects_count)
+	{
+		if (app->map->objects[i]->visible)
+			draw_object(app, app->map->objects[i]);
+		i++;
+	}
+}
+
+void		reset_objects(t_app *app)
+{
+	int		i;
+
+	i = 0;
+	while (i < app->map->objects_count)
+		app->map->objects[i++]->visible = false;
 }
 
 void		start_the_game(t_app *app)
 {
-	float		dist;
-
 	init_time(app);
 	printf("SetRelativeMouseMode -> %d\n", SDL_SetRelativeMouseMode(SDL_TRUE));
 	app->inputs->keyboard = SDL_GetKeyboardState(NULL);
@@ -70,10 +92,9 @@ void		start_the_game(t_app *app)
 		on_mouse_update(app);
 		keyboard_input(app, app->time->frame);
 		update_doors(app, app->time->frame);
+		reset_objects(app);
 		create_field_of_view(app);
-		dist = sqrtf(ft_powf(app->player->x - app->map->objects[0]->center.x, 2) + ft_powf(app->player->y - app->map->objects[0]->center.y, 2));
-		dist = (int)(64 / dist * app->sdl->dist_to_pp);
-		draw_object(app, app->map->objects[0], dist);
+		//update_objects(app);
 		redraw(app->sdl, app->player, app->time);
 	}
 }

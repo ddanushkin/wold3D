@@ -86,6 +86,7 @@ typedef struct		s_node
 	int				door_opening;
 	int				door_closing;
 	float			last_open;
+	float 			dist;
 	int 			visible;
 }					t_node;
 
@@ -244,5 +245,5 @@ void				update_doors(t_app *app, float frame);
 void				door_interaction(t_app *app, float frame);
 void				draw_column(t_app *app, t_ray *ray, int x, int height, float angle);
 SDL_Surface			*load_surf(char *dir, char *name, char *add);
-void				draw_object(t_app *app, t_node *obj, int height);
+void				draw_object(t_app *app, t_node *obj);
 #endif
