@@ -3,7 +3,6 @@
 void		player_debug(t_app *app)
 {
 	const Uint8 *key;
-	//test comments5
 	key = app->inputs->keyboard;
 //	if (key[SDL_SCANCODE_EQUALS] &&
 //		app->inputs->sensetivity < 5)

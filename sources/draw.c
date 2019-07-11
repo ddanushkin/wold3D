@@ -85,49 +85,36 @@ void	floor_and_ceiling(t_app *app, int x, int y, float angle)
 	}
 }
 
-float angle_from_points(t_ipoint center, t_ipoint target)
+void		draw_object(t_app *app, t_node *obj, int height)
 {
-	float theta;
+	t_ipoint	start;
+	t_ipoint	end;
+	int			x;
+	int			y;
 
-	theta = atan2(target.y - center.y, target.x - center.x);
-	theta += M_PI/2.0;
-	return theta;
-}
-
-void		draw_object(t_app *app, t_node *obj, int custom_height)
-{
-	int start_y;
-	int start_x;
-	int diff_x;
-	int end_x;
-	int end_y;
-	int x;
-	int y;
-	SDL_Color color;
-
-	diff_x = obj->center.x - app->player->x;
-	start_x = (obj->center.x + diff_x) - custom_height * 0.5;
-	start_y = app->sdl->half_height - custom_height * 0.5;
-
-	end_x = start_x + custom_height;
-	end_y = start_y + custom_height;
-
-	x = end_x;
-	while (x > start_x)
+	start.x = obj->center.x - height * 0.5;
+	start.y = app->sdl->half_height - height * 0.5;
+	end.x = start.x + height;
+	end.y = start.y + height;
+	x = start.x;
+	while (x < end.x)
 	{
-		y = end_y;
-		while (y > start_y)
+		y = start.y;
+		while (y < end.y)
 		{
-			int		texture_x = (end_x - x) * 64.0 / custom_height;
-			int		texture_y = 64 - (end_y - y) * 64.0 / custom_height;
+			int			texture_x;
+			int			texture_y;
+			SDL_Color	color;
+
+			texture_x = (end.x - x) * 64.0 / height;
+			texture_y = 64.0 - (end.y - y) * 64.0 / height;
 			get_color(obj->texture[0], &color, texture_x, texture_y);
-			int corrected_x = x;
 			if (!(color.r == 152 && color.g == 0 && color.b == 136) &&
-				corrected_x >= 0 && corrected_x < app->sdl->width && y >= 0 && y < app->sdl->height)
-				set_pixel(app->sdl, corrected_x, y, &color);
-			y--;
+				x >= 0 && x < app->sdl->width && y >= 0 && y < app->sdl->height)
+				set_pixel(app->sdl, x, y, &color);
+			y++;
 		}
-		x--;
+		x++;
 	}
 }
 

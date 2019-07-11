@@ -78,7 +78,7 @@ typedef struct		s_node
 {
 	int				x;
 	int				y;
-	SDL_Surface		*texture[4]; //[n, s, e, w];
+	SDL_Surface		*texture[4];
 	u_int			collidable;
 	u_int			type;
 	t_ipoint		center;
@@ -99,6 +99,13 @@ typedef struct		s_ray
 	SDL_Surface		*texture;
 	int 			type;
 }					t_ray;
+
+typedef struct		s_timers
+{
+	float 			space;
+	float 			left_shift;
+	float 			backspace;
+}					t_timers;
 
 typedef struct		s_player
 {
@@ -237,7 +244,5 @@ void				update_doors(t_app *app, float frame);
 void				door_interaction(t_app *app, float frame);
 void				draw_column(t_app *app, t_ray *ray, int x, int height, float angle);
 SDL_Surface			*load_surf(char *dir, char *name, char *add);
-float				range_mapping(long x, long in_min, long in_max, long out_min, long out_max);
-void				draw_object(t_app *app, t_node *obj, int custom_height);
-float				angle_from_points(t_ipoint center, t_ipoint target);
+void				draw_object(t_app *app, t_node *obj, int height);
 #endif
