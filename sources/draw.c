@@ -53,8 +53,6 @@ void	draw_ceiling(t_app *app, t_ipoint tile, int x, int y)
 	{
 		get_color(app->textures->ceilings, &c, tile.x, tile.y);
 		shade_color(app->diag_dist[y + (int)app->player->head_offset], &c, app->sdl->draw_dist - 100);
-		if (app->sdl->height - y == 1)
-			printf("%d\n", app->sdl->height - y);
 		set_pixel(app->sdl, x, app->sdl->height - y, &c);
 	}
 }
@@ -93,26 +91,33 @@ void		draw_object(t_app *app, t_node *obj)
 	int			x;
 	int			y;
 
-	start.x = obj->center.x - obj->dist * 0.5;
-	start.y = app->sdl->half_height - obj->dist * 0.5;
-	end.x = start.x + obj->dist;
-	end.y = start.y + obj->dist;
+	start.x = obj->screen_x - obj->height * 0.5;
+	start.y = app->sdl->half_height - obj->height * 0.5;
+	end.x = start.x + obj->height;
+	end.y = start.y + obj->height;
+	if (start.y < 0)
+		start.y = 0;
+	if (end.y > app->sdl->height)
+		start.y = app->sdl->height;
 	x = start.x;
 	while (x < end.x)
 	{
 		y = start.y;
-		while (y < end.y)
+		while (app->sdl->dist_per_x[x] > obj->dist && y < end.y)
 		{
 			int			texture_x;
 			int			texture_y;
 			SDL_Color	color;
 
-			texture_x = (end.x - x) * 64.0 / obj->dist;
-			texture_y = 64.0 - (end.y - y) * 64.0 / obj->dist;
+			texture_x = (end.x - x) * 64.0 / obj->height;
+			texture_y = 64.0 - (end.y - y) * 64.0 / obj->height;
 			get_color(obj->texture[0], &color, texture_x, texture_y);
 			if (!(color.r == 152 && color.g == 0 && color.b == 136) &&
-				x >= 0 && x < app->sdl->width && y >= 0 && y < app->sdl->height)
-				set_pixel(app->sdl, x, y, &color);
+				y + app->player->head_offset >= 0 && y + app->player->head_offset < app->sdl->height)
+			{
+				shade_color(obj->dist + 150, &color, app->sdl->draw_dist);
+				set_pixel(app->sdl, x, y + app->player->head_offset, &color);
+			}
 			y++;
 		}
 		x++;

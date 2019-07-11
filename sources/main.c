@@ -94,7 +94,7 @@ void		start_the_game(t_app *app)
 		update_doors(app, app->time->frame);
 		reset_objects(app);
 		create_field_of_view(app);
-		//update_objects(app);
+		update_objects(app);
 		redraw(app->sdl, app->player, app->time);
 	}
 }

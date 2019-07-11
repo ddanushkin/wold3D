@@ -86,7 +86,9 @@ typedef struct		s_node
 	int				door_opening;
 	int				door_closing;
 	float			last_open;
+	float 			height;
 	float 			dist;
+	int 			screen_x;
 	int 			visible;
 }					t_node;
 
@@ -99,6 +101,7 @@ typedef struct		s_ray
 	t_node			*node;
 	SDL_Surface		*texture;
 	int 			type;
+	int 			screen_x;
 }					t_ray;
 
 typedef struct		s_timers
@@ -202,6 +205,7 @@ typedef struct		s_app
 	t_time			*time;
 	float 			*diag_dist;
 	float 			*dist_per_x;
+	float 			spec_dist;
 }					t_app;
 
 typedef struct		s_color
@@ -228,7 +232,7 @@ void				update_time(t_app *app);
 void				draw_text(SDL_Renderer	*renderer, t_ui_elem *ui_elem);
 void 				create_hud(t_sdl *sdl, t_player *player);
 SDL_Texture			*load_texture(t_sdl *sdl, char *name);
-t_ray				*get_ray(t_app *app, double angle);
+t_ray				*get_ray(t_app *app, double angle, int x);
 void				draw_face(t_sdl *sdl, t_player *player, float delta);
 void 				idle_gun_animation(t_sdl *sdl, t_player *player, float delta);
 void 				gun_shoot(t_sdl *sdl, t_player *player, float delta);

@@ -63,6 +63,8 @@ void		fill_row(t_map *map, char **data, int row, t_player *player)
 			node->type = MAP_TYPE_INTERIOR;
 			node->texture[0] = load_surf("interior/", data[col], "");
 			node->collidable = true;
+			node->center.x = col * TEXTURE_SIZE + (TEXTURE_SIZE / 2);
+			node->center.y = row * TEXTURE_SIZE + (TEXTURE_SIZE / 2);
 			node->visible = false;
 			map->objects[map->objects_count++] = node;
 		}

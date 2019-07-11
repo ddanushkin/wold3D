@@ -90,33 +90,15 @@ int		is_wall(t_app *app, t_ray *ray, double angle)
 	}
 	if (node->type == MAP_TYPE_INTERIOR)
 	{
-		int		is_center;
-
-		is_center = false;
 		node->visible = true;
 		ray->start.x += ray->step.x * 0.5;
 		ray->start.y += ray->step.y * 0.5;
-		if (ray->type == RAY_TYPE_HORZ && (int)(ray->start.x) % TEXTURE_SIZE == 31)
+		if ((ray->type == RAY_TYPE_HORZ && (int)(ray->start.x) % TEXTURE_SIZE == 31) ||
+			(ray->type == RAY_TYPE_VERT && (int)(ray->start.y) % TEXTURE_SIZE == 31))
 		{
-			printf("x -> %d\n", (int)(ray->start.x) % TEXTURE_SIZE);
-			is_center = true;
-		}
-		else if (ray->type == RAY_TYPE_VERT && (int)(ray->start.y) % TEXTURE_SIZE == 31)
-		{
-			printf("y -> %d\n", (int)(ray->start.y) % TEXTURE_SIZE);
-			is_center = true;
-		}
-		if (is_center)
-		{
-			printf("is_center\n");
-			node->center.x = (int)ray->start.x;
-			node->center.y = (int)ray->start.y;
-			if (ray->type == RAY_TYPE_HORZ)
-				node->dist = fabs((app->player->y - ray->start.y) / sin(angle));
-			if (ray->type == RAY_TYPE_VERT)
-				node->dist = fabs((app->player->x - ray->start.x) / cos(angle));
-			node->dist *= cos(angle - app->player->direction * M_PI_180);
-			node->dist = (int)(64.0 / node->dist * app->sdl->dist_to_pp);
+			node->dist = sqrtf(ft_powf(app->player->x - node->center.x, 2) + ft_powf(app->player->y - node->center.y, 2));
+			node->height = (int)(64 / node->dist * app->sdl->dist_to_pp);
+			node->screen_x = ray->screen_x;
 		}
 		ray->start.x -= ray->step.x * 0.5;
 		ray->start.y -= ray->step.y * 0.5;
@@ -182,7 +164,7 @@ t_ray	*choose_ray(t_app *app, t_ray *horz, t_ray *vert, double angle)
 	}
 }
 
-t_ray	*get_ray(t_app *app, double angle)
+t_ray	*get_ray(t_app *app, double angle, int x)
 {
 	t_ray	*vert;
 	t_ray	*horz;
@@ -191,8 +173,11 @@ t_ray	*get_ray(t_app *app, double angle)
 	angle = angle * M_PI_180;
 	horz = init_horz(app->player, angle);
 	vert = init_vert(app->player, angle);
+	horz->screen_x = x;
+	vert->screen_x = x;
 	result = choose_ray(app, horz, vert, angle);
 	calc_ray_data(app, result, angle);
+	app->sdl->dist_per_x[x] = result->dist;
 	return (result);
 }
 
@@ -201,7 +186,7 @@ void	cast_single_ray(t_app *app, int x, float angle)
 	int		slice_height;
 	t_ray	*ray;
 
-	ray = get_ray(app, angle);
+	ray = get_ray(app, angle, x);
 	slice_height = (int)(64 / ray->dist * app->sdl->dist_to_pp);
 	draw_column(app, ray, x, slice_height, angle);
 	free(ray);
