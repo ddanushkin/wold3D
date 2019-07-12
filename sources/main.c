@@ -3,20 +3,21 @@
 void		player_debug(t_app *app)
 {
 	const Uint8 *key;
+
 	key = app->inputs->keyboard;
 //	if (key[SDL_SCANCODE_EQUALS] &&
-//		app->inputs->sensetivity < 5)
-//		app->inputs->sensetivity += 0.1;
+//		app->inputs->sensitivity < 5)
+//		app->inputs->sensitivity += 0.1;
 //	if (key[SDL_SCANCODE_MINUS] &&
-//			app->inputs->sensetivity > 0)
-//		app->inputs->sensetivity -= 0.1;
+//			app->inputs->sensitivity > 0)
+//		app->inputs->sensitivity -= 0.1;
 //	if (key[SDL_SCANCODE_EQUALS] || key[SDL_SCANCODE_MINUS])
 //	{
-//		if (app->inputs->sensetivity < 0)
-//			app->inputs->sensetivity = 0;
-//		if (app->inputs->sensetivity > 5)
-//			app->inputs->sensetivity = 5;
-//		printf("sensetivity -> %f\n", app->inputs->sensetivity);
+//		if (app->inputs->sensitivity < 0)
+//			app->inputs->sensitivity = 0;
+//		if (app->inputs->sensitivity > 5)
+//			app->inputs->sensitivity = 5;
+//		printf("sensitivity -> %f\n", app->inputs->sensitivity);
 //	}
 
 	if (key[SDL_SCANCODE_EQUALS] &&
@@ -43,7 +44,7 @@ void		on_mouse_update(t_app *app)
 	if (app->inputs->x)
 	{
 		app->player->direction += app->inputs->x *
-				app->inputs->sensetivity * app->time->delta;
+				app->inputs->sensitivity * app->time->delta;
 		if (app->player->direction > 359)
 			app->player->direction = 0;
 		if (app->player->direction < 0)
@@ -53,28 +54,6 @@ void		on_mouse_update(t_app *app)
 	}
 	if (app->inputs->y)
 		app->player->head_angle += app->inputs->y * 0.1 * app->time->delta;
-}
-
-void update_objects(t_app *app)
-{
-	int		i;
-
-	i = 0;
-	while (i < app->map->objects_count)
-	{
-		if (app->map->objects[i]->visible)
-			draw_object(app, app->map->objects[i]);
-		i++;
-	}
-}
-
-void		reset_objects(t_app *app)
-{
-	int		i;
-
-	i = 0;
-	while (i < app->map->objects_count)
-		app->map->objects[i++]->visible = false;
 }
 
 void		start_the_game(t_app *app)
@@ -88,11 +67,11 @@ void		start_the_game(t_app *app)
 		SDL_PollEvent(&app->sdl->event);
 		if (check_for_quit(app) == 1)
 			break ;
-		player_debug(app);
+		//player_debug(app);
 		on_mouse_update(app);
 		keyboard_input(app, app->time->frame);
 		update_doors(app, app->time->frame);
-		reset_objects(app);
+		reset_objects(app->map);
 		create_field_of_view(app);
 		update_objects(app);
 		redraw(app->sdl, app->player, app->time);

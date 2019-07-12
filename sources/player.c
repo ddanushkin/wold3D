@@ -2,10 +2,10 @@
 
 void		load_sounds(t_player *player)
 {
-	player->sound_effect = Mix_LoadWAV("../resources/sounds/speak.wav");
-	player->fx_reload = Mix_LoadWAV("../resources/sounds/GunReload.wav");
-	player->fx_empty = Mix_LoadWAV("../resources/sounds/GunEmpty.wav");
 	player->fx_die = Mix_LoadWAV("../resources/sounds/Player Dies.wav");
+	player->fx_empty = Mix_LoadWAV("../resources/sounds/GunEmpty.wav");
+	player->fx_reload = Mix_LoadWAV("../resources/sounds/GunReload.wav");
+	player->sound_effect = Mix_LoadWAV("../resources/sounds/speak.wav");
 	player->steps[0] = Mix_LoadWAV("../resources/sounds/step-01.wav");
 	player->steps[1] = Mix_LoadWAV("../resources/sounds/step-02.wav");
 	player->steps[2] = Mix_LoadWAV("../resources/sounds/step-03.wav");
@@ -32,33 +32,16 @@ void		draw_face(t_sdl *sdl, t_player *player, float delta)
 	SDL_Rect	area;
 	int			cur_frame;
 
-	area.y = sdl->height - 130;
-	area.w = 96;
-	area.x = sdl->width / 2 - area.w + 5;
 	area.h = 116;
+	area.w = 96;
+	area.x = sdl->half_width - area.w + 5;
+	area.y = sdl->height - 130;
 	cur_frame = (long)delta % 4 * 7;
 	if (cur_frame == 14)
 		cur_frame = 0;
 	if (player->health < 85)
 		cur_frame += 6 - ((player->health) / 14) % 7;
 	SDL_RenderCopy(sdl->renderer, player->state[cur_frame], NULL, &area);
-}
-
-SDL_Texture	*load_sprite(t_sdl *sdl, char *folder_path, char *sprite_name)
-{
-	char			file_path[50];
-	Uint32			key;
-	SDL_Texture		*texture;
-	SDL_Surface		*surface;
-
-	ft_strcpy(file_path, folder_path);
-	ft_strcat(file_path, sprite_name);
-	surface = SDL_LoadBMP(file_path);
-	key = SDL_MapRGB(surface->format, 152, 0, 136);
-	SDL_SetColorKey(surface, SDL_TRUE, key);
-	texture = SDL_CreateTextureFromSurface(sdl->renderer, surface);
-	SDL_FreeSurface(surface);
-	return (texture);
 }
 
 void		get_sprites(t_sdl *sdl, SDL_Texture *sprites[], char *path)
@@ -94,15 +77,15 @@ void		load_faces(t_sdl *sdl, t_player *player)
 void		player_init(t_sdl *sdl, t_player *player)
 {
 	ft_bzero(player, sizeof(t_player));
+	player->anim_is_done = 1;
 	player->direction = 270;
-	player->x_v = cos(player->direction * M_PI_180);
-	player->y_v = sin(player->direction * M_PI_180);
 	player->lives = 99;
 	player->health = 100;
-	player->anim_is_done = 1;
 	player->max_dist = 25;
-	load_sounds(player);
+	player->x_v = cos(player->direction * M_PI_180);
+	player->y_v = sin(player->direction * M_PI_180);
 	load_faces(sdl, player);
+	load_sounds(player);
 	load_weapons(sdl, player);
 }
 
@@ -129,37 +112,6 @@ void		init_weapon(t_weapon *weapon, u_int ammo, float rate, char *sound)
 	weapon->gun_sound = Mix_LoadWAV(file_path);
 }
 
-void		player_rotate(t_player *player, const Uint8 *state)
-{
-	if (state[SDL_SCANCODE_LEFT])
-		(player->direction -= player->speed * 0.5) < 0 ? player->direction = 359 : 0;
-	if (state[SDL_SCANCODE_RIGHT])
-		(player->direction += player->speed * 0.5) > 359 ? player->direction = 1 : 0;
-	if (state[SDL_SCANCODE_LEFT] || state[SDL_SCANCODE_RIGHT])
-	{
-		player->x_v = cos(player->direction * M_PI_180);
-		player->y_v = sin(player->direction * M_PI_180);
-	}
-
-	//Test
-	//	if (state[SDL_SCANCODE_LEFT])
-	//		player->rot_acc = -0.5;
-	//	if (state[SDL_SCANCODE_RIGHT])
-	//		player->rot_acc = 0.5;
-	//	if (fabsf(player->rot_acc) > 0)
-	//	{
-	//		player->direction += player->rot_acc * (player->speed * 0.5);
-	//		if (player->direction < 0)
-	//			player->direction = 359;
-	//		else if (player->direction > 359)
-	//			player->direction = 0;
-	//		player->rot_acc *= 0.5;
-	//		if (fabsf(player->rot_acc) < 0.1)
-	//			player->rot_acc = 0;
-	//		player->x_v = cos(player->direction * M_PI_180);
-	//		player->y_v = sin(player->direction * M_PI_180);
-	//		printf("player->rot_acc - %f\n", player->rot_acc);
-}
 
 void		update_sound(const Uint8 *key, t_sfx *sfx)
 {

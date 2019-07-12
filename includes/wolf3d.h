@@ -39,173 +39,175 @@ typedef struct		s_dpoint
 
 typedef	struct		s_time
 {
-	float			frame;
-	int				prev;
 	int				current;
 	float			delta;
+	float			frame;
+	int				prev;
 }					t_time;
 
 typedef struct		s_sdl
 {
-	int 			width;
+	float			*dist_per_x;
+	int				dist_to_pp;
+	int 			draw_dist;
+	SDL_Event		event;
+	float			fov;
+	int 			half_height;
 	int 			half_width;
 	int 			height;
-	int 			half_height;
-	int				dist_to_pp;
-	float			fov;
-	int 			draw_dist;
-	float			*dist_per_x;
-	SDL_Event		event;
-	SDL_Window		*window;
+	Uint32			*pixels;
 	SDL_Renderer	*renderer;
 	SDL_Texture		*texture;
-	Uint32			*pixels;
 	SDL_Texture		*ui;
+	int 			width;
+	SDL_Window		*window;
 }					t_sdl;
 
 typedef struct		s_weapon
 {
-	SDL_Texture		*sprites[11];
 	unsigned char	ammo_cur;
 	unsigned char	ammo_max;
-	float			firerate;
 	unsigned char	fired;
-	unsigned char	mag_cur;
+	float			firerate;
 	Mix_Chunk 		*gun_sound;
+	unsigned char	mag_cur;
+	SDL_Texture		*sprites[11];
 }					t_weapon;
 
 typedef struct		s_node
 {
-	int				x;
-	int				y;
-	SDL_Surface		*texture[4];
-	u_int			collidable;
-	u_int			type;
 	t_ipoint		center;
+	u_int			collidable;
+	float 			dist;
+	int				door_closing;
 	int				door_frame;
 	int				door_opening;
-	int				door_closing;
-	float			last_open;
 	float 			height;
-	float 			dist;
+	float			last_open;
 	int 			screen_x;
+	SDL_Surface		*texture[4];
+	u_int			type;
 	int 			visible;
+	int				x;
+	int				y;
 }					t_node;
 
 typedef struct		s_ray
 {
+	float			dist;
+	t_node			*node;
+	int				offset;
+	int 			screen_x;
 	t_fpoint		start;
 	t_fpoint 		step;
-	float			dist;
-	int				offset;
-	t_node			*node;
 	SDL_Surface		*texture;
 	int 			type;
-	int 			screen_x;
 }					t_ray;
 
 typedef struct		s_timers
 {
-	float 			space;
-	float 			left_shift;
 	float 			backspace;
+	float 			left_shift;
+	float 			space;
 }					t_timers;
 
 typedef struct		s_player
 {
-	int 			x;
-	int 			y;
-	int				health;
-	int 			score;
-	char			*cur_level;
-	int 			lives;
-	float			x_v;
-	float			y_v;
-	float			speed;
-	float			direction;
-	float			head_acc;
-	float			move_acc;
-	float			idle_frame;
-	float			head_offset;
-	Mix_Chunk 		*sound_effect;
-	Mix_Chunk 		*fx_reload;
-	Mix_Chunk 		*fx_empty;
-	Mix_Chunk		*fx_die;
-	Mix_Chunk		*steps[8];
-	int				max_dist;
-	SDL_Texture		*state[28];
-	unsigned char	shooting;
-	unsigned char	changing;
-	unsigned char	reloading;
 	float 			anim_frame;
-	t_weapon		*weapon;
-	unsigned char	cur_weapon;
 	unsigned char	anim_is_done;
 	unsigned char	change_down;
-	float 			last_space;
-	float 			last_shift;
-	float 			last_step;
+	unsigned char	changing;
+	char			*cur_level;
+	unsigned char	cur_weapon;
+	float			direction;
+	Mix_Chunk		*fx_die;
+	Mix_Chunk 		*fx_empty;
+	Mix_Chunk 		*fx_reload;
+	float			head_acc;
 	float 			head_angle;
+	float			head_offset;
+	int				health;
+	float			idle_frame;
+	float 			last_shift;
+	float 			last_space;
+	float 			last_step;
+	int 			lives;
+	int				max_dist;
+	float			move_acc;
 	float			obj_dist;
+	unsigned char	reloading;
+	int 			score;
+	unsigned char	shooting;
+	Mix_Chunk 		*sound_effect;
+	float			speed;
+	SDL_Texture		*state[28];
+	Mix_Chunk		*steps[8];
+	t_weapon		*weapon;
+	int 			x;
+	float			x_v;
+	int 			y;
+	float			y_v;
 }					t_player;
 
 typedef struct		s_ui_elem
 {
 	SDL_Color		*color;
-	int 			x;
-	int 			y;
 	int				size;
 	char			*text;
+	int 			x;
+	int 			y;
 }					t_ui_elem;
 
 typedef struct		s_map
 {
-	int				rows;
 	int 			cols;
-	t_node			**nodes;
 	t_node			**doors;
 	int				doors_count;
+	t_node			**nodes;
 	t_node			**objects;
 	int				objects_count;
+	int				rows;
+	t_node			**true_doors;
+	t_node			**true_objects;
 }					t_map;
 
 typedef struct		s_sfx
 {
-	Mix_Chunk		*door_move;
-	Mix_Chunk		*door_open_close;
 	Mix_Music		*background;
+	Mix_Chunk		*door_move;
+	Mix_Chunk		*door_open;
 }					t_sfx;
 
 typedef struct		s_textures
 {
-	SDL_Surface		**walls;
-	SDL_Surface		*doors;
-	SDL_Surface		*sprites;
-	SDL_Surface		*floors;
 	SDL_Surface		*ceilings;
+	SDL_Surface		*doors;
+	SDL_Surface		*floors;
+	SDL_Surface		*sprites;
+	SDL_Surface		**walls;
 }					t_textures;
 
 typedef struct		s_inputs
 {
 	const Uint8		*keyboard;
+	int 			left_pressed;
+	int 			right_pressed;
+	float			sensitivity;
 	int				x;
 	int				y;
-	int 			left_pressed;
-	float			sensetivity;
 }					t_inputs;
 
 typedef struct		s_app
 {
-	t_sdl			*sdl;
+	float 			*diag_dist;
+	float 			*dist_per_x;
 	t_inputs 		*inputs;
-	t_player		*player;
 	t_map			*map;
+	t_player		*player;
+	t_sdl			*sdl;
 	t_sfx			*sfx;
 	t_textures		*textures;
 	t_time			*time;
-	float 			*diag_dist;
-	float 			*dist_per_x;
-	float 			spec_dist;
 }					t_app;
 
 typedef struct		s_color
@@ -232,7 +234,7 @@ void				update_time(t_app *app);
 void				draw_text(SDL_Renderer	*renderer, t_ui_elem *ui_elem);
 void 				create_hud(t_sdl *sdl, t_player *player);
 SDL_Texture			*load_texture(t_sdl *sdl, char *name);
-t_ray				*get_ray(t_app *app, double angle, int x);
+t_ray				*get_ray(t_app *app, int x, float angle);
 void				draw_face(t_sdl *sdl, t_player *player, float delta);
 void 				idle_gun_animation(t_sdl *sdl, t_player *player, float delta);
 void 				gun_shoot(t_sdl *sdl, t_player *player, float delta);
@@ -247,7 +249,16 @@ void				redraw(t_sdl *sdl, t_player *player, t_time *time);
 int					check_for_quit(t_app *app);
 void				update_doors(t_app *app, float frame);
 void				door_interaction(t_app *app, float frame);
-void				draw_column(t_app *app, t_ray *ray, int x, int height, float angle);
+void				draw_column(t_app *app, t_ray *ray, int x, float angle);
 SDL_Surface			*load_surf(char *dir, char *name, char *add);
-void				draw_object(t_app *app, t_node *obj);
+void				map_type_wall(t_node *node, char *data);
+void				map_type_interior(t_node *node, char *data, t_map *map);
+void				map_type_door(t_node *node, char *data, t_map *map);
+void				player_shoot(t_player *player, float frame);
+void				player_change_weapon(t_player *player, float frame);
+void				player_reloading(t_player *player, float frame);
+SDL_Texture			*load_sprite(t_sdl *sdl, char *folder_path, char *sprite_name);
+void				update_objects(t_app *app);
+void				reset_objects(t_map *map);
+void				draw_object(t_sdl *sdl,t_player *player, t_node *obj);
 #endif

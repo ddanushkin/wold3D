@@ -13,7 +13,7 @@ void	quit_properly(t_app *app)
 	Mix_FreeChunk(app->player->sound_effect);
 	Mix_FreeMusic(app->sfx->background);
 	Mix_FreeChunk(app->sfx->door_move);
-	Mix_FreeChunk(app->sfx->door_open_close);
+	Mix_FreeChunk(app->sfx->door_open);
 	app->sfx->background = NULL;
 	app->player->sound_effect = NULL;
 	free(app->sdl->pixels);

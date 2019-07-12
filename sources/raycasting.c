@@ -10,55 +10,55 @@ t_node		*get_node(t_map *map, float x, float y)
 	return (&map->nodes[iy][ix]);
 }
 
-t_ray	*init_horz(t_player *player, double angle)
+t_ray	*init_horz(t_player *player, float angle)
 {
 	t_ray	*ray;
 
 	ray = (t_ray *)malloc(sizeof(t_ray));
 	ray->dist = 999999;
 	ray->type = RAY_TYPE_HORZ;
-	if (sin(angle) < 0)
+	if (sinf(angle) < 0)
 	{
 		ray->start.y = (player->y & 0xffc0) - 0.001;
 		ray->step.y = -64;
 	}
-	else if (sin(angle) > 0)
+	else if (sinf(angle) > 0)
 	{
 		ray->start.y = (player->y & 0xffc0) + 64.001;
 		ray->step.y = 64;
 	}
 	else
 		return (ray);
-	ray->step.x = -ray->step.y / tan(-angle);
-	ray->start.x = player->x + (ray->start.y - player->y) / tan(angle);
+	ray->step.x = -ray->step.y / tanf(-angle);
+	ray->start.x = player->x + (ray->start.y - player->y) / tanf(angle);
 	return (ray);
 }
 
-t_ray	*init_vert(t_player *player, double angle)
+t_ray	*init_vert(t_player *player, float angle)
 {
 	t_ray	*ray;
 
 	ray = (t_ray *)malloc(sizeof(t_ray));
 	ray->dist = 999999;
 	ray->type = RAY_TYPE_VERT;
-	if (cos(angle) > 0)
+	if (cosf(angle) > 0)
 	{
 		ray->start.x = (player->x & 0xffc0) + 64.001;
 		ray->step.x = 64;
 	}
-	else if (cos(angle) < 0)
+	else if (cosf(angle) < 0)
 	{
 		ray->start.x = (player->x & 0xffc0) - 0.001;
 		ray->step.x = -64;
 	}
 	else
 		return (ray);
-	ray->step.y = -ray->step.x * tan(-angle);
-	ray->start.y = player->y + (ray->start.x - player->x) * tan(angle);
+	ray->step.y = -ray->step.x * tanf(-angle);
+	ray->start.y = player->y + (ray->start.x - player->x) * tanf(angle);
 	return (ray);
 }
 
-int		is_wall(t_app *app, t_ray *ray, double angle)
+int		is_wall(t_app *app, t_ray *ray)
 {
 	t_node *node;
 
@@ -79,7 +79,7 @@ int		is_wall(t_app *app, t_ray *ray, double angle)
 			ray->start.y -= ray->step.y * 0.5;
 			return (0);
 		}
-		if (ray->type != RAY_TYPE_HORZ && (int)(ray->start.y) % TEXTURE_SIZE < node->door_frame)
+		if (ray->type == RAY_TYPE_VERT && (int)(ray->start.y) % TEXTURE_SIZE < node->door_frame)
 		{
 			ray->start.x -= ray->step.x * 0.5;
 			ray->start.y -= ray->step.y * 0.5;
@@ -123,8 +123,8 @@ void	calc_ray_data(t_app *app, t_ray *ray, float angle)
 			ray->offset = (int)(ray->start.y) % TEXTURE_SIZE;
 		ray->offset -= ray->node->door_frame;
 		ray->dist = (ray->type == RAY_TYPE_HORZ) ?
-					fabs((ray->start.y - app->player->y) / sin(angle)):
-					fabs((ray->start.x - app->player->x) / cos(angle));
+					fabsf((ray->start.y - app->player->y) / sinf(angle)):
+					fabsf((ray->start.x - app->player->x) / cosf(angle));
 		ray->dist *= cos(angle - app->player->direction * M_PI_180);
 		return;
 	}
@@ -132,26 +132,26 @@ void	calc_ray_data(t_app *app, t_ray *ray, float angle)
 				  (int)ray->start.x % 64 :
 				  (int)ray->start.y % 64;
 	if (ray->type == RAY_TYPE_HORZ)
-		ray->texture = ray->node->texture[(sin(angle) > 0 ? 0 : 1)];
+		ray->texture = ray->node->texture[(sinf(angle) > 0 ? 0 : 1)];
 	else
-		ray->texture = ray->node->texture[(cos(angle) < 0 ? 3 : 2)];
-	ray->dist *= cos(angle - app->player->direction * M_PI_180);
+		ray->texture = ray->node->texture[(cosf(angle) < 0 ? 3 : 2)];
+	ray->dist *= cosf(angle - app->player->direction * M_PI_180);
 }
 
-t_ray	*choose_ray(t_app *app, t_ray *horz, t_ray *vert, double angle)
+t_ray	*choose_ray(t_app *app, t_ray *horz, t_ray *vert, float angle)
 {
-	while (!is_wall(app, horz, angle))
+	while (!is_wall(app, horz))
 	{
 		horz->start.x += horz->step.x;
 		horz->start.y += horz->step.y;
 	}
-	while (!is_wall(app, vert, angle))
+	while (!is_wall(app, vert))
 	{
 		vert->start.x += vert->step.x;
 		vert->start.y += vert->step.y;
 	}
-	horz->dist = fabs((app->player->y - horz->start.y) / sin(angle));
-	vert->dist = fabs((app->player->x - vert->start.x) / cos(angle));
+	horz->dist = fabsf((app->player->y - horz->start.y) / sinf(angle));
+	vert->dist = fabsf((app->player->x - vert->start.x) / cosf(angle));
 	if (horz->dist <= vert->dist)
 	{
 		free(vert);
@@ -164,7 +164,7 @@ t_ray	*choose_ray(t_app *app, t_ray *horz, t_ray *vert, double angle)
 	}
 }
 
-t_ray	*get_ray(t_app *app, double angle, int x)
+t_ray	*get_ray(t_app *app, int x, float angle)
 {
 	t_ray	*vert;
 	t_ray	*horz;
@@ -183,12 +183,10 @@ t_ray	*get_ray(t_app *app, double angle, int x)
 
 void	cast_single_ray(t_app *app, int x, float angle)
 {
-	int		slice_height;
 	t_ray	*ray;
 
-	ray = get_ray(app, angle, x);
-	slice_height = (int)(64 / ray->dist * app->sdl->dist_to_pp);
-	draw_column(app, ray, x, slice_height, angle);
+	ray = get_ray(app, x, angle);
+	draw_column(app, ray, x, angle);
 	free(ray);
 }
 

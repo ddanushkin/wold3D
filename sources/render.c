@@ -60,7 +60,6 @@ void	idle_gun_animation(t_sdl *sdl, t_player *player, float delta)
 
 	id = player->cur_weapon;
 	cur_frame = (long)(delta * 1.9);
-
 	player->idle_frame += 0.10 + (player->head_acc / 8);
 	player->head_offset = sinf(player->idle_frame) * (3.5 + player->head_acc * 2) + player->head_angle;
 	if (player->idle_frame > M_PI && player->head_acc > 0 && delta - player->last_step >= 0.3)
@@ -71,9 +70,8 @@ void	idle_gun_animation(t_sdl *sdl, t_player *player, float delta)
 	if (player->idle_frame > M_PI * 2)
 		player->idle_frame = 0;
 	area.y = sdl->height - 130 - 550 + player->head_offset;
-
 	area.w = 96 * 5;
-	area.x = sdl->width / 2 - area.w + 200;
+	area.x = sdl->half_width - area.w + 200;
 	area.h = 116 * 5;
 	cur_frame %= 2;
 	if (cur_frame == 0)

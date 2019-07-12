@@ -39,48 +39,22 @@ void		fill_row(t_map *map, char **data, int row, t_player *player)
 {
 	int		col;
 	t_node	*node;
-	
+
 	col = 0;
 	while (col < map->cols)
 	{
 		node = &map->nodes[row][col];
 		node->visible = false;
-		node->collidable = 0;
+		node->collidable = false;
 		node->type = MAP_TYPE_EMPTY;
 		node->x = col;
 		node->y = row;
 		if (*data[col] >= '1' && *data[col] <= '9')
-		{
-			node->type = MAP_TYPE_WALL;
-			node->texture[0] = load_surf("walls/", data[col], "_n");
-			node->texture[1] = load_surf("walls/", data[col], "_s");
-			node->texture[2] = load_surf("walls/", data[col], "_w");
-			node->texture[3] = load_surf("walls/", data[col], "_e");
-			node->collidable = true;
-		}
+			map_type_wall(node, data[col]);
 		else if (*data[col] >= 'X' && *data[col] <= 'Z')
-		{
-			node->type = MAP_TYPE_INTERIOR;
-			node->texture[0] = load_surf("interior/", data[col], "");
-			node->collidable = true;
-			node->center.x = col * TEXTURE_SIZE + (TEXTURE_SIZE / 2);
-			node->center.y = row * TEXTURE_SIZE + (TEXTURE_SIZE / 2);
-			node->visible = false;
-			map->objects[map->objects_count++] = node;
-		}
+			map_type_interior(node, data[col], map);
 		else if (*data[col] == 'D')
-		{
-			node->type = MAP_TYPE_DOOR;
-			node->texture[0] = load_surf("doors/", data[col], "1");
-			node->door_frame = 0;
-			node->door_closing = false;
-			node->door_opening = false;
-			node->last_open = 0;
-			node->center.x = col * TEXTURE_SIZE + (TEXTURE_SIZE / 2);
-			node->center.y = row * TEXTURE_SIZE + (TEXTURE_SIZE / 2);
-			node->collidable = true;
-			map->doors[map->doors_count++] = node;
-		}
+			map_type_door(node, data[col], map);
 		else if (*data[col] == 'P')
 		{
 			player->y = row * TEXTURE_SIZE + (TEXTURE_SIZE / 2);
@@ -88,6 +62,28 @@ void		fill_row(t_map *map, char **data, int row, t_player *player)
 		}
 		col++;
 	}
+}
+
+void		scaled_number(t_map *map)
+{
+	int i;
+
+	i = 0;
+	map->true_doors = (t_node **)malloc(sizeof(t_node *) * map->doors_count);
+	map->true_objects = (t_node **)malloc(sizeof(t_node *) * map->objects_count);
+	while (i < map->doors_count)
+	{
+		map->true_doors[i] = map->doors[i];
+		i++;
+	}
+	i = 0;
+	while (i < map->objects_count)
+	{
+		map->true_objects[i] = map->objects[i];
+		i++;
+	}
+	free(map->doors);
+	free(map->objects);
 }
 
 void		map_read(int fd, t_map *map, t_player *player)
@@ -106,6 +102,7 @@ void		map_read(int fd, t_map *map, t_player *player)
 		ft_strdel(&line);
 		ft_delarr(data);
 	}
+	scaled_number(map);
 	close(fd);
 	ft_strdel(&line);
 }

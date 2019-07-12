@@ -1,23 +1,5 @@
 #include "wolf3d.h"
 
-SDL_Texture	*load_texture(t_sdl *sdl, char *name)
-{
-	char		file_path[50];
-	SDL_Surface	*surface;
-	SDL_Texture	*texture;
-	Uint32		key;
-
-	ft_strcpy(file_path, "../resources/");
-	ft_strcat(file_path, name);
-	ft_strcat(file_path, ".bmp");
-	surface = SDL_LoadBMP(file_path);
-	key = SDL_MapRGB(surface->format, 152, 0, 136);
-	SDL_SetColorKey(surface, SDL_TRUE, key);
-	texture = SDL_CreateTextureFromSurface(sdl->renderer, surface);
-	SDL_FreeSurface(surface);
-	return (texture);
-}
-
 int			draw_back(t_sdl *sdl, int y, int x, int end)
 {
 	int		offset;
@@ -35,11 +17,11 @@ void	draw_floor(t_app *app, t_ipoint tile, int x, int y)
 {
 	SDL_Color c;
 
-	if (y > 0 &&
-		y < app->sdl->height - app->sdl->height / 5)
+	if (y > 0 && y < app->sdl->height - app->sdl->height / 5)
 	{
 		get_color(app->textures->floors, &c, tile.x, tile.y);
-		shade_color(app->diag_dist[y - (int)app->player->head_offset], &c, app->sdl->draw_dist - 100);
+		shade_color(app->diag_dist[y - (int)app->player->head_offset],
+				&c, app->sdl->draw_dist - 100);
 		set_pixel(app->sdl, x, y, &c);
 	}
 }
@@ -52,15 +34,16 @@ void	draw_ceiling(t_app *app, t_ipoint tile, int x, int y)
 		app->sdl->height - y < app->sdl->height)
 	{
 		get_color(app->textures->ceilings, &c, tile.x, tile.y);
-		shade_color(app->diag_dist[y + (int)app->player->head_offset], &c, app->sdl->draw_dist - 100);
+		shade_color(app->diag_dist[y + (int)app->player->head_offset],
+				&c, app->sdl->draw_dist - 100);
 		set_pixel(app->sdl, x, app->sdl->height - y, &c);
 	}
 }
 
 void	floor_and_ceiling(t_app *app, int x, int y, float angle)
 {
-	t_fpoint end;
 	t_ipoint cell;
+	t_fpoint end;
 	t_ipoint tile;
 
 	angle = angle * M_PI_180;
@@ -77,14 +60,14 @@ void	floor_and_ceiling(t_app *app, int x, int y, float angle)
 		{
 			tile.y = (int)end.y % 64;
 			tile.x = (int)end.x % 64;
-			draw_floor(app, tile, x, y + app->player->head_offset);
-			draw_ceiling(app, tile, x, y - app->player->head_offset);
+			draw_floor(app, tile, x, (int)(y + app->player->head_offset));
+			draw_ceiling(app, tile, x, (int)(y - app->player->head_offset));
 		}
 		y++;
 	}
 }
 
-void		draw_object(t_app *app, t_node *obj)
+/*void		draw_object(t_app *app, t_node *obj)
 {
 	t_ipoint	start;
 	t_ipoint	end;
@@ -108,7 +91,6 @@ void		draw_object(t_app *app, t_node *obj)
 			int			texture_x;
 			int			texture_y;
 			SDL_Color	color;
-
 			texture_x = (end.x - x) * 64.0 / obj->height;
 			texture_y = 64.0 - (end.y - y) * 64.0 / obj->height;
 			get_color(obj->texture[0], &color, texture_x, texture_y);
@@ -116,7 +98,46 @@ void		draw_object(t_app *app, t_node *obj)
 				y + app->player->head_offset >= 0 && y + app->player->head_offset < app->sdl->height)
 			{
 				shade_color(obj->dist + 150, &color, app->sdl->draw_dist);
-				set_pixel(app->sdl, x, y + app->player->head_offset, &color);
+				set_pixel(app->sdl, x, (int)(y + app->player->head_offset), &color);
+			}
+			y++;
+		}
+		x++;
+	}
+}*/
+
+void		draw_object(t_sdl *sdl,t_player *player, t_node *obj)
+{
+	t_ipoint	start;
+	t_ipoint	end;
+	int			x;
+	int			y;
+
+	start.x = obj->screen_x - obj->height * 0.5;
+	start.y = sdl->half_height - obj->height * 0.5;
+	end.x = start.x + obj->height;
+	end.y = start.y + obj->height;
+	if (start.y < 0)
+		start.y = 0;
+	if (end.y > sdl->height)
+		start.y = sdl->height;
+	x = start.x;
+	while (x < end.x)
+	{
+		y = start.y;
+		while (sdl->dist_per_x[x] > obj->dist && y < end.y)
+		{
+			int			texture_x;
+			int			texture_y;
+			SDL_Color	color;
+			texture_x = (end.x - x) * 64.0 / obj->height;
+			texture_y = 64.0 - (end.y - y) * 64.0 / obj->height;
+			get_color(obj->texture[0], &color, texture_x, texture_y);
+			if (!(color.r == 152 && color.g == 0 && color.b == 136) &&
+				y + player->head_offset >= 0 && y + player->head_offset < sdl->height)
+			{
+				shade_color(obj->dist + 150, &color, sdl->draw_dist);
+				set_pixel(sdl, x, (int)(y + player->head_offset), &color);
 			}
 			y++;
 		}
@@ -124,24 +145,25 @@ void		draw_object(t_app *app, t_node *obj)
 	}
 }
 
-void		draw_column(t_app *app, t_ray *ray, int x, int height, float angle)
+void		draw_column(t_app *app, t_ray *ray, int x, float angle)
 {
-	int			y;
 	int			begin;
-	int			end;
-	double		ratio;
 	SDL_Color	color;
+	int			end;
+	int			slice_height;
+	int			y;
 
-	ratio = 64.0 / height;
-	begin = (app->sdl->height - height) * 0.5 + app->player->head_offset;
-	if ((end = begin + height) > app->sdl->height)
+	slice_height = (int)(64 / ray->dist * app->sdl->dist_to_pp);
+	begin = (app->sdl->height - slice_height) * 0.5 + app->player->head_offset;
+	if ((end = begin + slice_height) > app->sdl->height)
 		end = app->sdl->height;
 	y = (begin < 0) ? 0 : begin;
 	if (ray->dist > app->sdl->draw_dist)
 		y = draw_back(app->sdl, y, x, end);
 	while (y < end)
 	{
-		get_color(ray->texture, &color, ray->offset, (y - begin) * ratio);
+		get_color(ray->texture, &color, ray->offset,
+				(y - begin) * 64.0 / slice_height);
 		if (!(color.r == 152 && color.g == 0 && color.b == 136))
 		{
 			shade_color(ray->dist, &color, app->sdl->draw_dist);
@@ -149,6 +171,6 @@ void		draw_column(t_app *app, t_ray *ray, int x, int height, float angle)
 		}
 		y++;
 	}
-	floor_and_ceiling(app, x, end - app->player->head_offset, angle);
+	floor_and_ceiling(app, x, (int)(end - app->player->head_offset), angle);
 	app->dist_per_x[x] = ray->dist;
 }

@@ -1,32 +1,5 @@
 #include "wolf3d.h"
 
-void	gun_shoot(t_sdl *sdl, t_player *player, float delta)
-{
-	SDL_Rect		area;
-	int				cur_frame;
-	unsigned char	id;
-
-	cur_frame = (int)(delta * 14.0) % 11 + 1;
-	id = player->cur_weapon;
-	area.y = sdl->height - 130 - 550;
-	area.w = 96 * 5;
-	area.x = sdl->width / 2 - area.w + 200;
-	area.h = 116 * 5;
-	printf("SHOOT: FRAME %d\n", cur_frame);
-	if (cur_frame == 3 && !player->weapon[id].fired)
-	{
-		player->weapon[id].fired++;
-		player->weapon[id].ammo_cur--;
-	}
-	else if (cur_frame > 10)
-	{
-		player->anim_is_done = 1;
-		SDL_RenderCopy(sdl->renderer, player->weapon[id].sprites[1], NULL, &area);
-		return ;
-	}
-	SDL_RenderCopy(sdl->renderer, player->weapon[id].sprites[cur_frame], NULL, &area);
-}
-
 void	gun_change_down(t_sdl *sdl, t_player *player, unsigned char next_id, float delta)
 {
 	SDL_Rect		area;
@@ -37,7 +10,7 @@ void	gun_change_down(t_sdl *sdl, t_player *player, unsigned char next_id, float 
 	id = player->cur_weapon;
 	area.y = sdl->height - 130 - 550 + cur_frame;
 	area.w = 96 * 5;
-	area.x = sdl->width / 2 - area.w + 200;
+	area.x = sdl->half_width - area.w + 200;
 	area.h = 116 * 5;
 	printf("CHANGE: FRAME %d\n", cur_frame);
 	SDL_RenderCopy(sdl->renderer, player->weapon[id].sprites[1], NULL, &area);
@@ -58,7 +31,7 @@ void	gun_change_up(t_sdl *sdl, t_player *player, float delta)
 	id = player->cur_weapon;
 	area.y = sdl->height - 130 - 180 - cur_frame;
 	area.w = 96 * 5;
-	area.x = sdl->width / 2 - area.w + 200;
+	area.x = sdl->half_width - area.w + 200;
 	area.h = 116 * 5;
 	printf("CHANGE: FRAME %d\n", cur_frame);
 	SDL_RenderCopy(sdl->renderer, player->weapon[id].sprites[1], NULL, &area);
@@ -94,7 +67,7 @@ void	gun_reload_down(t_sdl *sdl, t_player *player, float delta)
 	id = player->cur_weapon;
 	area.y = sdl->height - 130 - 550 + cur_frame;
 	area.w = 96 * 5;
-	area.x = sdl->width / 2 - area.w + 200;
+	area.x = sdl->half_width - area.w + 200;
 	area.h = 116 * 5;
 	printf("RELOAD: FRAME %d\n", cur_frame);
 	SDL_RenderCopy(sdl->renderer, player->weapon[id].sprites[1], NULL, &area);

@@ -1,46 +1,6 @@
 #include "wolf3d.h"
 
-static	void	player_shoot(t_player *player, float frame)
-{
-	if (player->weapon[player->cur_weapon].ammo_cur > 0 && player->anim_frame == 0)
-	{
-		printf("SHOOT: START\n");
-		player->anim_frame = frame;
-		player->anim_is_done = 0;
-		player->shooting = 1;
-		Mix_PlayChannel(-1, player->weapon[player->cur_weapon].gun_sound, 0);
-	}
-	else if (player->anim_frame == 0 && player->weapon[player->cur_weapon].ammo_cur == 0)
-	{
-		Mix_PlayChannel(-1, player->fx_empty, 0);
-		player->last_shift = frame;
-	}
-}
-
-static	void	player_change_weapon(t_player *player, float frame)
-{
-	printf("CHANGE: START\n");
-	player->anim_frame = frame;
-	player->anim_is_done = 0;
-	player->changing = 1;
-}
-
-static	void	player_reloading(t_player *player, float frame)
-{
-	unsigned char	id;
-
-	id = player->cur_weapon;
-	if (player->weapon[id].ammo_cur < player->weapon[id].ammo_max && player->weapon[id].mag_cur > 0)
-	{
-		printf("RELOAD: START\n");
-		player->anim_frame = frame;
-		player->anim_is_done = 0;
-		player->reloading = 1;
-		Mix_PlayChannel(-1, player->fx_reload, 0);
-	}
-}
-
-int			is_move_input(const Uint8 *key)
+static int			is_move_input(const Uint8 *key)
 {
 	if (key[SDL_SCANCODE_W])
 		return (1);
@@ -80,4 +40,17 @@ void			keyboard_input(t_app *app, float frame)
 		update_sound(key, app->sfx);
 	if (key[SDL_SCANCODE_BACKSPACE])
 		SDL_SetRelativeMouseMode(!SDL_GetRelativeMouseMode());
+}
+
+void		player_rotate(t_player *player, const Uint8 *state)
+{
+	if (state[SDL_SCANCODE_LEFT])
+		(player->direction -= player->speed * 0.5) < 0 ? player->direction = 359 : 0;
+	if (state[SDL_SCANCODE_RIGHT])
+		(player->direction += player->speed * 0.5) > 359 ? player->direction = 1 : 0;
+	if (state[SDL_SCANCODE_LEFT] || state[SDL_SCANCODE_RIGHT])
+	{
+		player->x_v = cos(player->direction * M_PI_180);
+		player->y_v = sin(player->direction * M_PI_180);
+	}
 }
