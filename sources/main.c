@@ -19,19 +19,32 @@ void		player_debug(t_app *app)
 //		printf("sensetivity -> %f\n", app->inputs->sensetivity);
 //	}
 
-	if (key[SDL_SCANCODE_EQUALS] &&
-		app->player->obj_dist < (64 * 5))
-		app->player->obj_dist += 5;
-	if (key[SDL_SCANCODE_MINUS] &&
-		app->player->obj_dist > 0)
-		app->player->obj_dist -= 5;
+//	if (key[SDL_SCANCODE_EQUALS] &&
+//		app->player->obj_dist < (64 * 5))
+//		app->player->obj_dist += 5;
+//	if (key[SDL_SCANCODE_MINUS] &&
+//		app->player->obj_dist > 0)
+//		app->player->obj_dist -= 5;
+//	if (key[SDL_SCANCODE_EQUALS] || key[SDL_SCANCODE_MINUS])
+//	{
+//		if (app->player->obj_dist < 0)
+//			app->player->obj_dist = 0;
+//		if (app->player->obj_dist > 64 * 5)
+//			app->player->obj_dist = 64 * 5;
+//		printf("obj_dist -> %f\n", app->player->obj_dist);
+//	}
+
+	if (key[SDL_SCANCODE_EQUALS])
+		app->debug_angle++;
+	if (key[SDL_SCANCODE_MINUS])
+		app->debug_angle--;
 	if (key[SDL_SCANCODE_EQUALS] || key[SDL_SCANCODE_MINUS])
 	{
-		if (app->player->obj_dist < 0)
-			app->player->obj_dist = 0;
-		if (app->player->obj_dist > 64 * 5)
-			app->player->obj_dist = 64 * 5;
-		printf("obj_dist -> %f\n", app->player->obj_dist);
+		if (app->debug_angle < 0)
+			app->debug_angle = 359;
+		if (app->debug_angle > 359)
+			app->debug_angle = 0;
+		printf("debug -> %f\n", app->debug_angle);
 	}
 }
 
@@ -55,15 +68,35 @@ void		on_mouse_update(t_app *app)
 		app->player->head_angle += app->inputs->y * 0.1 * app->time->delta;
 }
 
+void fill_object(t_app *app, t_node *object)
+{
+	int dx;
+	int dy;
+	float object_angle;
+
+	dx = object->center.x - app->player->x;
+	dy = object->center.y - app->player->y;
+	object_angle = atan2f(dy, dx) - (app->player->direction * M_PI_180);
+	object->dist = sqrtf(dx*dx + dy*dy);
+	object->screen_x = tanf(object_angle) * app->sdl->dist_to_pp + app->sdl->half_width;
+	object->height = (int)(64 / object->dist * app->sdl->dist_to_pp);
+}
+
 void update_objects(t_app *app)
 {
 	int		i;
+	t_node 	*object;
 
 	i = 0;
 	while (i < app->map->objects_count)
 	{
-		if (app->map->objects[i]->visible)
-			draw_object(app, app->map->objects[i]);
+		object = app->map->objects[i];
+		object->visible = 1;
+		if (object->visible)
+		{
+			fill_object(app, object);
+			draw_object(app, object);
+		}
 		i++;
 	}
 }
@@ -74,7 +107,12 @@ void		reset_objects(t_app *app)
 
 	i = 0;
 	while (i < app->map->objects_count)
+	{
+		app->map->objects[i]->screen_x = -1;
+		app->map->objects[i]->height = -1;
+		app->map->objects[i]->dist = -1;
 		app->map->objects[i++]->visible = false;
+	}
 }
 
 void		start_the_game(t_app *app)

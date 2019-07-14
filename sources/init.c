@@ -15,12 +15,18 @@ static	void	check_for_init_errors(void)
 void	fill_diag_dist(t_app *app)
 {
 	int row;
+	float step;
+	float angle;
 
+	angle = 30.0 * M_PI_180;
+	step = (60.0 / app->sdl->width) * M_PI_180;
 	app->diag_dist = (float *)malloc(sizeof(float) * app->sdl->height);
 	row = app->sdl->height;
 	while (row >= 0)
 	{
-		app->diag_dist[row] = app->sdl->dist_to_pp * 32.0 / (row - app->sdl->height / 2);
+		app->diag_dist[row] = app->sdl->dist_to_pp * 32.0 / (row - app->sdl->height * 0.5);
+		app->diag_dist[row] *= cosf(angle);
+		angle -= step;
 		row--;
 	}
 }
@@ -52,10 +58,11 @@ static	void	init_sdl(t_sdl *sdl)
 	sdl->height = 720;
 	sdl->half_height = (int)(sdl->height * 0.5);
 	sdl->fov = 3.14159 / 3.0;
-	sdl->dist_to_pp = (int) (sdl->width / (tan(sdl->fov / 2.0) * 2.0));
+	sdl->dist_to_pp = (int)(sdl->width / (tan(sdl->fov / 2.0) * 2.0));
+	sdl->dist_to_pp = (int)((float)sdl->half_width / tanf(sdl->fov * 0.5));
 	sdl->draw_dist = 840;
-	sdl->pixels = (Uint32 *) malloc(sizeof(Uint32) * sdl->width * sdl->height);
-	sdl->dist_per_x = (float *) malloc(sizeof(float) * sdl->width);
+	sdl->pixels = (Uint32 *)malloc(sizeof(Uint32) * sdl->width * sdl->height);
+	sdl->dist_per_x = (float *)malloc(sizeof(float) * sdl->width);
 }
 
 void			init(t_app *app)
@@ -75,4 +82,5 @@ void			init(t_app *app)
 	app->sfx->door_open_close = Mix_LoadWAV("../resources/sounds/door_open_close.wav");
 	app->sfx->door_move = Mix_LoadWAV("../resources/sounds/door_move.wav");
 	app->inputs->sensetivity = 1.5;
+	app->debug_angle = 90;
 }

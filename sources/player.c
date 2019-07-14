@@ -139,6 +139,7 @@ void		player_rotate(t_player *player, const Uint8 *state)
 	{
 		player->x_v = cos(player->direction * M_PI_180);
 		player->y_v = sin(player->direction * M_PI_180);
+		printf("dir - %f\n", player->direction);
 	}
 
 	//Test

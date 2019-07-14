@@ -75,8 +75,8 @@ void	floor_and_ceiling(t_app *app, int x, int y, float angle)
 		if (cell.x >= 0 && cell.y >= 0 &&
 			cell.x < app->map->cols && cell.y < app->map->rows)
 		{
-			tile.y = (int)end.y % 64;
-			tile.x = (int)end.x % 64;
+			tile.y = ((int)end.y % 64);
+			tile.x = ((int)end.x % 64);
 			draw_floor(app, tile, x, y + app->player->head_offset);
 			draw_ceiling(app, tile, x, y - app->player->head_offset);
 		}
@@ -90,27 +90,27 @@ void		draw_object(t_app *app, t_node *obj)
 	t_ipoint	end;
 	int			x;
 	int			y;
-
+	
 	start.x = obj->screen_x - obj->height * 0.5;
 	start.y = app->sdl->half_height - obj->height * 0.5;
 	end.x = start.x + obj->height;
+	if (end.x > app->sdl->width)
+		end.x = app->sdl->width;
 	end.y = start.y + obj->height;
-	if (start.y < 0)
-		start.y = 0;
 	if (end.y > app->sdl->height)
-		start.y = app->sdl->height;
-	x = start.x;
+		end.y = app->sdl->height;
+	if ((x = start.x) < 0) x = 0;
 	while (x < end.x)
 	{
-		y = start.y;
+		if ((y = start.y) < 0) y = 0;
 		while (app->sdl->dist_per_x[x] > obj->dist && y < end.y)
 		{
 			int			texture_x;
 			int			texture_y;
 			SDL_Color	color;
 
-			texture_x = (end.x - x) * 64.0 / obj->height;
-			texture_y = 64.0 - (end.y - y) * 64.0 / obj->height;
+			texture_x = (x - start.x) * 64.0 / obj->height;
+			texture_y = (y - start.y) * 64.0 / obj->height;
 			get_color(obj->texture[0], &color, texture_x, texture_y);
 			if (!(color.r == 152 && color.g == 0 && color.b == 136) &&
 				y + app->player->head_offset >= 0 && y + app->player->head_offset < app->sdl->height)

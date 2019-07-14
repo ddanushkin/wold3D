@@ -206,6 +206,7 @@ typedef struct		s_app
 	float 			*diag_dist;
 	float 			*dist_per_x;
 	float 			spec_dist;
+	float 			debug_angle;
 }					t_app;
 
 typedef struct		s_color

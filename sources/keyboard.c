@@ -59,9 +59,15 @@ void			keyboard_input(t_app *app, float frame)
 
 	key = app->inputs->keyboard;
 	if (is_move_input(key) && app->player->move_acc < 5)
-		app->player->move_acc += 0.2;
+	{
+		app->player->move_acc = 2;
+		//app->player->move_acc += 0.2;
+	}
 	else if (!is_move_input(key) && app->player->move_acc > 0)
-		app->player->move_acc -= 0.8;
+	{
+		app->player->move_acc = 0;
+		//app->player->move_acc -= 0.8;
+	}
 	if (app->player->move_acc > 0)
 		app->player->speed = 50.0 * app->player->move_acc * app->time->delta;
 	if (app->player->speed > 0)

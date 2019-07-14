@@ -66,6 +66,7 @@ void		fill_row(t_map *map, char **data, int row, t_player *player)
 			node->center.x = col * TEXTURE_SIZE + (TEXTURE_SIZE / 2);
 			node->center.y = row * TEXTURE_SIZE + (TEXTURE_SIZE / 2);
 			node->visible = false;
+			node->screen_x = 0;
 			map->objects[map->objects_count++] = node;
 		}
 		else if (*data[col] == 'D')
