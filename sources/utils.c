@@ -21,25 +21,3 @@ int		check_for_quit(t_app *app)
 		return (1);
 	return (0);
 }
-
-void		update_objects(t_app *app)
-{
-	int		i;
-
-	i = 0;
-	while (i < app->map->objects_count)
-	{
-		if (app->map->true_objects[i]->visible)
-			draw_object(app->sdl, app->player, app->map->true_objects[i]);
-		i++;
-	}
-}
-
-void		reset_objects(t_map *map)
-{
-	int		i;
-
-	i = 0;
-	while (i < map->objects_count)
-		map->true_objects[i++]->visible = false;
-}

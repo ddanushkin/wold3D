@@ -157,8 +157,6 @@ t_ray	*get_ray(t_app *app, int x, float angle)
 	angle = angle * M_PI_180;
 	horz = init_horz(app->player, angle);
 	vert = init_vert(app->player, angle);
-	horz->screen_x = x;
-	vert->screen_x = x;
 	result = choose_ray(app, horz, vert, angle);
 	calc_ray_data(app, result, angle);
 	app->sdl->dist_per_x[x] = result->dist;
@@ -170,6 +168,7 @@ void	cast_single_ray(t_app *app, int x, float angle)
 	t_ray	*ray;
 
 	ray = get_ray(app, x, angle);
+	ray->height = 64.0 / ray->dist * app->sdl->dist_to_pp;
 	draw_column(app, ray, x, angle);
 	free(ray);
 }

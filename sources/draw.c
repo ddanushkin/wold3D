@@ -1,24 +1,6 @@
 #include "wolf3d.h"
 
-SDL_Texture	*load_texture(t_sdl *sdl, char *name)
-{
-	char		file_path[50];
-	SDL_Surface	*surface;
-	SDL_Texture	*texture;
-	Uint32		key;
-
-	ft_strcpy(file_path, "../resources/");
-	ft_strcat(file_path, name);
-	ft_strcat(file_path, ".bmp");
-	surface = SDL_LoadBMP(file_path);
-	key = SDL_MapRGB(surface->format, 152, 0, 136);
-	SDL_SetColorKey(surface, SDL_TRUE, key);
-	texture = SDL_CreateTextureFromSurface(sdl->renderer, surface);
-	SDL_FreeSurface(surface);
-	return (texture);
-}
-
-int			draw_back(t_sdl *sdl, int y, int x, int end)
+int		draw_back(t_sdl *sdl, int y, int x, int end)
 {
 	int		offset;
 
@@ -85,71 +67,30 @@ void	floor_and_ceiling(t_app *app, int x, int y, float angle)
 	}
 }
 
-void		draw_object(t_app *app, t_node *obj)
+void	draw_column(t_app *app, t_ray *ray, int x, float angle)
 {
-	t_ipoint	start;
-	t_ipoint	end;
-	int			x;
-	int			y;
-
-	start.x = obj->screen_x - obj->height * 0.5;
-	start.y = app->sdl->half_height - obj->height * 0.5;
-	end.x = start.x + obj->height;
-	if (end.x > app->sdl->width)
-		end.x = app->sdl->width;
-	end.y = start.y + obj->height;
-	if (end.y > app->sdl->height)
-		end.y = app->sdl->height;
-	if ((x = start.x) < 0) x = 0;
-	while (x < end.x)
-	{
-		if ((y = start.y) < 0) y = 0;
-		while (app->sdl->dist_per_x[x] > obj->dist && y < end.y)
-		{
-			int			texture_x;
-			int			texture_y;
-			SDL_Color	color;
-
-			texture_x = (x - start.x) * 64.0 / obj->height;
-			texture_y = (y - start.y) * 64.0 / obj->height;
-			get_color(obj->texture[0], &color, texture_x, texture_y);
-			if (!(color.r == 152 && color.g == 0 && color.b == 136) &&
-				y + app->player->head_offset >= 0 && y + app->player->head_offset < app->sdl->height)
-			{
-				shade_color(obj->dist + 150, &color, app->sdl->draw_dist);
-				set_pixel(app->sdl, x, y + app->player->head_offset, &color);
-			}
-			y++;
-		}
-		x++;
-	}
-}
-
-void		draw_column(t_app *app, t_ray *ray, int x, int height, float angle)
-{
-	int			y;
-	int			begin;
-	int			end;
+	t_iiter		y;
 	double		ratio;
 	SDL_Color	color;
 
-	ratio = 64.0 / height;
-	begin = (app->sdl->height - height) * 0.5 + app->player->head_offset;
-	if ((end = begin + height) > app->sdl->height)
-		end = app->sdl->height;
-	y = (begin < 0) ? 0 : begin;
+	ratio = 64.0 / ray->height;
+	y.min = (app->sdl->height - ray->height) * 0.5 + app->player->head_offset;
+	y.max = y.min + ray->height;
+	if (y.max > app->sdl->height)
+		y.max = app->sdl->height;
+	y.cur = (y.min < 0) ? 0 : y.min;
 	if (ray->dist > app->sdl->draw_dist)
-		y = draw_back(app->sdl, y, x, end);
-	while (y < end)
+		y.cur = draw_back(app->sdl, y.cur, x, y.max);
+	while (y.cur < y.max)
 	{
-		get_color(ray->texture, &color, ray->offset, (y - begin) * ratio);
+		get_color(ray->texture, &color, ray->offset, (y.cur - y.min) * ratio);
 		if (!(color.r == 152 && color.g == 0 && color.b == 136))
 		{
 			shade_color(ray->dist, &color, app->sdl->draw_dist);
-			set_pixel(app->sdl, x, y, &color);
+			set_pixel(app->sdl, x, y.cur, &color);
 		}
-		y++;
+		y.cur++;
 	}
-	floor_and_ceiling(app, x, end - app->player->head_offset, angle);
+	floor_and_ceiling(app, x, y.max - app->player->head_offset, angle);
 	app->dist_per_x[x] = ray->dist;
 }

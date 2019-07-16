@@ -17,7 +17,7 @@ void		draw_text(SDL_Renderer *renderer, t_ui_elem *ui_elem)
 	TTF_Font		*font;
 
 	font = load_font(ui_elem->size);
-	color.r = 200;
+	color.r = 255;
 	color.g = 77;
 	color.b = 255;
 	color.a = 255;

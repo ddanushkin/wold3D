@@ -1,54 +1,5 @@
 #include "wolf3d.h"
 
-void		player_debug(t_app *app)
-{
-	const Uint8 *key;
-
-	key = app->inputs->keyboard;
-//	if (key[SDL_SCANCODE_EQUALS] &&
-//		app->inputs->sensitivity < 5)
-//		app->inputs->sensitivity += 0.1;
-//	if (key[SDL_SCANCODE_MINUS] &&
-//			app->inputs->sensitivity > 0)
-//		app->inputs->sensitivity -= 0.1;
-//	if (key[SDL_SCANCODE_EQUALS] || key[SDL_SCANCODE_MINUS])
-//	{
-//		if (app->inputs->sensitivity < 0)
-//			app->inputs->sensitivity = 0;
-//		if (app->inputs->sensitivity > 5)
-//			app->inputs->sensitivity = 5;
-//		printf("sensitivity -> %f\n", app->inputs->sensitivity);
-//	}
-
-//	if (key[SDL_SCANCODE_EQUALS] &&
-//		app->player->obj_dist < (64 * 5))
-//		app->player->obj_dist += 5;
-//	if (key[SDL_SCANCODE_MINUS] &&
-//		app->player->obj_dist > 0)
-//		app->player->obj_dist -= 5;
-//	if (key[SDL_SCANCODE_EQUALS] || key[SDL_SCANCODE_MINUS])
-//	{
-//		if (app->player->obj_dist < 0)
-//			app->player->obj_dist = 0;
-//		if (app->player->obj_dist > 64 * 5)
-//			app->player->obj_dist = 64 * 5;
-//		printf("obj_dist -> %f\n", app->player->obj_dist);
-//	}
-
-	if (key[SDL_SCANCODE_EQUALS])
-		app->debug_angle++;
-	if (key[SDL_SCANCODE_MINUS])
-		app->debug_angle--;
-	if (key[SDL_SCANCODE_EQUALS] || key[SDL_SCANCODE_MINUS])
-	{
-		if (app->debug_angle < 0)
-			app->debug_angle = 359;
-		if (app->debug_angle > 359)
-			app->debug_angle = 0;
-		printf("debug -> %f\n", app->debug_angle);
-	}
-}
-
 void		on_mouse_update(t_app *app)
 {
 	app->inputs->left_pressed =
@@ -69,55 +20,14 @@ void		on_mouse_update(t_app *app)
 		app->player->head_angle += app->inputs->y * 0.1 * app->time->delta;
 }
 
-void fill_object(t_app *app, t_node *object)
-{
-	int dx;
-	int dy;
-	float object_angle;
-
-	dx = object->center.x - app->player->x;
-	dy = object->center.y - app->player->y;
-	object_angle = atan2f(dy, dx) - (app->player->direction * M_PI_180);
-	object->dist = sqrtf(dx*dx + dy*dy);
-	object->screen_x = tanf(object_angle) * app->sdl->dist_to_pp + app->sdl->half_width;
-	object->height = (int)(64 / object->dist * app->sdl->dist_to_pp);
-}
-
-void update_objects(t_app *app)
-{
-	int		i;
-	t_node 	*object;
-
-	i = 0;
-	while (i < app->map->objects_count)
-	{
-		object = app->map->objects[i];
-		object->visible = 1;
-		if (object->visible)
-		{
-			fill_object(app, object);
-			draw_object(app, object);
-		}
-		i++;
-	}
-}
-
-void		reset_objects(t_app *app)
-{
-	int		i;
-
-	i = 0;
-	while (i < app->map->objects_count)
-	{
-		app->map->objects[i]->screen_x = -1;
-		app->map->objects[i]->height = -1;
-		app->map->objects[i]->dist = -1;
-		app->map->objects[i++]->visible = false;
-	}
-}
-
 void		start_the_game(t_app *app)
 {
+	#define FPS_INTERVAL 1.0 //seconds.
+
+	Uint32 fps_lasttime = SDL_GetTicks();
+	Uint32 fps_current = 0;
+	Uint32 fps_frames = 0;
+
 	init_time(app);
 	printf("SetRelativeMouseMode -> %d\n", SDL_SetRelativeMouseMode(SDL_TRUE));
 	app->inputs->keyboard = SDL_GetKeyboardState(NULL);
@@ -127,7 +37,6 @@ void		start_the_game(t_app *app)
 		SDL_PollEvent(&app->sdl->event);
 		if (check_for_quit(app) == 1)
 			break ;
-		//player_debug(app);
 		on_mouse_update(app);
 		keyboard_input(app, app->time->frame);
 		update_doors(app, app->time->frame);
@@ -135,6 +44,15 @@ void		start_the_game(t_app *app)
 		create_field_of_view(app);
 		update_objects(app);
 		redraw(app->sdl, app->player, app->time);
+		fps_frames++;
+		if (fps_lasttime < SDL_GetTicks() - FPS_INTERVAL * 1000)
+		{
+			fps_lasttime = SDL_GetTicks();
+			fps_current = fps_frames;
+			fps_frames = 0;
+		}
+		debug_show_fsp(app->sdl->renderer, fps_current);
+		SDL_RenderPresent(app->sdl->renderer);
 	}
 }
 

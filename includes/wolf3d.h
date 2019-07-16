@@ -37,6 +37,20 @@ typedef struct		s_dpoint
 	double			y;
 }					t_dpoint;
 
+typedef struct		s_iiter
+{
+	int				min;
+	int 			cur;
+	int 			max;
+}					t_iiter;
+
+typedef struct		s_timers
+{
+	float 			backspace;
+	float 			left_shift;
+	float 			space;
+}					t_timers;
+
 typedef	struct		s_time
 {
 	int				current;
@@ -97,19 +111,12 @@ typedef struct		s_ray
 	float			dist;
 	t_node			*node;
 	int				offset;
-	int 			screen_x;
 	t_fpoint		start;
 	t_fpoint 		step;
 	SDL_Surface		*texture;
 	int 			type;
+	float			height;
 }					t_ray;
-
-typedef struct		s_timers
-{
-	float 			backspace;
-	float 			left_shift;
-	float 			space;
-}					t_timers;
 
 typedef struct		s_player
 {
@@ -134,7 +141,6 @@ typedef struct		s_player
 	int 			lives;
 	int				max_dist;
 	float			move_acc;
-	float			obj_dist;
 	unsigned char	reloading;
 	int 			score;
 	unsigned char	shooting;
@@ -161,12 +167,12 @@ typedef struct		s_ui_elem
 typedef struct		s_map
 {
 	int 			cols;
+	int				rows;
+	t_node			**nodes;
 	t_node			**doors;
 	int				doors_count;
-	t_node			**nodes;
 	t_node			**objects;
 	int				objects_count;
-	int				rows;
 	t_node			**true_doors;
 	t_node			**true_objects;
 }					t_map;
@@ -208,6 +214,7 @@ typedef struct		s_app
 	t_sfx			*sfx;
 	t_textures		*textures;
 	t_time			*time;
+	float 			debug_angle;
 }					t_app;
 
 typedef struct		s_color
@@ -259,6 +266,9 @@ void				player_change_weapon(t_player *player, float frame);
 void				player_reloading(t_player *player, float frame);
 SDL_Texture			*load_sprite(t_sdl *sdl, char *folder_path, char *sprite_name);
 void				update_objects(t_app *app);
-void				reset_objects(t_map *map);
-void				draw_object(t_sdl *sdl,t_player *player, t_node *obj);
+void				reset_objects(t_app *app);
+void				draw_object(t_app *app, t_node *obj);
+
+void				debug_show_fsp(SDL_Renderer *renderer, int fps);
+void				debug_player(t_app *app);
 #endif

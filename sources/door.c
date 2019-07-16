@@ -6,8 +6,10 @@ static void		auto_close(t_app *app, t_node *door_node, float frame)
 
 	dist_to_player = 0;
 	if (door_node->last_open != 0)
-		dist_to_player = abs(door_node->center.x - app->player->x) + abs(door_node->center.y - app->player->y);
-	if (!door_node->door_opening && door_node->door_frame == 64 && frame - door_node->last_open >= 5 && dist_to_player >= 60)
+		dist_to_player = abs(door_node->center.x - app->player->x) +
+				abs(door_node->center.y - app->player->y);
+	if (!door_node->door_opening && door_node->door_frame == 64 &&
+		frame - door_node->last_open >= 5 && dist_to_player >= 60)
 	{
 		Mix_PlayChannel(2, app->sfx->door_move, 0);
 		door_node->last_open = 0;
@@ -23,8 +25,7 @@ void			update_doors(t_app *app, float frame)
 	i = 0;
 	while (i < app->map->doors_count)
 	{
-		//door_node = app->map->doors[i];
-		door_node = app->map->true_doors[i];
+		door_node = app->map->doors[i];
 		auto_close(app, door_node, frame);
 		door_node->door_frame -= door_node->door_closing ? 1 : 0;
 		door_node->door_frame += door_node->door_opening ? 1 : 0;

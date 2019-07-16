@@ -57,8 +57,8 @@ void		fill_row(t_map *map, char **data, int row, t_player *player)
 			map_type_door(node, data[col], map);
 		else if (*data[col] == 'P')
 		{
-			player->y = row * TEXTURE_SIZE + (TEXTURE_SIZE / 2);
-			player->x = col * TEXTURE_SIZE + (TEXTURE_SIZE / 2);
+			player->y = row * TEXTURE_SIZE + (TEXTURE_SIZE * 0.5);
+			player->x = col * TEXTURE_SIZE + (TEXTURE_SIZE * 0.5);
 		}
 		col++;
 	}
@@ -102,7 +102,7 @@ void		map_read(int fd, t_map *map, t_player *player)
 		ft_strdel(&line);
 		ft_delarr(data);
 	}
-	scaled_number(map);
+	//scaled_number(map);
 	close(fd);
 	ft_strdel(&line);
 }

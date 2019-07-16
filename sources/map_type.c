@@ -17,6 +17,7 @@ void		map_type_interior(t_node *node, char *data, t_map *map)
 	node->collidable = true;
 	node->center.x = node->x * TEXTURE_SIZE + (TEXTURE_SIZE / 2);
 	node->center.y = node->y * TEXTURE_SIZE + (TEXTURE_SIZE / 2);
+	node->visible = true;
 	map->objects[map->objects_count++] = node;
 }
 

@@ -93,5 +93,4 @@ void	redraw(t_sdl *sdl, t_player *player, t_time *time)
 		idle_gun_animation(sdl, player, time->frame);
 	create_hud(sdl, player);
 	draw_face(sdl, player, time->frame);
-	SDL_RenderPresent(sdl->renderer);
 }
