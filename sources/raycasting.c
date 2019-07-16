@@ -88,22 +88,6 @@ int		is_wall(t_app *app, t_ray *ray)
 		ray->node = node;
 		return (1);
 	}
-	if (node->type == MAP_TYPE_INTERIOR)
-	{
-		node->visible = true;
-		ray->start.x += ray->step.x * 0.5;
-		ray->start.y += ray->step.y * 0.5;
-		if ((ray->type == RAY_TYPE_HORZ && (int)(ray->start.x) % TEXTURE_SIZE == 31) ||
-			(ray->type == RAY_TYPE_VERT && (int)(ray->start.y) % TEXTURE_SIZE == 31))
-		{
-			node->dist = sqrtf(ft_powf(app->player->x - node->center.x, 2) + ft_powf(app->player->y - node->center.y, 2));
-			node->height = (int)(64 / node->dist * app->sdl->dist_to_pp);
-			node->screen_x = ray->screen_x;
-		}
-		ray->start.x -= ray->step.x * 0.5;
-		ray->start.y -= ray->step.y * 0.5;
-		return (0);
-	}
 	if (node->type == MAP_TYPE_WALL)
 	{
 		ray->node = node;
@@ -196,7 +180,7 @@ void	create_field_of_view(t_app *app)
 	float	next_angle;
 	int		x;
 
-	angle = app->player->direction - (60.0 / 2.0);
+	angle = app->player->direction - (float)(60*0.5);
 	next_angle = 60.0 / app->sdl->width;
 	x = 0;
 	while (x < app->sdl->width)

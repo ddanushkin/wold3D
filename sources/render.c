@@ -71,7 +71,7 @@ void	idle_gun_animation(t_sdl *sdl, t_player *player, float delta)
 		player->idle_frame = 0;
 	area.y = sdl->height - 130 - 550 + player->head_offset;
 	area.w = 96 * 5;
-	area.x = sdl->half_width - area.w + 200;
+	area.x = sdl->half_width - area.w + 244;
 	area.h = 116 * 5;
 	cur_frame %= 2;
 	if (cur_frame == 0)
