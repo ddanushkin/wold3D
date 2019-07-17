@@ -1,6 +1,6 @@
 #include "wolf3d.h"
 
-void	get_color(SDL_Surface *surface, SDL_Color *c, int x, int y)
+void	get_color(SDL_Surface *surface, t_color *c, int x, int y)
 {
 	Uint8	*data;
 
@@ -9,7 +9,7 @@ void	get_color(SDL_Surface *surface, SDL_Color *c, int x, int y)
 	SDL_GetRGB(*data, surface->format, &c->r, &c->g, &c->b);
 }
 
-void	shade_color(double dist, SDL_Color *color, double draw_dist)
+void	shade_color(double dist, t_color *color, double draw_dist)
 {
 	double	factor;
 
@@ -29,7 +29,7 @@ void	shade_color(double dist, SDL_Color *color, double draw_dist)
 	}
 }
 
-void	set_pixel(t_sdl *sdl, int x, int y, SDL_Color *col)
+void	set_pixel(t_sdl *sdl, int x, int y, t_color *col)
 {
 	int		offset;
 

@@ -61,7 +61,7 @@ void		get_sprites(t_sdl *sdl, SDL_Texture *sprites[], char *path)
 				continue ;
 			else
 			{
-				sprites[i++] = load_sprite(sdl, path, dir->d_name);
+				sprites[i++] = load_sprite(sdl->renderer, path, dir->d_name);
 				printf("Sprite loaded: %s\n", dir->d_name);
 			}
 		}
@@ -78,7 +78,7 @@ void		player_init(t_sdl *sdl, t_player *player)
 {
 	ft_bzero(player, sizeof(t_player));
 	player->anim_is_done = 1;
-	player->direction = 270;
+	player->direction = 90;
 	player->lives = 99;
 	player->health = 100;
 	player->max_dist = 25;
@@ -111,7 +111,6 @@ void		init_weapon(t_weapon *weapon, u_int ammo, float rate, char *sound)
 	ft_strcat(file_path, sound);
 	weapon->gun_sound = Mix_LoadWAV(file_path);
 }
-
 
 void		update_sound(const Uint8 *key, t_sfx *sfx)
 {

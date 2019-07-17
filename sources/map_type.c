@@ -19,6 +19,7 @@ void		map_type_interior(t_node *node, char *data, t_map *map)
 	node->center.y = node->y * TEXTURE_SIZE + (TEXTURE_SIZE / 2);
 	node->visible = true;
 	map->objects[map->objects_count++] = node;
+	node->screen_x = 0;
 }
 
 void		map_type_door(t_node *node, char *data, t_map *map)

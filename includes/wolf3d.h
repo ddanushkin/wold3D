@@ -18,6 +18,7 @@
 # define MAP_TYPE_DOOR 3
 # define RAY_TYPE_HORZ 1
 # define RAY_TYPE_VERT 0
+# define FPS_INTERVAL 1.0 //seconds.
 
 typedef struct		s_ipoint
 {
@@ -61,6 +62,7 @@ typedef	struct		s_time
 
 typedef struct		s_sdl
 {
+	float 			*diag_dist;
 	float			*dist_per_x;
 	int				dist_to_pp;
 	int 			draw_dist;
@@ -206,7 +208,6 @@ typedef struct		s_inputs
 typedef struct		s_app
 {
 	float 			*diag_dist;
-	float 			*dist_per_x;
 	t_inputs 		*inputs;
 	t_map			*map;
 	t_player		*player;
@@ -224,6 +225,13 @@ typedef struct		s_color
 	Uint8			b;
 }					t_color;
 
+typedef struct		s_fps
+{
+	Uint32			lasttime;
+	Uint32			current;
+	Uint32			frames;
+}					t_fps;
+
 void				init(t_app *app);
 void				map_read(int fd, t_map *map, t_player *player);
 void				ft_error(char *str);
@@ -232,15 +240,15 @@ void				draw_minimap(t_map *map, t_sdl *sdl, t_player *player);
 void				player_init(t_sdl *sdl, t_player *player);
 void				keyboard_input(t_app *app, float frame);
 void				create_field_of_view(t_app *app);
-void				shade_color(double dist, SDL_Color *color, double draw_dist);
-void				get_color(SDL_Surface *surface, SDL_Color *c, int x, int y);
-void				set_pixel(t_sdl *sdl, int x, int y, SDL_Color *c);
+void				get_color(SDL_Surface *surface, t_color *c, int x, int y);
+void				shade_color(double dist, t_color *color, double draw_dist);
+void				set_pixel(t_sdl *sdl, int x, int y, t_color *col);
 void				draw_obj_column(t_sdl *sdl, t_ray *ray, int x, int height);
-void				init_time(t_app *app);
+void				init_time(t_app *app, t_fps *fps);
 void				update_time(t_app *app);
 void				draw_text(SDL_Renderer	*renderer, t_ui_elem *ui_elem);
 void 				create_hud(t_sdl *sdl, t_player *player);
-SDL_Texture			*load_texture(t_sdl *sdl, char *name);
+SDL_Texture			*load_texture(SDL_Renderer * renderer, char *name);
 t_ray				*get_ray(t_app *app, int x, float angle);
 void				draw_face(t_sdl *sdl, t_player *player, float delta);
 void 				idle_gun_animation(t_sdl *sdl, t_player *player, float delta);
@@ -250,7 +258,7 @@ void 				gun_reload(t_sdl *sdl, t_player *player, float frame);
 void				get_weapon_sprites(t_sdl *sdl, t_weapon *weapon, char *weapon_folder);
 void				init_weapon(t_weapon *weapon, u_int ammo, float rate, char *sound);
 void				update_sound(const Uint8 *key, t_sfx *sfx);
-void				player_movement(t_map *map, const Uint8 *key, t_player *player);
+void				player_movement(t_node **nodes, const Uint8 *key, t_player *player);
 void				player_rotate(t_player *player, const Uint8 *state);
 void				redraw(t_sdl *sdl, t_player *player, t_time *time);
 int					check_for_quit(t_app *app);
@@ -264,11 +272,12 @@ void				map_type_door(t_node *node, char *data, t_map *map);
 void				player_shoot(t_player *player, float frame);
 void				player_change_weapon(t_player *player, float frame);
 void				player_reloading(t_player *player, float frame);
-SDL_Texture			*load_sprite(t_sdl *sdl, char *folder_path, char *sprite_name);
+SDL_Texture			*load_sprite(SDL_Renderer *renderer, char *folder_path, char *sprite_name);
 void				update_objects(t_app *app);
-void				reset_objects(t_app *app);
+void				reset_objects(t_map *map);
 void				draw_object(t_app *app, t_node *obj);
-
+void				on_mouse_update(t_inputs *inputs, t_player *player, float delta);
 void				debug_show_fsp(SDL_Renderer *renderer, int fps);
+void				get_fps(t_fps *fps, SDL_Renderer *renderer);
 void				debug_player(t_app *app);
 #endif

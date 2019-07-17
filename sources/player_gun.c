@@ -22,11 +22,11 @@ void	gun_shoot(t_sdl *sdl, t_player *player, float delta)
 	{
 		player->anim_is_done = 1;
 		SDL_RenderCopy(sdl->renderer, player->weapon[id].sprites[1],
-					   NULL, &area);
+			NULL, &area);
 		return ;
 	}
 	SDL_RenderCopy(sdl->renderer, player->weapon[id].sprites[cur_frame],
-				   NULL, &area);
+				NULL, &area);
 }
 
 void	player_shoot(t_player *player, float frame)

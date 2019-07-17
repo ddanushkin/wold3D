@@ -19,7 +19,6 @@ void		debug_player(t_app *app)
 //			app->inputs->sensitivity = 5;
 //		printf("sensitivity -> %f\n", app->inputs->sensitivity);
 //	}
-
 //	if (key[SDL_SCANCODE_EQUALS] &&
 //		app->player->obj_dist < (64 * 5))
 //		app->player->obj_dist += 5;

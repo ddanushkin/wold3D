@@ -76,7 +76,7 @@ void		update_health(SDL_Renderer *renderer, int health, t_ui_elem *ui_elem)
 void		update_ammo(SDL_Renderer *renderer, t_player *player, t_ui_elem *ui_elem)
 {
 	char	ammo_text[50];
-	char 	*divider;
+	char	*divider;
 	char	*ui_text;
 
 	ui_elem->x = 150 + 40 + 235 + 260 + 170;

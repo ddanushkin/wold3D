@@ -12,20 +12,20 @@ static	void	check_for_init_errors(void)
 		ft_error("TTF error");
 }
 
-void	fill_diag_dist(t_app *app)
+void	fill_diag_dist(t_sdl *sdl)
 {
-	int row;
-	float step;
-	float angle;
+	int		row;
+	float	step;
+	float	angle;
 
 	angle = 30.0 * M_PI_180;
-	step = (60.0 / app->sdl->width) * M_PI_180;
-	app->diag_dist = (float *)malloc(sizeof(float) * app->sdl->height);
-	row = app->sdl->height;
+	step = (60.0 / sdl->width) * M_PI_180;
+	sdl->diag_dist = (float *)malloc(sizeof(float) * sdl->height);
+	row = sdl->height;
 	while (row >= 0)
 	{
-		app->diag_dist[row] = app->sdl->dist_to_pp * 32.0 / (row - app->sdl->height * 0.5);
-		app->diag_dist[row] *= cosf(angle);
+		sdl->diag_dist[row] = sdl->dist_to_pp * 32.0 / (row - sdl->height * 0.5);
+		sdl->diag_dist[row] *= cosf(angle);
 		angle -= step;
 		row--;
 	}
@@ -46,11 +46,10 @@ static	void	create_stuff(t_app *app)
 	app->sdl->renderer = SDL_CreateRenderer(app->sdl->window, -1, flags);
 	app->sdl->texture = SDL_CreateTexture(app->sdl->renderer, format, access,
 			app->sdl->width, app->sdl->height);
-	app->sdl->ui = load_texture(app->sdl, "main_ui");
-	app->dist_per_x = (float *)malloc(sizeof(float) * app->sdl->width);
+	app->sdl->ui = load_texture(app->sdl->renderer, "main_ui");
 	app->textures->floors = load_surf("floors/", "1", "");
 	app->textures->ceilings = load_surf("ceilings/", "1", "");
-	fill_diag_dist(app);
+	fill_diag_dist(app->sdl);
 }
 
 static	void	init_sdl(t_sdl *sdl)
@@ -60,7 +59,6 @@ static	void	init_sdl(t_sdl *sdl)
 	sdl->height = 720;
 	sdl->half_height = (int)(sdl->height * 0.5);
 	sdl->fov = 3.14159 / 3.0;
-	sdl->dist_to_pp = (int)(sdl->width / (tan(sdl->fov / 2.0) * 2.0));
 	sdl->dist_to_pp = (int)((float)sdl->half_width / tanf(sdl->fov * 0.5));
 	sdl->draw_dist = 840;
 	sdl->pixels = (Uint32 *)malloc(sizeof(Uint32) * sdl->width * sdl->height);

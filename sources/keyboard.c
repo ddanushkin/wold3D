@@ -25,7 +25,7 @@ void		keyboard_input(t_app *app, float frame)
 	if (app->player->move_acc > 0)
 		app->player->speed = 50.0 * app->player->move_acc * app->time->delta;
 	if (app->player->speed > 0)
-		player_movement(app->map, key, app->player);
+		player_movement(app->map->nodes, key, app->player);
 	if (key[SDL_SCANCODE_LEFT] || key[SDL_SCANCODE_RIGHT])
 		player_rotate(app->player, key);
 	if (app->inputs->left_pressed && frame - app->player->last_shift >= 2.5)
@@ -46,13 +46,10 @@ void		player_rotate(t_player *player, const Uint8 *state)
 {
 	if (state[SDL_SCANCODE_LEFT])
 		(player->direction -= player->speed * 0.5) < 0 ?
-			player->direction = 359 : 0;
+			player->direction = 359 : player->direction--;
 	if (state[SDL_SCANCODE_RIGHT])
 		(player->direction += player->speed * 0.5) > 359 ?
-			player->direction = 1 : 0;
-	if (state[SDL_SCANCODE_LEFT] || state[SDL_SCANCODE_RIGHT])
-	{
-		player->x_v = cos(player->direction * M_PI_180);
-		player->y_v = sin(player->direction * M_PI_180);
-	}
+			player->direction = 1 : player->direction++;
+	player->x_v = cos(player->direction * M_PI_180);
+	player->y_v = sin(player->direction * M_PI_180);
 }

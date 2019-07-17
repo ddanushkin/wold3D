@@ -82,8 +82,8 @@ void		scaled_number(t_map *map)
 		map->true_objects[i] = map->objects[i];
 		i++;
 	}
-	free(map->doors);
-	free(map->objects);
+	//free(map->doors);
+	//free(map->objects);
 }
 
 void		map_read(int fd, t_map *map, t_player *player)
