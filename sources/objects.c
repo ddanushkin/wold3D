@@ -54,8 +54,20 @@ void	fill_object(t_sdl *sdl, t_player *player, t_node *object)
 	int		dy;
 	float	angle;
 
-	dx = object->center.x - player->x;
-	dy = object->center.y - player->y;
+	dx = player->x - object->center.x;
+	dy = player->y - object->center.y;
+	object->visible = true;
+	if (dy >= 0 && player->direction >= 35 && player->direction <= 145)
+		object->visible = false;
+	else if (dy < 0 && player->direction >= 215 && player->direction <= 325)
+		object->visible = false;
+	else if (dx >= 0 && ((player->direction >= 305 && player->direction <= 359)
+	|| (player->direction >= 0 && player->direction <= 55)))
+		object->visible = false;
+	else if (dx < 0 && player->direction >= 125 && player->direction <= 235)
+		object->visible = false;
+	if (!object->visible)
+		return ;
 	angle = atan2f(dy, dx) - (player->direction * M_PI_180);
 	object->dist = sqrtf(dx * dx + dy * dy);
 	object->screen_x = tanf(angle) * sdl->dist_to_pp + sdl->half_width;
@@ -71,11 +83,9 @@ void	update_objects(t_app *app)
 	while (i < app->map->objects_count)
 	{
 		object = app->map->objects[i];
+		fill_object(app->sdl, app->player, object);
 		if (object->visible)
-		{
-			fill_object(app->sdl, app->player, object);
 			draw_object(app, object);
-		}
 		i++;
 	}
 }
