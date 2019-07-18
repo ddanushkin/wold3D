@@ -10,7 +10,7 @@ void		map_type_wall(t_app *app, t_node *node, int index)
 	node->collidable = true;
 }
 
-void		map_type_interior(t_app *app, t_node *node, char *data)
+void		map_type_interior(t_app *app, t_node *node, int index)
 {
 	node->type = MAP_TYPE_INTERIOR;
 	node->texture[0] = app->textures->sprites[0];
@@ -22,7 +22,7 @@ void		map_type_interior(t_app *app, t_node *node, char *data)
 	node->screen_x = 0;
 }
 
-void		map_type_door(t_app *app, t_node *node, char *data)
+void		map_type_door(t_app *app, t_node *node, int index)
 {
 	node->type = MAP_TYPE_DOOR;
 	node->texture[0] = app->textures->doors[0];

@@ -18,7 +18,12 @@ void		map_init(int fd, t_map *map)
 	map->objects = (t_node **)malloc(sizeof(t_node *) * map->rows * map->cols);
 	map->objects_count = 0;
 	while (i < map->rows)
-		map->nodes[i++] = (t_node *)malloc(sizeof(t_node) * map->cols);
+	{
+		map->nodes[i] = (t_node *)malloc(sizeof(t_node) * map->cols);
+		map->nodes[i]->visible = false;
+		map->nodes[i]->collidable = false;
+		map->nodes[i++]->type = MAP_TYPE_EMPTY;
+	}
 	map->doors = (t_node **)malloc(sizeof(t_node *) * 100);
 	map->doors_count = 0;
 }
@@ -27,26 +32,23 @@ void		fill_row(t_app *app, char **data, int row)
 {
 	int		col;
 	t_node	*node;
-	char type;
-	int index;
+	int		index;
+	char	type;
 
 	col = 0;
 	while (col < app->map->cols)
 	{
-		type = *data[col];
-		index = ft_atoi((data[col] + 1)) - 1;
 		node = &app->map->nodes[row][col];
-		node->visible = false;
-		node->collidable = false;
-		node->type = MAP_TYPE_EMPTY;
 		node->x = col;
 		node->y = row;
+		index = ft_atoi((data[col] + 1)) - 1;
+		type = *data[col];
 		if (type == 'W')
 			map_type_wall(app, node, index);
 		else if (type == 'I')
-			map_type_interior(app, node, data[col]);
+			map_type_interior(app, node, index);
 		else if (type == 'D')
-			map_type_door(app, node, data[col]);
+			map_type_door(app, node, index);
 		else if (type == 'P')
 		{
 			app->player->y = row * TEXTURE_SIZE + (TEXTURE_SIZE * 0.5);
