@@ -17,21 +17,23 @@ void	fill_diag_dist(t_sdl *sdl)
 	int		row;
 	float	step;
 	float	angle;
+	float 	dist_32;
 
 	angle = 30.0 * M_PI_180;
+	dist_32 = sdl->dist_to_pp * 32;
 	step = (60.0 / sdl->width) * M_PI_180;
 	sdl->diag_dist = (float *)malloc(sizeof(float) * sdl->height);
 	row = sdl->height;
 	while (row >= 0)
 	{
-		sdl->diag_dist[row] = sdl->dist_to_pp * 32.0 / (row - sdl->height * 0.5);
+		sdl->diag_dist[row] = dist_32 / (row - sdl->half_height);
 		sdl->diag_dist[row] *= cosf(angle);
 		angle -= step;
 		row--;
 	}
 }
 
-static	void	create_stuff(t_app *app)
+static	void	create_stuff(t_sdl *sdl, t_textures *textures)
 {
 	int		access;
 	Uint32	flags;
@@ -41,15 +43,15 @@ static	void	create_stuff(t_app *app)
 	access = SDL_TEXTUREACCESS_STATIC;
 	flags = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
 	check_for_init_errors();
-	app->sdl->window = SDL_CreateWindow("SDL2", 0, 0,
-			app->sdl->width, app->sdl->height, 0);
-	app->sdl->renderer = SDL_CreateRenderer(app->sdl->window, -1, flags);
-	app->sdl->texture = SDL_CreateTexture(app->sdl->renderer, format, access,
-			app->sdl->width, app->sdl->height);
-	app->sdl->ui = load_texture(app->sdl->renderer, "main_ui");
-	app->textures->floors = load_surf("floors/", "1", "");
-	app->textures->ceilings = load_surf("ceilings/", "1", "");
-	fill_diag_dist(app->sdl);
+	sdl->window = SDL_CreateWindow("SDL2", 0, 0,
+			sdl->width, sdl->height, 0);
+	sdl->renderer = SDL_CreateRenderer(sdl->window, -1, flags);
+	sdl->texture = SDL_CreateTexture(sdl->renderer, format, access,
+			sdl->width, sdl->height);
+	sdl->ui = load_texture(sdl->renderer, "main_ui");
+	textures->floors = load_surf("floors/", "1", "");
+	textures->ceilings = load_surf("ceilings/", "1", "");
+	fill_diag_dist(sdl);
 }
 
 static	void	init_sdl(t_sdl *sdl)
@@ -80,7 +82,7 @@ void			init(t_app *app)
 {
 	malloc_stuff(app);
 	init_sdl(app->sdl);
-	create_stuff(app);
+	create_stuff(app->sdl, app->textures);
 	app->sfx->background = Mix_LoadMUS("../resources/sounds/bgm.mp3");
 	app->sfx->door_open = Mix_LoadWAV("../resources/sounds/door_open.wav");
 	app->sfx->door_move = Mix_LoadWAV("../resources/sounds/door_move.wav");

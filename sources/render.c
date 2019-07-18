@@ -79,18 +79,18 @@ void	idle_gun_animation(t_sdl *sdl, t_player *player, float delta)
 	SDL_RenderCopy(sdl->renderer, player->weapon[id].sprites[cur_frame], NULL, &area);
 }
 
-void	redraw(t_sdl *sdl, t_player *player, t_time *time)
+void	redraw(t_sdl *sdl, t_player *player, float frame)
 {
 	SDL_UpdateTexture(sdl->texture, NULL, sdl->pixels, sdl->width * sizeof(Uint32));
 	SDL_RenderCopy(sdl->renderer, sdl->texture, NULL, NULL);
 	if (player->shooting)
-		shooting_animation(sdl, player, time->frame);
+		shooting_animation(sdl, player, frame);
 	if (player->changing)
-		changing_animation(sdl, player, time->frame);
+		changing_animation(sdl, player, frame);
 	if (player->reloading)
-		reloading_animation(sdl, player, time->frame);
+		reloading_animation(sdl, player, frame);
 	if (player->anim_is_done)
-		idle_gun_animation(sdl, player, time->frame);
+		idle_gun_animation(sdl, player, frame);
 	create_hud(sdl, player);
-	draw_face(sdl, player, time->frame);
+	draw_face(sdl, player, frame);
 }

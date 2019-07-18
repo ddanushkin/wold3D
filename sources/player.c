@@ -89,12 +89,12 @@ void		player_init(t_sdl *sdl, t_player *player)
 	load_weapons(sdl, player);
 }
 
-void		get_weapon_sprites(t_sdl *sdl, t_weapon *weapon, char *weapon_folder)
+void		get_weapon_sprites(t_sdl *sdl, t_weapon *weapon, char *gun_path)
 {
 	char	folder_path[50];
 
 	ft_strcpy(folder_path, "../resources/weapons/");
-	ft_strcat(folder_path, weapon_folder);
+	ft_strcat(folder_path, gun_path);
 	get_sprites(sdl, weapon->sprites, folder_path);
 }
 

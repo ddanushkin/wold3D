@@ -18,15 +18,15 @@ SDL_Texture		*load_texture(SDL_Renderer *renderer, char *name)
 	return (texture);
 }
 
-SDL_Texture		*load_sprite(SDL_Renderer *renderer, char *folder_path, char *sprite_name)
+SDL_Texture		*load_sprite(SDL_Renderer *renderer, char *folder, char *sprite)
 {
 	char			file_path[50];
 	Uint32			key;
 	SDL_Surface		*surface;
 	SDL_Texture		*texture;
 
-	ft_strcpy(file_path, folder_path);
-	ft_strcat(file_path, sprite_name);
+	ft_strcpy(file_path, folder);
+	ft_strcat(file_path, sprite);
 	surface = SDL_LoadBMP(file_path);
 	key = SDL_MapRGB(surface->format, 152, 0, 136);
 	SDL_SetColorKey(surface, SDL_TRUE, key);

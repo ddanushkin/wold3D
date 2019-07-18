@@ -1,16 +1,16 @@
 #include "wolf3d.h"
 
-t_node		*get_node(t_map *map, float x, float y)
+t_node		*get_node(t_node **nodes, float x, float y)
 {
 	int ix;
 	int iy;
 
 	iy = (int)y / 64;
 	ix = (int)x / 64;
-	return (&map->nodes[iy][ix]);
+	return (&nodes[iy][ix]);
 }
 
-t_ray	*init_horz(int x, int y, float angle)
+t_ray		*init_horz(int x, int y, float angle)
 {
 	t_ray	*ray;
 
@@ -34,7 +34,7 @@ t_ray	*init_horz(int x, int y, float angle)
 	return (ray);
 }
 
-t_ray	*init_vert(t_player *player, float angle)
+t_ray	*init_vert(int x, int y, float angle)
 {
 	t_ray	*ray;
 
@@ -43,18 +43,18 @@ t_ray	*init_vert(t_player *player, float angle)
 	ray->type = RAY_TYPE_VERT;
 	if (cosf(angle) > 0)
 	{
-		ray->start.x = (player->x & 0xffc0) + 64.001;
+		ray->start.x = (x & 0xffc0) + 64.001;
 		ray->step.x = 64;
 	}
 	else if (cosf(angle) < 0)
 	{
-		ray->start.x = (player->x & 0xffc0) - 0.001;
+		ray->start.x = (x & 0xffc0) - 0.001;
 		ray->step.x = -64;
 	}
 	else
 		return (ray);
 	ray->step.y = -ray->step.x * tanf(-angle);
-	ray->start.y = player->y + (ray->start.x - player->x) * tanf(angle);
+	ray->start.y = y + (ray->start.x - x) * tanf(angle);
 	return (ray);
 }
 
@@ -66,7 +66,7 @@ int		is_wall(t_map *map, t_ray *ray)
 		return (1);
 	if (ray->start.x >= map->cols * 64 || ray->start.y >= map->rows * 64)
 		return (1);
-	node = get_node(map, ray->start.x, ray->start.y);
+	node = get_node(map->nodes, ray->start.x, ray->start.y);
 	if (node->type == MAP_TYPE_EMPTY)
 		return (0);
 	if (node->type == MAP_TYPE_DOOR)
@@ -125,7 +125,7 @@ void	calc_ray_data(t_player *player, t_ray *ray, float angle)
 		ray->offset = (int)ray->start.y % 64;
 		ray->texture = ray->node->texture[(cosf(angle) < 0 ? 3 : 2)];
 	}
-	ray->dist *= cosf(angle - player->direction * M_PI_180);
+	ray->dist *= cos(angle - player->direction * M_PI_180);
 }
 
 t_ray	*choose_ray(t_app *app, t_ray *horz, t_ray *vert, float angle)
@@ -162,7 +162,7 @@ t_ray	*get_ray(t_app *app, int x, float angle)
 
 	angle = angle * M_PI_180;
 	horz = init_horz(app->player->x, app->player->y, angle);
-	vert = init_vert(app->player, angle);
+	vert = init_vert(app->player->x, app->player->y, angle);
 	result = choose_ray(app, horz, vert, angle);
 	calc_ray_data(app->player, result, angle);
 	app->sdl->dist_per_x[x] = result->dist;
