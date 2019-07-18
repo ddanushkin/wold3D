@@ -79,18 +79,26 @@ void	idle_gun_animation(t_sdl *sdl, t_player *player, float delta)
 	SDL_RenderCopy(sdl->renderer, player->weapon[id].sprites[cur_frame], NULL, &area);
 }
 
-void	redraw(t_sdl *sdl, t_player *player, float frame)
+void	redraw(t_app *app, float frame)
 {
-	SDL_UpdateTexture(sdl->texture, NULL, sdl->pixels, sdl->width * sizeof(Uint32));
-	SDL_RenderCopy(sdl->renderer, sdl->texture, NULL, NULL);
-	if (player->shooting)
-		shooting_animation(sdl, player, frame);
-	if (player->changing)
-		changing_animation(sdl, player, frame);
-	if (player->reloading)
-		reloading_animation(sdl, player, frame);
-	if (player->anim_is_done)
-		idle_gun_animation(sdl, player, frame);
-	create_hud(sdl, player);
-	draw_face(sdl, player, frame);
+	SDL_Rect		screen;
+	int offset;
+
+	offset = app->inputs->right_pressed ? app->inputs->zoom : 100;
+	screen.x = -offset * 0.5;
+	screen.y = -offset * 0.5 + app->player->head_offset;
+	screen.w = app->sdl->width + offset;
+	screen.h = app->sdl->height + offset;
+	SDL_UpdateTexture(app->sdl->texture, NULL, app->sdl->pixels, app->sdl->width * sizeof(Uint32));
+	SDL_RenderCopy(app->sdl->renderer, app->sdl->texture, NULL, &screen);
+	if (app->player->shooting)
+		shooting_animation(app->sdl, app->player, frame);
+	if (app->player->changing)
+		changing_animation(app->sdl, app->player, frame);
+	if (app->player->reloading)
+		reloading_animation(app->sdl, app->player, frame);
+	if (app->player->anim_is_done)
+		idle_gun_animation(app->sdl, app->player, frame);
+	create_hud(app->sdl, app->player);
+	draw_face(app->sdl, app->player, frame);
 }

@@ -203,6 +203,7 @@ typedef struct		s_inputs
 	float			sensitivity;
 	int				x;
 	int				y;
+	int 			zoom;
 }					t_inputs;
 
 typedef struct		s_app
@@ -216,6 +217,7 @@ typedef struct		s_app
 	t_textures		*textures;
 	t_time			*time;
 	float 			debug_angle;
+	float 			debug_head_offset;
 }					t_app;
 
 typedef struct		s_color
@@ -259,7 +261,7 @@ void				init_weapon(t_weapon *weapon, u_int ammo, float rate, char *sound);
 void				update_sound(const Uint8 *key, t_sfx *sfx);
 void				player_movement(t_node **nodes, const Uint8 *key, t_player *player);
 void				player_rotate(t_player *player, const Uint8 *state);
-void				redraw(t_sdl *sdl, t_player *player, float time);
+void				redraw(t_app *app, float time);
 int					check_for_quit(SDL_Event *event, t_inputs *inputs);
 void				update_doors(t_app *app, float frame);
 void				door_interaction(t_app *app, float frame);
@@ -274,7 +276,7 @@ SDL_Texture			*load_sprite(SDL_Renderer *renderer, char *folder_path, char *spri
 void				update_objects(t_app *app);
 void				reset_objects(t_map *map);
 void				draw_object(t_app *app, t_node *obj);
-void				on_mouse_update(t_inputs *inputs, t_player *player, float delta);
+void				on_mouse_update(t_app *app);
 void				debug_show_fsp(SDL_Renderer *renderer, int fps);
 void				get_fps(t_fps *fps, SDL_Renderer *renderer);
 void				debug_player(t_app *app);

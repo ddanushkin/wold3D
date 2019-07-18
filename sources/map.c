@@ -18,14 +18,18 @@ void		map_init(int fd, t_map *map)
 	map->objects = (t_node **)malloc(sizeof(t_node *) * map->rows * map->cols);
 	map->objects_count = 0;
 	while (i < map->rows)
-	{
-		map->nodes[i] = (t_node *)malloc(sizeof(t_node) * map->cols);
-		map->nodes[i]->visible = false;
-		map->nodes[i]->collidable = false;
-		map->nodes[i++]->type = MAP_TYPE_EMPTY;
-	}
+		map->nodes[i++] = (t_node *)malloc(sizeof(t_node) * map->cols);
 	map->doors = (t_node **)malloc(sizeof(t_node *) * 100);
 	map->doors_count = 0;
+}
+
+void		node_reset(t_node *node, int row, int col)
+{
+	node->visible = false;
+	node->collidable = false;
+	node->type = MAP_TYPE_EMPTY;
+	node->x = col;
+	node->y = row;
 }
 
 void		fill_row(t_app *app, char **data, int row)
@@ -39,8 +43,7 @@ void		fill_row(t_app *app, char **data, int row)
 	while (col < app->map->cols)
 	{
 		node = &app->map->nodes[row][col];
-		node->x = col;
-		node->y = row;
+		node_reset(node, row, col);
 		index = ft_atoi((data[col] + 1)) - 1;
 		type = *data[col];
 		if (type == 'W')

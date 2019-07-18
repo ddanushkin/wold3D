@@ -9,18 +9,19 @@ void		start_the_game(t_app *app)
 	app->inputs->keyboard = SDL_GetKeyboardState(NULL);
 	while (1)
 	{
-		update_time(app->time);
 		SDL_PollEvent(&app->sdl->event);
+		update_time(app->time);
 		if (check_for_quit(&app->sdl->event, app->inputs) == 1)
 			break ;
-		on_mouse_update(app->inputs, app->player, app->time->delta);
+		on_mouse_update(app);
 		keyboard_input(app, app->time->frame);
+		debug_player(app);
 		update_doors(app, app->time->frame);
 		reset_objects(app->map);
 		create_field_of_view(app);
 		update_objects(app);
-		redraw(app->sdl, app->player, app->time->frame);
-		//get_fps(&fps, app->sdl->renderer);
+		redraw(app, app->time->frame);
+		get_fps(&fps, app->sdl->renderer);
 		SDL_RenderPresent(app->sdl->renderer);
 	}
 }

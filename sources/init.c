@@ -27,7 +27,7 @@ void	fill_diag_dist(t_sdl *sdl)
 	while (row >= 0)
 	{
 		sdl->diag_dist[row] = dist_32 / (row - sdl->half_height);
-		sdl->diag_dist[row] *= cosf(angle);
+		sdl->diag_dist[row] /= cosf(angle);
 		angle -= step;
 		row--;
 	}
@@ -95,5 +95,6 @@ void			init(t_app *app)
 	app->sfx->door_open = Mix_LoadWAV("../resources/sounds/door_open.wav");
 	app->sfx->door_move = Mix_LoadWAV("../resources/sounds/door_move.wav");
 	app->inputs->sensitivity = 1.5;
-	app->debug_angle = 90;
+	app->inputs->zoom = 500;
+	app->debug_angle = 0;
 }

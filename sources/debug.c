@@ -34,17 +34,11 @@ void		debug_player(t_app *app)
 //		printf("obj_dist -> %f\n", app->player->obj_dist);
 //	}
 	if (key[SDL_SCANCODE_EQUALS])
-		app->debug_angle++;
+		app->debug_angle += 1.01;
 	if (key[SDL_SCANCODE_MINUS])
-		app->debug_angle--;
+		app->debug_angle -= 1.01;
 	if (key[SDL_SCANCODE_EQUALS] || key[SDL_SCANCODE_MINUS])
-	{
-		if (app->debug_angle < 0)
-			app->debug_angle = 359;
-		if (app->debug_angle > 359)
-			app->debug_angle = 0;
 		printf("debug -> %f\n", app->debug_angle);
-	}
 }
 
 void		debug_show_fsp(SDL_Renderer *renderer, int fps)
