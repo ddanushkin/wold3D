@@ -1,10 +1,7 @@
 #include "wolf3d.h"
 
-void		map_type_wall(t_app *app, t_node *node, char *data)
+void		map_type_wall(t_app *app, t_node *node, int index)
 {
-	int index;
-
-	index = ft_atoi(data) - 1;
 	node->type = MAP_TYPE_WALL;
 	node->texture[0] = app->textures->walls[index];
 	node->texture[1] = app->textures->walls[index + 1];

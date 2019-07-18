@@ -264,7 +264,7 @@ int					check_for_quit(SDL_Event *event, t_inputs *inputs);
 void				update_doors(t_app *app, float frame);
 void				door_interaction(t_app *app, float frame);
 void				draw_column(t_app *app, t_ray *ray, int x, float angle);
-void				map_type_wall(t_app *app, t_node *node, char *data);
+void				map_type_wall(t_app *app, t_node *node, int index);
 void				map_type_interior(t_app *app, t_node *node, char *data);
 void				map_type_door(t_app *app, t_node *node, char *data);
 void				player_shoot(t_player *player, float frame);

@@ -27,23 +27,27 @@ void		fill_row(t_app *app, char **data, int row)
 {
 	int		col;
 	t_node	*node;
+	char type;
+	int index;
 
 	col = 0;
 	while (col < app->map->cols)
 	{
+		type = *data[col];
+		index = ft_atoi((data[col] + 1)) - 1;
 		node = &app->map->nodes[row][col];
 		node->visible = false;
 		node->collidable = false;
 		node->type = MAP_TYPE_EMPTY;
 		node->x = col;
 		node->y = row;
-		if (*data[col] >= '1' && *data[col] <= '9')
-			map_type_wall(app, node, data[col]);
-		else if (*data[col] >= 'X' && *data[col] <= 'Z')
+		if (type == 'W')
+			map_type_wall(app, node, index);
+		else if (type == 'I')
 			map_type_interior(app, node, data[col]);
-		else if (*data[col] == 'D')
+		else if (type == 'D')
 			map_type_door(app, node, data[col]);
-		else if (*data[col] == 'P')
+		else if (type == 'P')
 		{
 			app->player->y = row * TEXTURE_SIZE + (TEXTURE_SIZE * 0.5);
 			app->player->x = col * TEXTURE_SIZE + (TEXTURE_SIZE * 0.5);
@@ -85,7 +89,7 @@ void		map_read(int fd, t_app *app)
 	map_init(fd, app->map);
 	while (ft_gnl(fd, &line))
 	{
-		data = ft_strsplit(line, ' ');
+		data = ft_strsplit(line, '\t');
 		fill_row(app, data, i++);
 		ft_strdel(&line);
 		ft_delarr(data);
