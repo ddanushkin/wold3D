@@ -44,34 +44,9 @@ void		draw_face(t_sdl *sdl, t_player *player, float delta)
 	SDL_RenderCopy(sdl->renderer, player->state[cur_frame], NULL, &area);
 }
 
-void		get_sprites(t_sdl *sdl, SDL_Texture *sprites[], char *path)
-{
-	DIR				*d;
-	struct dirent	*dir;
-	u_int			i;
-
-	i = 0;
-	printf("Load from: %s\n", path);
-	d = opendir(path);
-	if (d)
-	{
-		while ((dir = readdir(d)) != NULL)
-		{
-			if (dir->d_name[0] == '.')
-				continue ;
-			else
-			{
-				sprites[i++] = load_sprite(sdl->renderer, path, dir->d_name);
-				printf("Sprite loaded: %s\n", dir->d_name);
-			}
-		}
-		closedir(d);
-	}
-}
-
 void		load_faces(t_sdl *sdl, t_player *player)
 {
-	get_sprites(sdl, player->state, "../resources/player/faces/");
+	load_textures(sdl, player->state, "../resources/player/faces/");
 }
 
 void		player_init(t_sdl *sdl, t_player *player)
@@ -95,7 +70,7 @@ void		get_weapon_sprites(t_sdl *sdl, t_weapon *weapon, char *gun_path)
 
 	ft_strcpy(folder_path, "../resources/weapons/");
 	ft_strcat(folder_path, gun_path);
-	get_sprites(sdl, weapon->sprites, folder_path);
+	load_textures(sdl, weapon->sprites, folder_path);
 }
 
 void		init_weapon(t_weapon *weapon, u_int ammo, float rate, char *sound)

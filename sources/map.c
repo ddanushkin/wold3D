@@ -23,42 +23,30 @@ void		map_init(int fd, t_map *map)
 	map->doors_count = 0;
 }
 
-SDL_Surface	*load_surf(char *dir, char *name, char *add)
-{
-	char	file_path[50];
-
-	ft_strcpy(file_path, "../resources/");
-	ft_strcat(file_path, dir);
-	ft_strcat(file_path, name);
-	ft_strcat(file_path, add);
-	ft_strcat(file_path, ".bmp");
-	return (SDL_LoadBMP(file_path));
-}
-
-void		fill_row(t_map *map, char **data, int row, t_player *player)
+void		fill_row(t_app *app, char **data, int row)
 {
 	int		col;
 	t_node	*node;
 
 	col = 0;
-	while (col < map->cols)
+	while (col < app->map->cols)
 	{
-		node = &map->nodes[row][col];
+		node = &app->map->nodes[row][col];
 		node->visible = false;
 		node->collidable = false;
 		node->type = MAP_TYPE_EMPTY;
 		node->x = col;
 		node->y = row;
 		if (*data[col] >= '1' && *data[col] <= '9')
-			map_type_wall(node, data[col]);
+			map_type_wall(app, node, data[col]);
 		else if (*data[col] >= 'X' && *data[col] <= 'Z')
-			map_type_interior(node, data[col], map);
+			map_type_interior(app, node, data[col]);
 		else if (*data[col] == 'D')
-			map_type_door(node, data[col], map);
+			map_type_door(app, node, data[col]);
 		else if (*data[col] == 'P')
 		{
-			player->y = row * TEXTURE_SIZE + (TEXTURE_SIZE * 0.5);
-			player->x = col * TEXTURE_SIZE + (TEXTURE_SIZE * 0.5);
+			app->player->y = row * TEXTURE_SIZE + (TEXTURE_SIZE * 0.5);
+			app->player->x = col * TEXTURE_SIZE + (TEXTURE_SIZE * 0.5);
 		}
 		col++;
 	}
@@ -86,7 +74,7 @@ void		scaled_number(t_map *map)
 	//free(map->objects);
 }
 
-void		map_read(int fd, t_map *map, t_player *player)
+void		map_read(int fd, t_app *app)
 {
 	char	*line;
 	char	**data;
@@ -94,11 +82,11 @@ void		map_read(int fd, t_map *map, t_player *player)
 
 	i = 0;
 	line = NULL;
-	map_init(fd, map);
+	map_init(fd, app->map);
 	while (ft_gnl(fd, &line))
 	{
 		data = ft_strsplit(line, ' ');
-		fill_row(map, data, i++, player);
+		fill_row(app, data, i++);
 		ft_strdel(&line);
 		ft_delarr(data);
 	}

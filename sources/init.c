@@ -48,9 +48,12 @@ static	void	create_stuff(t_sdl *sdl, t_textures *textures)
 	sdl->renderer = SDL_CreateRenderer(sdl->window, -1, flags);
 	sdl->texture = SDL_CreateTexture(sdl->renderer, format, access,
 			sdl->width, sdl->height);
-	sdl->ui = load_texture(sdl->renderer, "main_ui");
-	textures->floors = load_surf("floors/", "1", "");
-	textures->ceilings = load_surf("ceilings/", "1", "");
+	sdl->ui = load_texture(sdl->renderer, "../resources/", "main_ui.bmp");
+	textures->floors[0] = load_surface("../resources/floors/", "1.bmp");
+	textures->ceilings[0] = load_surface("../resources/ceilings/", "1.bmp");
+	load_surfaces(textures->walls, "../resources/walls/");
+	load_surfaces(textures->doors, "../resources/doors/");
+	load_surfaces(textures->sprites, "../resources/interior/");
 	fill_diag_dist(sdl);
 }
 
@@ -75,6 +78,11 @@ static	void	malloc_stuff(t_app *app)
 	app->player = (t_player *)malloc(sizeof(t_player));
 	app->sfx = (t_sfx *)malloc(sizeof(t_sfx));
 	app->textures = (t_textures *)malloc(sizeof(t_textures));
+	app->textures->sprites = (SDL_Surface **)malloc(sizeof(SDL_Surface *) * 20);
+	app->textures->doors = (SDL_Surface **)malloc(sizeof(SDL_Surface *) * 20);
+	app->textures->walls = (SDL_Surface **)malloc(sizeof(SDL_Surface *) * 200);
+	app->textures->ceilings = (SDL_Surface **)malloc(sizeof(SDL_Surface *) * 20);
+	app->textures->floors = (SDL_Surface **)malloc(sizeof(SDL_Surface *) * 20);
 	app->time = (t_time *)malloc(sizeof(t_time));
 }
 

@@ -19,7 +19,7 @@ void	draw_floor(t_app *app, t_ipoint tile, int x, int y)
 
 	if (y > 0 && y < app->sdl->height - app->sdl->height / 5)
 	{
-		get_color(app->textures->floors, &col, tile.x, tile.y);
+		get_color(app->textures->floors[0], &col, tile.x, tile.y);
 		shade_color(app->sdl->diag_dist[y - (int)app->player->head_offset],
 					&col, app->sdl->draw_dist - 100);
 		set_pixel(app->sdl, x, y, &col);
@@ -33,7 +33,7 @@ void	draw_ceiling(t_app *app, t_ipoint tile, int x, int y)
 	if (app->sdl->height - y > 0 &&
 		app->sdl->height - y < app->sdl->height)
 	{
-		get_color(app->textures->ceilings, &col, tile.x, tile.y);
+		get_color(app->textures->ceilings[0], &col, tile.x, tile.y);
 		shade_color(app->sdl->diag_dist[y + (int)app->player->head_offset],
 					&col, app->sdl->draw_dist - 100);
 		set_pixel(app->sdl, x, app->sdl->height - y, &col);

@@ -188,10 +188,10 @@ typedef struct		s_sfx
 
 typedef struct		s_textures
 {
-	SDL_Surface		*ceilings;
-	SDL_Surface		*doors;
-	SDL_Surface		*floors;
-	SDL_Surface		*sprites;
+	SDL_Surface		**ceilings;
+	SDL_Surface		**doors;
+	SDL_Surface		**floors;
+	SDL_Surface		**sprites;
 	SDL_Surface		**walls;
 }					t_textures;
 
@@ -233,7 +233,7 @@ typedef struct		s_fps
 }					t_fps;
 
 void				init(t_app *app);
-void				map_read(int fd, t_map *map, t_player *player);
+void				map_read(int fd, t_app *app);
 void				ft_error(char *str);
 void				quit_properly(t_app *sdl);
 void				draw_minimap(t_map *map, t_sdl *sdl, t_player *player);
@@ -248,7 +248,6 @@ void				init_time(t_time *time, t_fps *fps);
 void				update_time(t_time *time);
 void				draw_text(SDL_Renderer	*renderer, t_ui_elem *ui_elem);
 void 				create_hud(t_sdl *sdl, t_player *player);
-SDL_Texture			*load_texture(SDL_Renderer * renderer, char *name);
 t_ray				*get_ray(t_app *app, int x, float angle);
 void				draw_face(t_sdl *sdl, t_player *player, float delta);
 void 				idle_gun_animation(t_sdl *sdl, t_player *player, float delta);
@@ -265,10 +264,9 @@ int					check_for_quit(SDL_Event *event, t_inputs *inputs);
 void				update_doors(t_app *app, float frame);
 void				door_interaction(t_app *app, float frame);
 void				draw_column(t_app *app, t_ray *ray, int x, float angle);
-SDL_Surface			*load_surf(char *dir, char *name, char *add);
-void				map_type_wall(t_node *node, char *data);
-void				map_type_interior(t_node *node, char *data, t_map *map);
-void				map_type_door(t_node *node, char *data, t_map *map);
+void				map_type_wall(t_app *app, t_node *node, char *data);
+void				map_type_interior(t_app *app, t_node *node, char *data);
+void				map_type_door(t_app *app, t_node *node, char *data);
 void				player_shoot(t_player *player, float frame);
 void				player_change_weapon(t_player *player, float frame);
 void				player_reloading(t_player *player, float frame);
@@ -280,4 +278,8 @@ void				on_mouse_update(t_inputs *inputs, t_player *player, float delta);
 void				debug_show_fsp(SDL_Renderer *renderer, int fps);
 void				get_fps(t_fps *fps, SDL_Renderer *renderer);
 void				debug_player(t_app *app);
+SDL_Surface			*load_surface(char *folder, char *sprite);
+SDL_Texture			*load_texture(SDL_Renderer *renderer, char *folder, char *sprite);
+void				load_textures(t_sdl *sdl, SDL_Texture *array[], char *path);
+void				load_surfaces(SDL_Surface *array[], char *path);
 #endif
