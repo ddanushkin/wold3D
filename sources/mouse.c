@@ -10,7 +10,14 @@ void		on_mouse_update(t_app *app)
 	if (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_RIGHT))
 		app->inputs->right_pressed = true;
 	if (app->inputs->y)
+	{
+		int max = 250;
 		app->debug_angle += app->inputs->y * 6.5 * app->inputs->sensitivity * app->time->delta;
+		if (app->debug_angle > max)
+			app->debug_angle = max;
+		if (app->debug_angle < -max)
+			app->debug_angle = -max;
+	}
 	if (app->inputs->x)
 	{
 		app->player->direction += app->inputs->x * app->inputs->sensitivity * app->time->delta;

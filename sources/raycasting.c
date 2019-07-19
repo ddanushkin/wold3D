@@ -1,6 +1,6 @@
 #include "wolf3d.h"
 
-t_node		*get_node(t_node **nodes, float x, float y)
+t_node	*get_node(t_node **nodes, float x, float y)
 {
 	int ix;
 	int iy;
@@ -10,7 +10,7 @@ t_node		*get_node(t_node **nodes, float x, float y)
 	return (&nodes[iy][ix]);
 }
 
-t_ray		*init_horz(int x, int y, float angle)
+t_ray	*init_horz(int x, int y, float angle)
 {
 	t_ray	*ray;
 
@@ -58,6 +58,28 @@ t_ray	*init_vert(int x, int y, float angle)
 	return (ray);
 }
 
+int		is_door(t_ray *ray, t_node *node)
+{
+	ray->start.x += ray->step.x * 0.5;
+	ray->start.y += ray->step.y * 0.5;
+	if (ray->type == RAY_TYPE_HORZ &&
+		(int)(ray->start.x) % TEXTURE_SIZE < node->door_frame)
+	{
+		ray->start.x -= ray->step.x * 0.5;
+		ray->start.y -= ray->step.y * 0.5;
+		return (0);
+	}
+	if (ray->type == RAY_TYPE_VERT &&
+		(int)(ray->start.y) % TEXTURE_SIZE < node->door_frame)
+	{
+		ray->start.x -= ray->step.x * 0.5;
+		ray->start.y -= ray->step.y * 0.5;
+		return (0);
+	}
+	ray->node = node;
+	return (1);
+}
+
 int		is_wall(t_map *map, t_ray *ray)
 {
 	t_node *node;
@@ -70,24 +92,7 @@ int		is_wall(t_map *map, t_ray *ray)
 	if (node->type == MAP_TYPE_EMPTY)
 		return (0);
 	if (node->type == MAP_TYPE_DOOR)
-	{
-		ray->start.x += ray->step.x * 0.5;
-		ray->start.y += ray->step.y * 0.5;
-		if (ray->type == RAY_TYPE_HORZ && (int)(ray->start.x) % TEXTURE_SIZE < node->door_frame)
-		{
-			ray->start.x -= ray->step.x * 0.5;
-			ray->start.y -= ray->step.y * 0.5;
-			return (0);
-		}
-		if (ray->type == RAY_TYPE_VERT && (int)(ray->start.y) % TEXTURE_SIZE < node->door_frame)
-		{
-			ray->start.x -= ray->step.x * 0.5;
-			ray->start.y -= ray->step.y * 0.5;
-			return (0);
-		}
-		ray->node = node;
-		return (1);
-	}
+		return (is_door(ray, node));
 	if (node->type == MAP_TYPE_WALL)
 	{
 		ray->node = node;
@@ -96,25 +101,8 @@ int		is_wall(t_map *map, t_ray *ray)
 	return (0);
 }
 
-void	calc_ray_data(t_player *player, t_ray *ray, float angle)
+void	calc_wall_data(t_ray *ray, float angle)
 {
-	if (ray->node->type == MAP_TYPE_DOOR)
-	{
-		ray->texture = ray->node->texture[0];
-		if (ray->type == RAY_TYPE_HORZ)
-		{
-			ray->offset = (int)(ray->start.x) % TEXTURE_SIZE;
-			ray->dist = fabsf((ray->start.y - player->y) / sinf(angle));
-		}
-		else
-		{
-			ray->offset = (int)(ray->start.y) % TEXTURE_SIZE;
-			ray->dist = fabsf((ray->start.x - player->x) / cosf(angle));
-		}
-		ray->offset -= ray->node->door_frame;
-		ray->dist *= cos(angle - player->direction * M_PI_180);
-		return ;
-	}
 	if (ray->type == RAY_TYPE_HORZ)
 	{
 		ray->offset = (int)ray->start.x % 64;
@@ -125,7 +113,16 @@ void	calc_ray_data(t_player *player, t_ray *ray, float angle)
 		ray->offset = (int)ray->start.y % 64;
 		ray->texture = ray->node->texture[(cosf(angle) < 0 ? 3 : 2)];
 	}
-	ray->dist *= cos(angle - player->direction * M_PI_180);
+}
+
+void	calc_door_data(t_ray *ray, float angle)
+{
+	ray->texture = ray->node->texture[0];
+	if (ray->type == RAY_TYPE_HORZ)
+		ray->offset = (int)(ray->start.x) % TEXTURE_SIZE;
+	else
+		ray->offset = (int)(ray->start.y) % TEXTURE_SIZE;
+	ray->offset -= ray->node->door_frame;
 }
 
 t_ray	*choose_ray(t_app *app, t_ray *horz, t_ray *vert, float angle)
@@ -164,7 +161,11 @@ t_ray	*get_ray(t_app *app, int x, float angle)
 	horz = init_horz(app->player->x, app->player->y, angle);
 	vert = init_vert(app->player->x, app->player->y, angle);
 	result = choose_ray(app, horz, vert, angle);
-	calc_ray_data(app->player, result, angle);
+	if (result->node->type == MAP_TYPE_DOOR)
+		calc_door_data(result, angle);
+	else
+		calc_wall_data(result, angle);
+	result->dist *= cos(angle - app->player->direction * M_PI_180);
 	app->sdl->dist_per_x[x] = result->dist;
 	return (result);
 }

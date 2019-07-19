@@ -39,7 +39,7 @@ static	void	create_stuff(t_sdl *sdl, t_textures *textures)
 	Uint32	flags;
 	Uint32	format;
 
-	format = SDL_PIXELFORMAT_ARGB8888;
+	format = SDL_PIXELFORMAT_RGB888;
 	access = SDL_TEXTUREACCESS_STATIC;
 	flags = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
 	check_for_init_errors();

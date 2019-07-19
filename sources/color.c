@@ -2,11 +2,14 @@
 
 void	get_color(SDL_Surface *surface, t_color *c, int x, int y)
 {
-	Uint8	*data;
+	Uint8		*data;
+	SDL_Color	color;
 
-	data = surface->pixels + y * surface->pitch;
-	data += x * surface->format->BytesPerPixel;
-	SDL_GetRGB(*data, surface->format, &c->r, &c->g, &c->b);
+	data = surface->pixels + y * TEXTURE_SIZE + x;
+	color = surface->format->palette->colors[*data];
+	c->r = color.r;
+	c->g = color.g;
+	c->b = color.b;
 }
 
 void	shade_color(double dist, t_color *color, double draw_dist)

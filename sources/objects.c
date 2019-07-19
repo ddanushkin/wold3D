@@ -4,19 +4,15 @@ void	draw_slice(t_app *app, t_node *obj, t_iiter x, t_iiter y)
 {
 	int			texture_x;
 	int			texture_y;
-	int			corrected_y;
 	t_color		col;
 
-	corrected_y = y.cur - app->debug_angle;
-	if (corrected_y < 0 || corrected_y >= app->sdl->height)
-		return ;
 	texture_x = (x.cur - x.min) * (64.0 / obj->height);
 	texture_y = (y.cur - y.min) * (64.0 / obj->height);
 	get_color(obj->texture[0], &col, texture_x, texture_y);
 	if (!(col.r == 152 && col.g == 0 && col.b == 136))
 	{
 		shade_color(obj->dist + 150, &col, app->sdl->draw_dist);
-		set_pixel(app->sdl, x.cur, corrected_y, &col);
+		set_pixel(app->sdl, x.cur, y.cur, &col);
 	}
 }
 
@@ -27,7 +23,7 @@ void	draw_object(t_app *app, t_node *obj)
 
 	x.min = obj->screen_x - obj->height * 0.5;
 	x.max = x.min + obj->height;
-	y.min = app->sdl->half_height - obj->height * 0.5;
+	y.min = (app->sdl->half_height - app->debug_angle) - obj->height * 0.5;
 	y.max = y.min + obj->height;
 	if (x.max > app->sdl->width)
 		x.max = app->sdl->width;

@@ -253,6 +253,7 @@ void 				create_hud(t_sdl *sdl, t_player *player);
 t_ray				*get_ray(t_app *app, int x, float angle);
 void				draw_face(t_sdl *sdl, t_player *player, float delta);
 void 				idle_gun_animation(t_sdl *sdl, t_player *player, float delta);
+SDL_Rect			*gun_position(t_app *app);
 void 				gun_shoot(t_sdl *sdl, t_player *player, float delta);
 void				gun_change(t_sdl *sdl, t_player *player, float delta);
 void 				gun_reload(t_sdl *sdl, t_player *player, float frame);
