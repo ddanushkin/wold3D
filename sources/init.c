@@ -63,7 +63,7 @@ static	void	init_sdl(t_sdl *sdl)
 	sdl->half_width = (int)(sdl->width * 0.5);
 	sdl->height = 720;
 	sdl->half_height = (int)(sdl->height * 0.5);
-	sdl->fov = 3.14159 / 3.0;
+	sdl->fov = M_PI / 3.0;
 	sdl->dist_to_pp = (int)((float)sdl->half_width / tanf(sdl->fov * 0.5));
 	sdl->draw_dist = 840;
 	sdl->pixels = (Uint32 *)malloc(sizeof(Uint32) * sdl->width * sdl->height);
@@ -84,6 +84,7 @@ static	void	malloc_stuff(t_app *app)
 	app->textures->ceilings = (SDL_Surface **)malloc(sizeof(SDL_Surface *) * 20);
 	app->textures->floors = (SDL_Surface **)malloc(sizeof(SDL_Surface *) * 20);
 	app->time = (t_time *)malloc(sizeof(t_time));
+	app->animations = (t_animation *)malloc(sizeof(t_animation) * 10);
 }
 
 void			init(t_app *app)

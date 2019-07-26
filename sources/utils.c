@@ -5,6 +5,7 @@ void	init_time(t_time *time, t_fps *fps)
 	ft_bzero(time, sizeof(*time));
 	ft_bzero(fps, sizeof(*fps));
 	fps->lasttime = SDL_GetTicks();
+	time->current = SDL_GetTicks();
 }
 
 void	update_time(t_time *time)
@@ -13,6 +14,9 @@ void	update_time(t_time *time)
 	time->current = SDL_GetTicks();
 	time->delta = (time->current - time->prev) * 0.001;
 	time->frame += time->delta;
+	time->frame_nbr++;
+	if (time->frame_nbr < 0)
+		time->frame_nbr = 0;
 }
 
 void	get_fps(t_fps *fps, SDL_Renderer *renderer)

@@ -61,14 +61,14 @@ void	idle_gun_animation(t_sdl *sdl, t_player *player, float delta)
 	id = player->cur_weapon;
 	cur_frame = (long)(delta * 1.9);
 	player->idle_frame += 0.10 + (player->head_acc / 8);
-	player->head_offset = sinf(player->idle_frame) * (3.5 + player->head_acc * 2) + player->head_angle;
-	if (player->idle_frame > M_PI && player->head_acc > 0 && delta - player->last_step >= 0.3)
-	{
-		Mix_PlayChannel(1, player->steps[rand() % 8], 0);
-		player->last_step = delta;
-	}
-	if (player->idle_frame > M_PI * 2)
-		player->idle_frame = 0;
+	player->head_offset = sinf(player->idle_frame) * (3.5 + player->head_acc * 2);
+//	if (player->idle_frame > M_PI && player->head_acc > 0 && delta - player->last_step >= 0.3)
+//	{
+//		Mix_PlayChannel(1, player->steps[rand() % 8], 0);
+//		player->last_step = delta;
+//	}
+//	if (player->idle_frame > M_PI * 2)
+//		player->idle_frame = 0;
 	area.y = sdl->height - 130 - 550 + player->head_offset;
 	area.w = 96 * 5;
 	area.x = sdl->half_width - area.w + 244;
@@ -79,7 +79,7 @@ void	idle_gun_animation(t_sdl *sdl, t_player *player, float delta)
 	SDL_RenderCopy(sdl->renderer, player->weapon[id].sprites[cur_frame], NULL, &area);
 }
 
-void	redraw(t_app *app, float frame)
+void	draw_veiw(t_app *app)
 {
 	SDL_Rect		screen;
 	int offset;
@@ -91,6 +91,10 @@ void	redraw(t_app *app, float frame)
 	screen.h = app->sdl->height + offset;
 	SDL_UpdateTexture(app->sdl->texture, NULL, app->sdl->pixels, app->sdl->width * sizeof(Uint32));
 	SDL_RenderCopy(app->sdl->renderer, app->sdl->texture, NULL, &screen);
+}
+
+void	redraw(t_app *app, float frame)
+{
 	if (app->player->shooting)
 		shooting_animation(app->sdl, app->player, frame);
 	if (app->player->changing)

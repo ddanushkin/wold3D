@@ -41,12 +41,12 @@ void		draw_face(t_sdl *sdl, t_player *player, float delta)
 		cur_frame = 0;
 	if (player->health < 85)
 		cur_frame += 6 - ((player->health) / 14) % 7;
-	SDL_RenderCopy(sdl->renderer, player->state[cur_frame], NULL, &area);
+	SDL_RenderCopy(sdl->renderer, player->faces[cur_frame], NULL, &area);
 }
 
 void		load_faces(t_sdl *sdl, t_player *player)
 {
-	load_textures(sdl, player->state, "../resources/player/faces/");
+	load_textures(sdl, player->faces, "../resources/player/faces/");
 }
 
 void		player_init(t_sdl *sdl, t_player *player)
