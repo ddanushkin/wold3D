@@ -23,21 +23,43 @@ void		draw_text(SDL_Renderer *renderer, t_ui_elem *ui_elem)
 	color.a = 255;
 	text_surface = TTF_RenderText_Solid(font, ui_elem->text, color);
 	text_texture = SDL_CreateTextureFromSurface(renderer, text_surface);
+	text_area.x = ui_elem->x;
+	text_area.y = ui_elem->y;
+	text_area.w = text_surface->w;
+	text_area.h = text_surface->h;
+	SDL_RenderCopy(renderer,2 text_texture, NULL, &text_area);
 	SDL_FreeSurface(text_surface);
+	SDL_DestroyTexture(text_texture);
+	TTF_CloseFont(font);
+}
+
+void		draw_text_font(SDL_Renderer *renderer, t_ui_elem *ui_elem, TTF_Font *font)
+{
+	SDL_Surface		*text_surface;
+	SDL_Texture		*text_texture;
+	SDL_Rect		text_area;
+	SDL_Color		color;
+
+	color.r = 255;
+	color.g = 77;
+	color.b = 255;
+	color.a = 255;
+	text_surface = TTF_RenderText_Solid(font, ui_elem->text, color);
+	text_texture = SDL_CreateTextureFromSurface(renderer, text_surface);
 	text_area.x = ui_elem->x;
 	text_area.y = ui_elem->y;
 	text_area.w = text_surface->w;
 	text_area.h = text_surface->h;
 	SDL_RenderCopy(renderer, text_texture, NULL, &text_area);
+	SDL_FreeSurface(text_surface);
 	SDL_DestroyTexture(text_texture);
-	TTF_CloseFont(font);
 }
 
-void		update_level(SDL_Renderer *renderer, char *level, t_ui_elem *ui_elem)
+void		update_levelNEW(SDL_Renderer *renderer, char *level, t_ui_elem *ui_elem, TTF_Font *font)
 {
 	ui_elem->x = 90;
 	ui_elem->text = level;
-	draw_text(renderer, ui_elem);
+	draw_text_font(renderer, ui_elem, font);
 }
 
 void		update_score(SDL_Renderer *renderer, int score, t_ui_elem *ui_elem)
@@ -48,6 +70,17 @@ void		update_score(SDL_Renderer *renderer, int score, t_ui_elem *ui_elem)
 	ui_text = ft_itoa(score);
 	ui_elem->text = ui_text;
 	draw_text(renderer, ui_elem);
+	free(ui_text);
+}
+
+void		update_scoreNEW(SDL_Renderer *renderer, int score, t_ui_elem *ui_elem, TTF_Font *font)
+{
+	char	*ui_text;
+
+	ui_elem->x = 150 + 40;
+	ui_text = ft_itoa(score);
+	ui_elem->text = ui_text;
+	draw_text_font(renderer, ui_elem, font);
 	free(ui_text);
 }
 
@@ -62,6 +95,17 @@ void		update_lives(SDL_Renderer *renderer, int lives, t_ui_elem *ui_elem)
 	free(ui_text);
 }
 
+void		update_livesNEW(SDL_Renderer *renderer, int lives, t_ui_elem *ui_elem, TTF_Font *font)
+{
+	char	*ui_text;
+
+	ui_elem->x = 150 + 40 + 235;
+	ui_text = ft_itoa(lives);
+	ui_elem->text = ui_text;
+	draw_text_font(renderer, ui_elem, font);
+	free(ui_text);
+}
+
 void		update_health(SDL_Renderer *renderer, int health, t_ui_elem *ui_elem)
 {
 	char	*ui_text;
@@ -70,6 +114,17 @@ void		update_health(SDL_Renderer *renderer, int health, t_ui_elem *ui_elem)
 	ui_text = ft_itoa(health);
 	ui_elem->text = ui_text;
 	draw_text(renderer, ui_elem);
+	free(ui_text);
+}
+
+void		update_healthNEW(SDL_Renderer *renderer, int health, t_ui_elem *ui_elem, TTF_Font *font)
+{
+	char	*ui_text;
+
+	ui_elem->x = 150 + 40 + 235 + 260;
+	ui_text = ft_itoa(health);
+	ui_elem->text = ui_text;
+	draw_text_font(renderer, ui_elem, font);
 	free(ui_text);
 }
 
@@ -118,10 +173,10 @@ void		create_hud(t_sdl *sdl, t_player *player)
 	ui_elem.y = sdl->height - 105;
 	ui_elem.size = 60;
 	SDL_RenderCopy(sdl->renderer, sdl->ui, NULL, &area);
-	update_level(sdl->renderer, player->cur_level, &ui_elem);
-	update_score(sdl->renderer, player->score, &ui_elem);
-	update_lives(sdl->renderer, player->lives, &ui_elem);
-	update_health(sdl->renderer, player->health, &ui_elem);
+	update_levelNEW(sdl->renderer, player->cur_level, &ui_elem, sdl->font);
+	update_scoreNEW(sdl->renderer, player->score, &ui_elem, sdl->font);
+	update_livesNEW(sdl->renderer, player->lives, &ui_elem, sdl->font);
+	update_healthNEW(sdl->renderer, player->health, &ui_elem, sdl->font);
 	update_ammo(sdl->renderer, player, &ui_elem);
 	update_ammo2(sdl->renderer, player, &ui_elem);
 }

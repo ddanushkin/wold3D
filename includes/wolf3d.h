@@ -29,6 +29,8 @@
 # define PL_STATE_CHANGE 3
 # define PL_STATE_WALK 4
 
+# define PI 3.14159265
+
 typedef struct		s_ipoint
 {
 	int				x;
@@ -90,7 +92,6 @@ typedef struct		s_sdl
 	int				dist_to_pp;
 	int				draw_dist;
 	SDL_Event		event;
-	float			fov;
 	int				half_height;
 	int				half_width;
 	int				height;
@@ -100,6 +101,7 @@ typedef struct		s_sdl
 	SDL_Texture		*ui;
 	int				width;
 	SDL_Window		*window;
+	TTF_Font		*font;
 }					t_sdl;
 
 typedef struct		s_weapon
@@ -311,4 +313,5 @@ SDL_Texture			*load_texture(SDL_Renderer *renderer, char *folder,
 void				load_textures(t_sdl *sdl, SDL_Texture *array[], char *path);
 void				load_surfaces(SDL_Surface *array[], char *path);
 void				draw_veiw(t_app *app);
+TTF_Font			*load_font(int size);
 #endif

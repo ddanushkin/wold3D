@@ -35,20 +35,21 @@ void	fill_diag_dist(t_sdl *sdl)
 
 static	void	create_stuff(t_sdl *sdl, t_textures *textures)
 {
-	int		access;
-	Uint32	flags;
-	Uint32	format;
+	int			access;
+	Uint32		flags;
+	Uint32		format;
 
 	format = SDL_PIXELFORMAT_RGB888;
 	access = SDL_TEXTUREACCESS_STATIC;
 	flags = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
 	check_for_init_errors();
-	sdl->window = SDL_CreateWindow("SDL2", 0, 0,
+	sdl->window = SDL_CreateWindow("SDL2", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 			sdl->width, sdl->height, 0);
 	sdl->renderer = SDL_CreateRenderer(sdl->window, -1, flags);
 	sdl->texture = SDL_CreateTexture(sdl->renderer, format, access,
 			sdl->width, sdl->height);
 	sdl->ui = load_texture(sdl->renderer, "../resources/", "main_ui.bmp");
+	sdl->font = load_font(60);
 	textures->floors[0] = load_surface("../resources/floors/", "1.bmp");
 	textures->ceilings[0] = load_surface("../resources/ceilings/", "1.bmp");
 	load_surfaces(textures->walls, "../resources/walls/");
@@ -59,12 +60,14 @@ static	void	create_stuff(t_sdl *sdl, t_textures *textures)
 
 static	void	init_sdl(t_sdl *sdl)
 {
+	float	fov;
+
+	fov = M_PI / 6.0;
 	sdl->width = 1280;
 	sdl->half_width = (int)(sdl->width * 0.5);
 	sdl->height = 720;
 	sdl->half_height = (int)(sdl->height * 0.5);
-	sdl->fov = M_PI / 3.0;
-	sdl->dist_to_pp = (int)((float)sdl->half_width / tanf(sdl->fov * 0.5));
+	sdl->dist_to_pp = (int)((float)sdl->half_width / tanf(fov));
 	sdl->draw_dist = 840;
 	sdl->pixels = (Uint32 *)malloc(sizeof(Uint32) * sdl->width * sdl->height);
 	sdl->dist_per_x = (float *)malloc(sizeof(float) * sdl->width);

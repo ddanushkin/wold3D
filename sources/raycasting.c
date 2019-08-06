@@ -14,6 +14,25 @@ t_ray	*init_horz(int x, int y, float angle)
 {
 	t_ray	*ray;
 
+/*	angle = angle / 2;
+	int RayFacingDown = angle > 0 && angle < PI;
+	int RayFacingUp = !RayFacingDown;
+	int RayFacingRight = angle < 0.5 * PI || angle > 1.5 * PI;
+	int RayFacingLeft = !RayFacingRight;
+
+
+
+	ray->start.y = floor(y / TEXTURE_SIZE) * TEXTURE_SIZE;
+	ray->start.y += RayFacingDown ? TEXTURE_SIZE : 0;
+
+	ray->start.x = x + (ray->start.y - y) / tanf(angle);
+	ray->step.y = TEXTURE_SIZE;
+	ray->step.y *= RayFacingUp ? -1 : 1;
+
+	ray->step.x = TEXTURE_SIZE / tanf(angle);
+	ray->step.x *= (RayFacingLeft && ray->step.x > 0) ? -1 : 1;
+	ray->step.x *= (RayFacingRight && ray->step.x < 0) ? -1 : 1;*/
+
 	ray = (t_ray *)malloc(sizeof(t_ray));
 	ray->dist = 999999;
 	ray->type = RAY_TYPE_HORZ;
