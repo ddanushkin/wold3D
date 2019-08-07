@@ -12,7 +12,7 @@
 
 # define TEXTURE_SIZE 64
 # define M_PI_180 0.017453292519943295
-# define FPS_INTERVAL 1.0
+# define FPS_INTERVAL 1000
 # define MAX(a,b) (a > b) ? a : b
 
 # define MAP_TYPE_EMPTY 0
@@ -273,6 +273,7 @@ void				draw_obj_column(t_sdl *sdl, t_ray *ray, int x, int height);
 void				init_time(t_time *time, t_fps *fps);
 void				update_time(t_time *time);
 void				draw_text(SDL_Renderer	*renderer, t_ui_elem *ui_elem);
+void		        draw_text_font(SDL_Renderer *renderer, t_ui_elem *ui_elem, TTF_Font *font);
 void				create_hud(t_sdl *sdl, t_player *player);
 t_ray				*get_ray(t_app *app, int x, float angle);
 void				draw_face(t_sdl *sdl, t_player *player, float delta);
@@ -291,7 +292,8 @@ void				player_movement(t_node **nodes, const Uint8 *key,
 void				player_rotate(t_player *player, const Uint8 *state);
 void				redraw(t_app *app, float time);
 int					check_for_quit(SDL_Event *event, t_inputs *inputs);
-void				update_doors(t_app *app, float frame);
+
+void			    update_doors(t_app *app, float frame);
 void				door_interaction(t_app *app, float frame);
 void				draw_column(t_app *app, t_ray *ray, int x, float angle);
 void				map_type_wall(t_app *app, t_node *node, int index);
@@ -300,11 +302,13 @@ void				map_type_door(t_app *app, t_node *node, int index);
 void				player_shoot(t_player *player, float frame);
 void				player_change_weapon(t_player *player, float frame);
 void				player_reloading(t_player *player, float frame);
-void				update_objects(t_app *app);
-void				reset_objects(t_map *map);
+
+void	            update_objects(t_app *app);
+
+void	            reset_objects(t_map *map);
 void				draw_object(t_app *app, t_node *obj);
 void				on_mouse_update(t_app *app);
-void				debug_show_fsp(SDL_Renderer *renderer, int fps);
+void				debug_show_fps(SDL_Renderer *renderer, int fps);
 void				get_fps(t_fps *fps, SDL_Renderer *renderer);
 void				debug_player(t_app *app);
 SDL_Surface			*load_surface(char *folder, char *sprite);
@@ -314,4 +318,14 @@ void				load_textures(t_sdl *sdl, SDL_Texture *array[], char *path);
 void				load_surfaces(SDL_Surface *array[], char *path);
 void				draw_veiw(t_app *app);
 TTF_Font			*load_font(int size);
+int					count_files(char *path);
+
+void	            init_test_animation(t_app *app, t_animation *anim);
+void	            init_idle_animation(t_app *app, t_animation *anim);
+void		        idle_draw(t_app *app, t_animation *anim);
+void	            animation_draw_sprite(t_app *app, t_animation *anim);
+void	            animation_next_frame(t_app *app, t_animation *anim);
+void		map_init(int fd, t_map *map);
+void		fill_row(t_app *app, char **data, int row);
+void		scaled_number(t_map *map);
 #endif

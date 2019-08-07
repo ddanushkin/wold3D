@@ -41,7 +41,7 @@ void		debug_player(t_app *app)
 		printf("debug -> %f\n", app->debug_angle);
 }
 
-void		debug_show_fsp(SDL_Renderer *renderer, int fps)
+void		debug_show_fps(SDL_Renderer *renderer, int fps)
 {
 	t_ui_elem	ui_elem;
 	char		*ui_text;

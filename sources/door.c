@@ -19,31 +19,31 @@ static void		auto_close(t_app *app, t_node *door_node, float frame)
 
 void			update_doors(t_app *app, float frame)
 {
-	t_node		*door_node;
-	int			i;
+    t_node		*door_node;
+    int			i;
 
-	i = 0;
-	while (i < app->map->doors_count)
-	{
-		door_node = app->map->doors[i];
-		auto_close(app, door_node, frame);
-		door_node->door_frame -= door_node->door_closing ? 1 : 0;
-		door_node->door_frame += door_node->door_opening ? 1 : 0;
-		if (door_node->door_frame == 59 && door_node->door_opening)
-			Mix_PlayChannel(2, app->sfx->door_open, 0);
-		if (door_node->door_frame == 5 && door_node->door_closing)
-			Mix_PlayChannel(2, app->sfx->door_open, 0);
-		if (door_node->door_frame > 64)
-		{
-			door_node->door_opening = false;
-			door_node->last_open = frame;
-			door_node->door_frame = 64;
-		}
-		if (door_node->door_frame == 0)
-			door_node->door_closing = false;
-		door_node->collidable = door_node->door_frame > 32 ? false : true;
-		i++;
-	}
+    i = 0;
+    while (i < app->map->doors_count)
+    {
+        door_node = app->map->true_doors[i];
+        auto_close(app, door_node, frame);
+        door_node->door_frame -= door_node->door_closing ? 1 : 0;
+        door_node->door_frame += door_node->door_opening ? 1 : 0;
+        if (door_node->door_frame == 59 && door_node->door_opening)
+            Mix_PlayChannel(2, app->sfx->door_open, 0);
+        if (door_node->door_frame == 5 && door_node->door_closing)
+            Mix_PlayChannel(2, app->sfx->door_open, 0);
+        if (door_node->door_frame > 64)
+        {
+            door_node->door_opening = false;
+            door_node->last_open = frame;
+            door_node->door_frame = 64;
+        }
+        if (door_node->door_frame == 0)
+            door_node->door_closing = false;
+        door_node->collidable = door_node->door_frame > 32 ? false : true;
+        i++;
+    }
 }
 
 void			door_interaction(t_app *app, float frame)

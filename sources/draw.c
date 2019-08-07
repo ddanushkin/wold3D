@@ -69,7 +69,7 @@ void	draw_column(t_app *app, t_ray *ray, int x, float angle)
 	double		ratio;
 	t_color		col;
 
-	ratio = 64.0 / ray->height;
+	ratio = TEXTURE_SIZE / ray->height;
 	y.min = (app->sdl->half_height - app->debug_angle) - (ray->height * 0.5);
 	y.max = y.min + ray->height;
 	if (y.max > app->sdl->height)

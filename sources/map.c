@@ -1,5 +1,65 @@
 #include "wolf3d.h"
 
+void		count_stuff(int fd, t_app *app)
+{
+	char	*line;
+	int		count;
+	int 	i;
+
+	i = 0;
+	count = 0;
+	line = NULL;
+	while (ft_gnl(fd, &line))
+	{
+		app->map->rows++;
+		ft_strsplit(line, '\t');
+		while (line[i] != '\0')
+		{
+			count++;
+			if (line[i] == 'W')
+			{
+				app->map->objects_count++;
+				app->map->cols++;
+			}
+			else if (line[i] == 'D')
+			{
+				app->map->doors_count++;
+				app->map->cols++;
+			}
+			else if (line[i] == 'I')
+			{
+				app->map->doors_count++;
+				app->map->cols++;
+			}
+			i++;
+		}
+		ft_strdel(&line);
+
+	}
+}
+
+void		map_read(int fd, t_app *app)
+{
+	char	*line;
+	char	**data;
+	int		i;
+
+	i = 0;
+	line = NULL;
+	//count_stuff(fd, app); /* testing*/
+	map_init(fd, app->map);
+	while (ft_gnl(fd, &line))
+	{
+		data = ft_strsplit(line, '\t');
+		fill_row(app, data, i++);
+		ft_strdel(&line);
+		ft_delarr(data);
+	}
+	scaled_number(app->map);
+	close(fd);
+	ft_strdel(&line);
+}
+
 void		map_init(int fd, t_map *map)
 {
 	char	*line;
@@ -79,27 +139,6 @@ void		scaled_number(t_map *map)
 		map->true_objects[i] = map->objects[i];
 		i++;
 	}
-	//free(map->doors);
-	//free(map->objects);
-}
-
-void		map_read(int fd, t_app *app)
-{
-	char	*line;
-	char	**data;
-	int		i;
-
-	i = 0;
-	line = NULL;
-	map_init(fd, app->map);
-	while (ft_gnl(fd, &line))
-	{
-		data = ft_strsplit(line, '\t');
-		fill_row(app, data, i++);
-		ft_strdel(&line);
-		ft_delarr(data);
-	}
-	//scaled_number(map);
-	close(fd);
-	ft_strdel(&line);
+	free(map->doors);
+	free(map->objects);
 }

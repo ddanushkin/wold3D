@@ -17,7 +17,7 @@ void	fill_diag_dist(t_sdl *sdl)
 	int		row;
 	float	step;
 	float	angle;
-	float 	dist_32;
+	float	dist_32;
 
 	angle = 30.0 * M_PI_180;
 	dist_32 = sdl->dist_to_pp * 32;
@@ -43,15 +43,15 @@ static	void	create_stuff(t_sdl *sdl, t_textures *textures)
 	access = SDL_TEXTUREACCESS_STATIC;
 	flags = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
 	check_for_init_errors();
-	sdl->window = SDL_CreateWindow("SDL2", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-			sdl->width, sdl->height, 0);
+	sdl->window = SDL_CreateWindow("SDL2", SDL_WINDOWPOS_CENTERED,
+			SDL_WINDOWPOS_CENTERED, sdl->width, sdl->height, 0);
 	sdl->renderer = SDL_CreateRenderer(sdl->window, -1, flags);
 	sdl->texture = SDL_CreateTexture(sdl->renderer, format, access,
 			sdl->width, sdl->height);
 	sdl->ui = load_texture(sdl->renderer, "../resources/", "main_ui.bmp");
 	sdl->font = load_font(60);
-	textures->floors[0] = load_surface("../resources/floors/", "1.bmp");
-	textures->ceilings[0] = load_surface("../resources/ceilings/", "1.bmp");
+	load_surfaces(textures->floors, "../resources/floors/");
+	load_surfaces(textures->ceilings, "../resources/ceilings/");
 	load_surfaces(textures->walls, "../resources/walls/");
 	load_surfaces(textures->doors, "../resources/doors/");
 	load_surfaces(textures->sprites, "../resources/interior/");
@@ -73,6 +73,22 @@ static	void	init_sdl(t_sdl *sdl)
 	sdl->dist_per_x = (float *)malloc(sizeof(float) * sdl->width);
 }
 
+void	malloc_textures(t_textures *textures)
+{
+	int files;
+
+	files = count_files("../resources/doors/");
+	textures->doors = (SDL_Surface **)malloc(sizeof(SDL_Surface *) * files);
+	files = count_files("../resources/walls/");
+	textures->walls = (SDL_Surface **)malloc(sizeof(SDL_Surface *) * files);
+	files = count_files("../resources/ceilings/");
+	textures->ceilings = (SDL_Surface **)malloc(sizeof(SDL_Surface *) * files);
+	files = count_files("../resources/floors/");
+	textures->floors = (SDL_Surface **)malloc(sizeof(SDL_Surface *) * files);
+	files = count_files("../resources/interior/");
+	textures->sprites = (SDL_Surface **)malloc(sizeof(SDL_Surface *) * files);
+}
+
 static	void	malloc_stuff(t_app *app)
 {
 	app->inputs = (t_inputs *)malloc(sizeof(t_inputs));
@@ -80,14 +96,10 @@ static	void	malloc_stuff(t_app *app)
 	app->map = (t_map *)malloc(sizeof(t_map));
 	app->player = (t_player *)malloc(sizeof(t_player));
 	app->sfx = (t_sfx *)malloc(sizeof(t_sfx));
-	app->textures = (t_textures *)malloc(sizeof(t_textures));
-	app->textures->sprites = (SDL_Surface **)malloc(sizeof(SDL_Surface *) * 20);
-	app->textures->doors = (SDL_Surface **)malloc(sizeof(SDL_Surface *) * 20);
-	app->textures->walls = (SDL_Surface **)malloc(sizeof(SDL_Surface *) * 200);
-	app->textures->ceilings = (SDL_Surface **)malloc(sizeof(SDL_Surface *) * 20);
-	app->textures->floors = (SDL_Surface **)malloc(sizeof(SDL_Surface *) * 20);
 	app->time = (t_time *)malloc(sizeof(t_time));
 	app->animations = (t_animation *)malloc(sizeof(t_animation) * 10);
+	app->textures = (t_textures *)malloc(sizeof(t_textures));
+	malloc_textures(app->textures);
 }
 
 void			init(t_app *app)

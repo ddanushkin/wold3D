@@ -5,8 +5,8 @@ t_node	*get_node(t_node **nodes, float x, float y)
 	int ix;
 	int iy;
 
-	iy = (int)y / 64;
-	ix = (int)x / 64;
+	iy = (int)y / TEXTURE_SIZE;
+	ix = (int)x / TEXTURE_SIZE;
 	return (&nodes[iy][ix]);
 }
 
@@ -194,7 +194,7 @@ void	cast_single_ray(t_app *app, int x, float angle)
 	t_ray	*ray;
 
 	ray = get_ray(app, x, angle);
-	ray->height = 64.0 / ray->dist * app->sdl->dist_to_pp;
+	ray->height = TEXTURE_SIZE / ray->dist * app->sdl->dist_to_pp;
 	draw_column(app, ray, x, angle);
 	free(ray);
 }
