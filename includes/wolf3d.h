@@ -200,8 +200,6 @@ typedef struct		s_map
 	int				doors_count;
 	t_node			**objects;
 	int				objects_count;
-	t_node			**true_doors;
-	t_node			**true_objects;
 }					t_map;
 
 typedef struct		s_sfx
@@ -325,7 +323,7 @@ void	            init_idle_animation(t_app *app, t_animation *anim);
 void		        idle_draw(t_app *app, t_animation *anim);
 void	            animation_draw_sprite(t_app *app, t_animation *anim);
 void	            animation_next_frame(t_app *app, t_animation *anim);
-void		map_init(int fd, t_map *map);
-void		fill_row(t_app *app, char **data, int row);
-void		scaled_number(t_map *map);
+void				map_init(t_map *map);
+void				fill_row(t_app *app, char **data, int row);
+void		map_initNEW(t_map *map);
 #endif

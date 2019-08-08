@@ -1,85 +1,147 @@
 #include "wolf3d.h"
 
-void		count_stuff(int fd, t_app *app)
+int		valid_characters(char *c)
+{
+	if (*c == 'W' || *c == 'I' || *c == 'D' || *c == 'P')
+		if (isdigit(*(c + 1)))
+			return (1);
+	return (0);
+}
+
+int		map_validation(char *str, t_app *app)
+{
+	int 	max_col;
+	int 	cur_col;
+
+	cur_col = 0;
+	max_col = 0;
+	app->map->doors_count = 0;
+	app->map->objects_count = 0;
+	app->map->rows = 1;
+	while (*str)
+	{
+		if (valid_characters(str))
+		{
+			str += 2;
+			cur_col += 1;
+			if ((*str != '\t' && *str != '\n' && *str != '\0'))
+			{
+				ft_error("Bad map. GoodBye");
+				return (0);
+			}
+		}
+		else if (*str == '.')
+		{
+			cur_col++;
+			if (*(str + 1) != '\t')
+			{
+				ft_error("Bad map. GoodBye");
+				break;
+			}
+		}
+		if (* str == '\n')
+		{
+			app->map->rows++;
+			if (max_col < cur_col)
+				max_col = cur_col;
+			cur_col = 0;
+		}
+		str++;
+	}
+	app->map->cols = max_col;
+	return (1);
+}
+
+char	*create_line(int fd)
 {
 	char	*line;
-	int		count;
-	int 	i;
+	char 	*level;
+	size_t	count;
+	char 	*lvl;
+	int res;
 
-	i = 0;
+	line = NULL;
+	lvl = NULL;
+	level = NULL;
+
+	level = ft_strnew(999);
+	res = read(fd, level, 999);
+
+	count = 0;
+/*	char *check;
+	int res;
+	check = NULL;
+	level = ft_strnew(10);
+	check = ft_strnew(10);
 	count = 0;
 	line = NULL;
-	while (ft_gnl(fd, &line))
-	{
-		app->map->rows++;
-		ft_strsplit(line, '\t');
-		while (line[i] != '\0')
-		{
-			count++;
-			if (line[i] == 'W')
-			{
-				app->map->objects_count++;
-				app->map->cols++;
-			}
-			else if (line[i] == 'D')
-			{
-				app->map->doors_count++;
-				app->map->cols++;
-			}
-			else if (line[i] == 'I')
-			{
-				app->map->doors_count++;
-				app->map->cols++;
-			}
-			i++;
-		}
-		ft_strdel(&line);
+	res = read(fd, level, 10);
+	level[res] = '\0';*/
 
+/*	int res;
+	int final;
+
+	final = 0;
+	level = ft_strnew(5);
+	//res = read(fd, level, 5);
+	while (1)
+	{
+		res = read(fd, level, 5);
+		final += res;
+		if (res == 0)
+			break;
+	}*/
+
+
+	/*while (ft_gnl(fd, &line))
+	{
+		count += ft_strlen(line);
+		ft_strsplit(line, '\t');
+		ft_strcat(level, line);
+		ft_strcat(level, "\n");
+		ft_strdel(&line);
 	}
+	level[count + 2] = 0;
+	//lvl = ft_strnew(count);
+	//ft_strcpy(lvl, level);*/
+	return (level);
 }
 
 void		map_read(int fd, t_app *app)
 {
-	char	*line;
 	char	**data;
+	char 	**lines;
 	int		i;
+	char 	*level;
 
 	i = 0;
-	line = NULL;
-	//count_stuff(fd, app); /* testing*/
-	map_init(fd, app->map);
-	while (ft_gnl(fd, &line))
+	level = create_line(fd);
+	if (!map_validation(level, app))
+		ft_error("map error!");
+	map_init(app->map);
+	lines = ft_strsplit(level, '\n');
+	while (*lines)
 	{
-		data = ft_strsplit(line, '\t');
+		data = ft_strsplit(*lines, '\t');
 		fill_row(app, data, i++);
-		ft_strdel(&line);
+		ft_strdel(lines);
 		ft_delarr(data);
+		lines++;
 	}
-	scaled_number(app->map);
 	close(fd);
-	ft_strdel(&line);
 }
 
-void		map_init(int fd, t_map *map)
+void		map_init(t_map *map)
 {
-	char	*line;
-	char	**data;
 	int		i;
 
 	i = 0;
-	line = NULL;
-	ft_gnl(fd, &line);
-	data = ft_strsplit(line, ' ');
-	ft_strdel(&line);
-	map->rows = ft_atoi(data[0]);
-	map->cols = ft_atoi(data[1]);
-	ft_delarr(data);
 	map->nodes = (t_node **)malloc(sizeof(t_node *) * map->rows);
-	map->objects = (t_node **)malloc(sizeof(t_node *) * map->rows * map->cols);
+	map->objects = (t_node **)malloc(sizeof(t_node *) * map->objects_count);
 	map->objects_count = 0;
 	while (i < map->rows)
 		map->nodes[i++] = (t_node *)malloc(sizeof(t_node) * map->cols);
-	map->doors = (t_node **)malloc(sizeof(t_node *) * 100);
+	map->doors = (t_node **)malloc(sizeof(t_node *) * map->doors_count);
 	map->doors_count = 0;
 }
 
@@ -119,26 +181,4 @@ void		fill_row(t_app *app, char **data, int row)
 		}
 		col++;
 	}
-}
-
-void		scaled_number(t_map *map)
-{
-	int i;
-
-	i = 0;
-	map->true_doors = (t_node **)malloc(sizeof(t_node *) * map->doors_count);
-	map->true_objects = (t_node **)malloc(sizeof(t_node *) * map->objects_count);
-	while (i < map->doors_count)
-	{
-		map->true_doors[i] = map->doors[i];
-		i++;
-	}
-	i = 0;
-	while (i < map->objects_count)
-	{
-		map->true_objects[i] = map->objects[i];
-		i++;
-	}
-	free(map->doors);
-	free(map->objects);
 }

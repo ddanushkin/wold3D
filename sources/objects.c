@@ -78,7 +78,7 @@ void	update_objects(t_app *app)
     i = 0;
     while (i < app->map->objects_count)
     {
-        object = app->map->true_objects[i];
+        object = app->map->objects[i];
         fill_object(app->sdl, app->player, object);
         if (object->visible)
             draw_object(app, object);
@@ -94,7 +94,7 @@ void	reset_objects(t_map *map)
     i = 0;
     while (i < map->objects_count)
     {
-        object = map->true_objects[i];
+        object = map->objects[i];
         object->screen_x = -1;
         object->height = -1;
         object->dist = -1;

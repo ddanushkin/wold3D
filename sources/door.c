@@ -25,7 +25,7 @@ void			update_doors(t_app *app, float frame)
     i = 0;
     while (i < app->map->doors_count)
     {
-        door_node = app->map->true_doors[i];
+        door_node = app->map->doors[i];
         auto_close(app, door_node, frame);
         door_node->door_frame -= door_node->door_closing ? 1 : 0;
         door_node->door_frame += door_node->door_opening ? 1 : 0;
