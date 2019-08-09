@@ -1,15 +1,15 @@
 #include "wolf3d.h"
 
-void		start_the_game(t_app *app)
+void	start_the_game(t_app *app)
 {
-	t_fps	fps;
+	t_fps		fps;
+	t_animation	animation;
+	t_animation	anim_idle;
 
 	init_time(app->time, &fps);
 	SDL_SetRelativeMouseMode(SDL_TRUE);
 	app->inputs->keyboard = SDL_GetKeyboardState(NULL);
 	update_time(app->time);
-	t_animation	animation;
-	t_animation	anim_idle;
 	init_test_animation(app, &animation);
 	init_idle_animation(app, &anim_idle);
 	while (1)
@@ -35,7 +35,7 @@ void		start_the_game(t_app *app)
 	}
 }
 
-void		load_level(t_app *app, int level)
+int		load_level(t_app *app, int level)
 {
 	int		fd;
 	char	*level_char;
@@ -48,19 +48,25 @@ void		load_level(t_app *app, int level)
 	ft_strcat(level_path, level_char);
 	ft_strcat(level_path, ".wolf3d");
 	if ((fd = open(level_path, O_RDONLY)) != -1)
-		map_read(fd, app);
+		if (map_read(fd, app))
+			return (1);
+		else
+			return (0);
 	else
+	{
 		ft_error("Map path error.");
+		return (0);
+	}
 }
 
-int			main(void)
+int		main(void)
 {
 	t_app	app;
 
 	init(&app);
 	player_init(app.sdl, app.player);
-	load_level(&app, 1);
-	start_the_game(&app);
+	if (load_level(&app, 1))
+		start_the_game(&app);
 	quit_properly(&app);
 	return (0);
 }

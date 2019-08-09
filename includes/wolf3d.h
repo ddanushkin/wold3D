@@ -256,8 +256,14 @@ typedef struct		s_fps
 	Uint32			frames;
 }					t_fps;
 
+typedef struct		s_row
+{
+	int				current_length;
+	int				max_length;
+}					t_row;
+
 void				init(t_app *app);
-void				map_read(int fd, t_app *app);
+int					map_read(int fd, t_app *app);
 void				ft_error(char *str);
 void				quit_properly(t_app *sdl);
 void				draw_minimap(t_map *map, t_sdl *sdl, t_player *player);
@@ -290,7 +296,6 @@ void				player_movement(t_node **nodes, const Uint8 *key,
 void				player_rotate(t_player *player, const Uint8 *state);
 void				redraw(t_app *app, float time);
 int					check_for_quit(SDL_Event *event, t_inputs *inputs);
-
 void			    update_doors(t_app *app, float frame);
 void				door_interaction(t_app *app, float frame);
 void				draw_column(t_app *app, t_ray *ray, int x, float angle);
@@ -300,9 +305,7 @@ void				map_type_door(t_app *app, t_node *node, int index);
 void				player_shoot(t_player *player, float frame);
 void				player_change_weapon(t_player *player, float frame);
 void				player_reloading(t_player *player, float frame);
-
 void	            update_objects(t_app *app);
-
 void	            reset_objects(t_map *map);
 void				draw_object(t_app *app, t_node *obj);
 void				on_mouse_update(t_app *app);
@@ -325,5 +328,6 @@ void	            animation_draw_sprite(t_app *app, t_animation *anim);
 void	            animation_next_frame(t_app *app, t_animation *anim);
 void				map_init(t_map *map);
 void				fill_row(t_app *app, char **data, int row);
-void		map_initNEW(t_map *map);
+
+char				*create_lineTEMP(int fd);
 #endif

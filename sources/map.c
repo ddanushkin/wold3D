@@ -3,149 +3,138 @@
 int		valid_characters(char *c)
 {
 	if (*c == 'W' || *c == 'I' || *c == 'D' || *c == 'P')
-		if (isdigit(*(c + 1)))
+		if (ft_isdigit(*(c + 1)) &&
+		((*(c + 2) == '\t' || *(c + 2) == '\n' || *(c + 2) == '\0')))
 			return (1);
 	return (0);
 }
 
-int		map_validation(char *str, t_app *app)
+void	change_row_length(char *str, t_row *row, t_map *map)
 {
-	int 	max_col;
-	int 	cur_col;
+	str += 2;
+	row->current_length++;
+	if (*str == '\n')
+	{
+		map->rows++;
+		if (row->max_length < row->current_length)
+			row->max_length = row->current_length;
+		row->current_length = 0;
+	}
+}
 
-	cur_col = 0;
-	max_col = 0;
-	app->map->doors_count = 0;
-	app->map->objects_count = 0;
-	app->map->rows = 1;
+int		map_validation(char *str, t_map *map)
+{
+	t_row	row;
+
+	row.current_length = 0;
+	row.max_length = 0;
+	map->rows = 1;
 	while (*str)
 	{
 		if (valid_characters(str))
 		{
-			str += 2;
-			cur_col += 1;
-			if ((*str != '\t' && *str != '\n' && *str != '\0'))
-			{
-				ft_error("Bad map. GoodBye");
-				return (0);
-			}
+			change_row_length(str, &row, map);
+			str += 3;
 		}
 		else if (*str == '.')
 		{
-			cur_col++;
-			if (*(str + 1) != '\t')
-			{
-				ft_error("Bad map. GoodBye");
-				break;
-			}
+			row.current_length++;
+			str += 2;
 		}
-		if (* str == '\n')
+		else
 		{
-			app->map->rows++;
-			if (max_col < cur_col)
-				max_col = cur_col;
-			cur_col = 0;
+			ft_error("Bad map. GoodBye");
+			return (0);
 		}
-		str++;
 	}
-	app->map->cols = max_col;
+	map->cols = row.max_length;
 	return (1);
 }
 
-char	*create_line(int fd)
+char	*write_map_to_string(int fd)
 {
-	char	*line;
-	char 	*level;
-	size_t	count;
-	char 	*lvl;
-	int res;
+	char	*read_string;
+	char	*level;
 
-	line = NULL;
-	lvl = NULL;
-	level = NULL;
-
-	level = ft_strnew(999);
-	res = read(fd, level, 999);
-
-	count = 0;
-/*	char *check;
-	int res;
-	check = NULL;
-	level = ft_strnew(10);
-	check = ft_strnew(10);
-	count = 0;
-	line = NULL;
-	res = read(fd, level, 10);
-	level[res] = '\0';*/
-
-/*	int res;
-	int final;
-
-	final = 0;
-	level = ft_strnew(5);
-	//res = read(fd, level, 5);
-	while (1)
-	{
-		res = read(fd, level, 5);
-		final += res;
-		if (res == 0)
-			break;
-	}*/
-
-
-	/*while (ft_gnl(fd, &line))
-	{
-		count += ft_strlen(line);
-		ft_strsplit(line, '\t');
-		ft_strcat(level, line);
-		ft_strcat(level, "\n");
-		ft_strdel(&line);
-	}
-	level[count + 2] = 0;
-	//lvl = ft_strnew(count);
-	//ft_strcpy(lvl, level);*/
+	read_string = ft_strnew(999);
+	read(fd, read_string, 999);
+	level = ft_strdup(read_string);
+	free(read_string);
 	return (level);
 }
 
-void		map_read(int fd, t_app *app)
+char	*map_extend(char *old_level, t_map *map)
 {
-	char	**data;
-	char 	**lines;
+	char	*new_level;
+	char	*start;
+
+	new_level = ft_strnew(ft_strlen(old_level) + (map->rows * 3));
+	start = new_level;
+	while (*old_level)
+	{
+		if (*old_level == '\n')
+		{
+			*new_level++ = '\t';
+			*new_level++ = 'W';
+			*new_level++ = '1';
+			*new_level++ = *old_level++;
+		}
+		else
+			*new_level++ = *old_level++;
+	}
+	*new_level++ = '\t';
+	*new_level++ = 'W';
+	*new_level++ = '1';
+	*new_level = '\0';
+	map->rows++;
+	map->cols++;
+	return (start);
+}
+
+int		map_read(int fd, t_app *app)
+{
 	int		i;
-	char 	*level;
+	char	**data;
+	char	**lines;
+	char	*level;
 
 	i = 0;
-	level = create_line(fd);
-	if (!map_validation(level, app))
-		ft_error("map error!");
-	map_init(app->map);
+	level = write_map_to_string(fd);
+	if (!map_validation(level, app->map))
+	{
+		close(fd);
+		return (0);
+	}
+	level = map_extend(level, app->map);
 	lines = ft_strsplit(level, '\n');
+	map_init(app->map);
 	while (*lines)
 	{
 		data = ft_strsplit(*lines, '\t');
 		fill_row(app, data, i++);
-		ft_strdel(lines);
+		ft_strdel(lines++);
 		ft_delarr(data);
-		lines++;
 	}
 	close(fd);
+	free(level);
+	return (1);
 }
 
-void		map_init(t_map *map)
+void	map_init(t_map *map)
 {
 	int		i;
 
 	i = 0;
+	map->doors_count = 0;
+	map->objects_count = 0;
 	map->nodes = (t_node **)malloc(sizeof(t_node *) * map->rows);
 	map->objects = (t_node **)malloc(sizeof(t_node *) * map->objects_count);
-	map->objects_count = 0;
 	while (i < map->rows)
 		map->nodes[i++] = (t_node *)malloc(sizeof(t_node) * map->cols);
 	map->doors = (t_node **)malloc(sizeof(t_node *) * map->doors_count);
-	map->doors_count = 0;
 }
 
-void		node_reset(t_node *node, int row, int col)
+void	node_reset(t_node *node, int row, int col)
 {
 	node->visible = false;
 	node->collidable = false;
@@ -154,7 +143,7 @@ void		node_reset(t_node *node, int row, int col)
 	node->y = row;
 }
 
-void		fill_row(t_app *app, char **data, int row)
+void	fill_row(t_app *app, char **data, int row)
 {
 	int		col;
 	t_node	*node;
