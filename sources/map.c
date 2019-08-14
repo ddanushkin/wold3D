@@ -1,21 +1,11 @@
 #include "wolf3d.h"
 
-int		valid_characters(char *c)
-{
-	if (*c == '.' && *(c + 1) == '\0')
-		return (1);
-	if (*c == 'W' || *c == 'I' || *c == 'D' || *c == 'P')
-		if (ft_isdigit(*(c + 1)) && *(c + 2) == '\0')
-			return 1;
-	return (0);
-}
-
 char	*write_map_to_string(int fd)
 {
 	char	*read_string;
 
-	read_string = ft_strnew(999);
-	read(fd, read_string, 999);
+	read_string = ft_strnew(999999999);
+	read(fd, read_string, 999999999);
 	return (read_string);
 }
 
@@ -81,12 +71,6 @@ void	map_init(t_map *map)
 	map->doors_count = 0;
 }
 
-void	place_player(t_player *player, int row, int col)
-{
-	player->y = row * TEXTURE_SIZE + (TEXTURE_SIZE * 0.5);
-	player->x = col * TEXTURE_SIZE + (TEXTURE_SIZE * 0.5);
-}
-
 void	fill_row(t_app *app, char **data, int row)
 {
 	int		col;
@@ -95,7 +79,7 @@ void	fill_row(t_app *app, char **data, int row)
 	char	type;
 
 	col = 0;
-	while (col < app->map->cols - 1)
+	while (col < app->map->cols - 1 && data[col])
 	{
 		node = &app->map->nodes[row + 1][col + 1];
 		type = *data[col];
@@ -109,77 +93,7 @@ void	fill_row(t_app *app, char **data, int row)
 		else if (type == '.')
 			map_type_empty(node);
 		else if (type == 'P')
-		{
-			place_player(app->player, row, col);
-			map_type_empty(node);
-		}
+			place_player(app->player, node, row, col);
 		col++;
-		if (!data[col])
-			break ;
 	}
-}
-
-int	count_words(char const *s, char c)
-{
-	int	cnt;
-
-	cnt = 0;
-	while (*s)
-	{
-		if (*s != c && (*(s + 1) == c || *(s + 1) == '\0'))
-		{
-			cnt++;
-		}
-		s++;
-	}
-	return (cnt);
-}
-
-int		map_count_cols(char *row, t_map *map)
-{
-	char	**cols;
-	char	**tmp_cols;
-
-	if (map->cols < count_words(row, '\t') + 2)
-		map->cols = count_words(row, '\t') + 2;
-	cols = ft_strsplit(row, '\t');
-	tmp_cols = cols;
-	while (*cols)
-	{
-		if (!valid_characters(*cols))
-		{
-			ft_delarr(tmp_cols);
-			return (0);
-		}
-		if (*cols[0] == 'D')
-			map->doors_count++;
-		if (*cols[0] == 'I')
-			map->objects_count++;
-		cols++;
-	}
-	ft_delarr(tmp_cols);
-	return (1);
-}
-
-int		map_count_rows(char *str, t_map *map)
-{
-	char	**rows;
-	char	**tmp_rows;
-
-	map->rows = count_words(str, '\n') + 2;
-	map->cols = 0;
-	rows = ft_strsplit(str, '\n');
-	tmp_rows = rows;
-	while (*rows)
-	{
-		if (!map_count_cols(*rows, map))
-		{
-			ft_delarr(tmp_rows);
-			ft_error("Bad map. GoodBye");
-			return (0);
-		}
-		rows++;
-	}
-	ft_delarr(tmp_rows);
-	return (1);
 }

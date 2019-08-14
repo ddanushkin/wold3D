@@ -19,18 +19,6 @@ void	update_time(t_time *time)
 		time->frame_nbr = 0;
 }
 
-void	get_fps(t_fps *fps, SDL_Renderer *renderer)
-{
-	fps->frames++;
-	if (fps->lasttime < SDL_GetTicks() - FPS_INTERVAL)
-	{
-		fps->lasttime = SDL_GetTicks();
-		fps->current = fps->frames;
-		fps->frames = 0;
-	}
-    debug_show_fps(renderer, fps->current);
-}
-
 int		check_for_quit(SDL_Event *event, t_inputs *inputs)
 {
 	if (event->type == SDL_QUIT)

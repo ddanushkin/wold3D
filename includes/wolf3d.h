@@ -244,6 +244,8 @@ typedef struct		s_app
 	t_animation		*animations;
 	int 			offset;
 	float			debug_angle;
+	int 			w;
+	int 			h;
 }					t_app;
 
 typedef struct		s_color
@@ -326,9 +328,11 @@ void	            animation_draw_sprite(t_app *app, t_animation *anim);
 void	            animation_next_frame(t_app *app, t_animation *anim);
 void				map_init(t_map *map);
 void				fill_row(t_app *app, char **data, int row);
-int					map_count_rows(char *str, t_map *map);
 char				*create_lineTEMP(int fd);
 void				node_reset(t_node *node, int row, int col);
 void				map_type_empty(t_node *node);
 void				map_fill(t_app *app);
+int					map_count_cols(char *row, t_map *map);
+int					map_count_rows(char *str, t_map *map);
+void				place_player(t_player *player, t_node *node, int row, int col);
 #endif

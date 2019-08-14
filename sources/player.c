@@ -99,3 +99,10 @@ void		update_sound(const Uint8 *key, t_sfx *sfx)
 	if (key[SDL_SCANCODE_P])
 		Mix_PauseMusic();
 }
+
+void	place_player(t_player *player, t_node *node, int row, int col)
+{
+	player->y = row * TEXTURE_SIZE + (TEXTURE_SIZE * 0.5);
+	player->x = col * TEXTURE_SIZE + (TEXTURE_SIZE * 0.5);
+	map_type_empty(node);
+}

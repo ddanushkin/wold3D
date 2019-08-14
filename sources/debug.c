@@ -5,40 +5,12 @@ void		debug_player(t_app *app)
 	const Uint8 *key;
 
 	key = app->inputs->keyboard;
-//	if (key[SDL_SCANCODE_EQUALS] &&
-//		app->inputs->sensitivity < 5)
-//		app->inputs->sensitivity += 0.1;
-//	if (key[SDL_SCANCODE_MINUS] &&
-//			app->inputs->sensitivity > 0)
-//		app->inputs->sensitivity -= 0.1;
-//	if (key[SDL_SCANCODE_EQUALS] || key[SDL_SCANCODE_MINUS])
-//	{
-//		if (app->inputs->sensitivity < 0)
-//			app->inputs->sensitivity = 0;
-//		if (app->inputs->sensitivity > 5)
-//			app->inputs->sensitivity = 5;
-//		printf("sensitivity -> %f\n", app->inputs->sensitivity);
-//	}
-//	if (key[SDL_SCANCODE_EQUALS] &&
-//		app->player->obj_dist < (64 * 5))
-//		app->player->obj_dist += 5;
-//	if (key[SDL_SCANCODE_MINUS] &&
-//		app->player->obj_dist > 0)
-//		app->player->obj_dist -= 5;
-//	if (key[SDL_SCANCODE_EQUALS] || key[SDL_SCANCODE_MINUS])
-//	{
-//		if (app->player->obj_dist < 0)
-//			app->player->obj_dist = 0;
-//		if (app->player->obj_dist > 64 * 5)
-//			app->player->obj_dist = 64 * 5;
-//		printf("obj_dist -> %f\n", app->player->obj_dist);
-//	}
-	if (key[SDL_SCANCODE_EQUALS])
-		app->debug_angle += 1.01;
-	if (key[SDL_SCANCODE_MINUS])
-		app->debug_angle -= 1.01;
+	if (key[SDL_SCANCODE_EQUALS] && app->player->health < 100)
+		app->player->health += 1;
+	if (key[SDL_SCANCODE_MINUS] && app->player->health > 0)
+		app->player->health -= 1;
 	if (key[SDL_SCANCODE_EQUALS] || key[SDL_SCANCODE_MINUS])
-		printf("debug -> %f\n", app->debug_angle);
+		printf("debug -> %d\n", app->player->health);
 }
 
 void		debug_show_fps(SDL_Renderer *renderer, int fps)
@@ -53,4 +25,16 @@ void		debug_show_fps(SDL_Renderer *renderer, int fps)
 	ui_elem.text = ui_text;
 	draw_text(renderer, &ui_elem);
 	free(ui_text);
+}
+
+void	get_fps(t_fps *fps, SDL_Renderer *renderer)
+{
+	fps->frames++;
+	if (fps->lasttime < SDL_GetTicks() - FPS_INTERVAL)
+	{
+		fps->lasttime = SDL_GetTicks();
+		fps->current = fps->frames;
+		fps->frames = 0;
+	}
+	debug_show_fps(renderer, fps->current);
 }
