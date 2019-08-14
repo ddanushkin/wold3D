@@ -1,50 +1,6 @@
 #include "wolf3d.h"
 
-void	draw_slice(t_app *app, t_node *obj, t_iiter x, t_iiter y)
-{
-	int			texture_x;
-	int			texture_y;
-	t_color		col;
-
-	texture_x = (x.cur - x.min) * (TEXTURE_SIZE / obj->height);
-	texture_y = (y.cur - y.min) * (TEXTURE_SIZE / obj->height);
-	get_color(obj->texture[0], &col, texture_x, texture_y);
-	if (!(col.r == 152 && col.g == 0 && col.b == 136))
-	{
-		shade_color(obj->dist + 150, &col, app->sdl->draw_dist);
-		set_pixel(app->sdl, x.cur, y.cur, &col);
-	}
-}
-
-void	draw_object(t_app *app, t_node *obj)
-{
-	t_iiter	x;
-	t_iiter	y;
-
-	x.min = obj->screen_x - obj->height * 0.5;
-	x.max = x.min + obj->height;
-	y.min = (app->sdl->half_height - app->debug_angle) - obj->height * 0.5;
-	y.max = y.min + obj->height;
-	if (x.max > app->sdl->width)
-		x.max = app->sdl->width;
-	if (y.max > app->sdl->height)
-		y.max = app->sdl->height;
-	if ((x.cur = x.min) < 0)
-		x.cur = 0;
-	while (x.cur < x.max)
-	{
-		if ((y.cur = y.min) < 0)
-			y.cur = 0;
-		while (app->sdl->dist_per_x[x.cur] > obj->dist && y.cur < y.max)
-		{
-			draw_slice(app, obj, x, y);
-			y.cur++;
-		}
-		x.cur++;
-	}
-}
-
-void	fill_object(t_sdl *sdl, t_player *player, t_node *object)
+static void	fill_object(t_sdl *sdl, t_player *player, t_node *object)
 {
 	int		dx;
 	int		dy;
@@ -70,34 +26,79 @@ void	fill_object(t_sdl *sdl, t_player *player, t_node *object)
 	object->height = (int)(TEXTURE_SIZE / object->dist * sdl->dist_to_pp);
 }
 
-void	update_objects(t_app *app)
+static void	reset_objects(t_app *app)
+{
+	int		i;
+	int		objects_count;
+	t_node	*object;
+
+	i = 0;
+	objects_count = app->map->objects_count;
+	while (i < objects_count)
+	{
+		object = app->map->objects[i];
+		object->screen_x = -1;
+		object->height = -1;
+		object->dist = -1;
+		i++;
+	}
+}
+
+static void	sort_objects(t_app *app)
+{
+	int     i;
+	int		objects_count;
+	t_node	**objects;
+	t_node	*tmp_object;
+
+	objects_count = app->map->objects_count;
+	objects = app->map->objects;
+	i = 0;
+	while (i < objects_count)
+	{
+		if (i + 1 < objects_count && objects[i]->dist < objects[i + 1]->dist)
+		{
+			tmp_object = objects[i + 1];
+			objects[i + 1] = objects[i];
+			objects[i] = tmp_object;
+			i = -1;
+		}
+		i++;
+	}
+}
+
+static void	draw_objects(t_app *app)
+{
+	int		i;
+	int		objects_count;
+	t_node	*object;
+
+	objects_count = app->map->objects_count;
+	i = 0;
+	while (i < objects_count)
+	{
+		object = app->map->objects[i];
+		if (object->visible)
+			draw_object(app, object);
+		i++;
+	}
+}
+
+void		update_objects(t_app *app)
 {
     int     i;
+	int		objects_count;
     t_node	*object;
 
+    reset_objects(app);
+	objects_count = app->map->objects_count;
     i = 0;
-    while (i < app->map->objects_count)
+    while (i < objects_count)
     {
         object = app->map->objects[i];
         fill_object(app->sdl, app->player, object);
-        if (object->visible)
-            draw_object(app, object);
         i++;
     }
-}
-
-void	reset_objects(t_map *map)
-{
-    int		i;
-    t_node	*object;
-
-    i = 0;
-    while (i < map->objects_count)
-    {
-        object = map->objects[i];
-        object->screen_x = -1;
-        object->height = -1;
-        object->dist = -1;
-        i++;
-    }
+    sort_objects(app);
+    draw_objects(app);
 }

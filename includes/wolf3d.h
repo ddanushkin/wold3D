@@ -306,8 +306,8 @@ void				player_shoot(t_player *player, float frame);
 void				player_change_weapon(t_player *player, float frame);
 void				player_reloading(t_player *player, float frame);
 void	            update_objects(t_app *app);
-void	            reset_objects(t_map *map);
 void				draw_object(t_app *app, t_node *obj);
+
 void				on_mouse_update(t_app *app);
 void				debug_show_fps(SDL_Renderer *renderer, int fps);
 void				get_fps(t_fps *fps, SDL_Renderer *renderer);
