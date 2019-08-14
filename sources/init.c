@@ -49,13 +49,14 @@ static	void	create_stuff(t_sdl *sdl, t_textures *textures)
 	sdl->texture = SDL_CreateTexture(sdl->renderer, format, access,
 			sdl->width, sdl->height);
 	sdl->ui = load_texture(sdl->renderer, "../resources/", "main_ui.bmp");
+	sdl->logo = load_texture(sdl->renderer, "../resources/main/", "logo.bmp");
 	sdl->font = load_font(60);
 	load_surfaces(textures->floors, "../resources/floors/");
 	load_surfaces(textures->ceilings, "../resources/ceilings/");
 	load_surfaces(textures->walls, "../resources/walls/");
 	load_surfaces(textures->doors, "../resources/doors/");
 	load_surfaces(textures->sprites, "../resources/interior/");
-	fill_diag_dist(sdl);
+	//fill_diag_dist(sdl);
 }
 
 static	void	init_sdl(t_sdl *sdl)

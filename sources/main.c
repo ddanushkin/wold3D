@@ -16,13 +16,12 @@ void	start_the_game(t_app *app)
 	{
 		SDL_PollEvent(&app->sdl->event);
 		update_time(app->time);
-		if (check_for_quit(&app->sdl->event, app->inputs) == 1)
+		if (check_for_quit(&app->sdl->event, app->inputs))
 			break ;
 		on_mouse_update(app);
 		keyboard_input(app, app->time->frame);
 		debug_player(app);
 		update_doors(app, app->time->frame);
-		reset_objects(app->map);
 		create_field_of_view(app);
 		update_objects(app);
 		draw_veiw(app);
@@ -59,12 +58,44 @@ int		load_level(t_app *app, int level)
 	}
 }
 
+int		keyboard_input2(t_app *app)
+{
+	const Uint8 *key;
+
+	key = app->inputs->keyboard;
+	if (key[SDL_SCANCODE_RETURN])
+		return 1;
+	return (0);
+}
+
+void	display_logo(t_app *app)
+{
+	SDL_Rect	area;
+
+	area.y = 0;
+	area.x = 0;
+	area.w = app->sdl->width;
+	area.h = app->sdl->height;
+	app->inputs->keyboard = SDL_GetKeyboardState(NULL);
+	SDL_RenderCopy(app->sdl->renderer, app->sdl->logo, NULL, &area);
+	SDL_RenderPresent(app->sdl->renderer);
+	while (1)
+	{
+		SDL_PollEvent(&app->sdl->event);
+		if (check_for_quit(&app->sdl->event, app->inputs))
+			break ;
+		if (keyboard_input2(app))
+			break ;
+	}
+
+}
 int		main(void)
 {
 	t_app	app;
 
 	init(&app);
 	player_init(app.sdl, app.player);
+	display_logo(&app);
 	if (load_level(&app, 1))
 		start_the_game(&app);
 	quit_properly(&app);

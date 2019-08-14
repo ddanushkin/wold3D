@@ -97,11 +97,14 @@ typedef struct		s_sdl
 	int				height;
 	Uint32			*pixels;
 	SDL_Renderer	*renderer;
+	SDL_Renderer	*renderer2;
 	SDL_Texture		*texture;
 	SDL_Texture		*ui;
 	int				width;
 	SDL_Window		*window;
 	TTF_Font		*font;
+	SDL_Texture		*logo;
+	SDL_Texture		*main;
 }					t_sdl;
 
 typedef struct		s_weapon
