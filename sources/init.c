@@ -95,6 +95,8 @@ static	void	malloc_stuff(t_app *app)
 	app->inputs = (t_inputs *)malloc(sizeof(t_inputs));
 	app->sdl = (t_sdl *)malloc(sizeof(t_sdl));
 	app->map = (t_map *)malloc(sizeof(t_map));
+	app->map->doors_count = 0;
+	app->map->objects_count = 0;
 	app->player = (t_player *)malloc(sizeof(t_player));
 	app->sfx = (t_sfx *)malloc(sizeof(t_sfx));
 	app->time = (t_time *)malloc(sizeof(t_time));
@@ -112,6 +114,7 @@ void			init(t_app *app)
 	app->sfx->door_open = Mix_LoadWAV("../resources/sounds/door_open.wav");
 	app->sfx->door_move = Mix_LoadWAV("../resources/sounds/door_move.wav");
 	app->inputs->sensitivity = 1.5;
-	app->inputs->zoom = 500;
+	app->inputs->zoom = 300;
 	app->debug_angle = 0;
+	app->offset = 0;
 }

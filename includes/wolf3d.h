@@ -242,6 +242,7 @@ typedef struct		s_app
 	t_textures		*textures;
 	t_time			*time;
 	t_animation		*animations;
+	int 			offset;
 	float			debug_angle;
 }					t_app;
 
@@ -258,12 +259,6 @@ typedef struct		s_fps
 	Uint32			current;
 	Uint32			frames;
 }					t_fps;
-
-typedef struct		s_row
-{
-	int				current_length;
-	int				max_length;
-}					t_row;
 
 void				init(t_app *app);
 int					map_read(int fd, t_app *app);
@@ -331,6 +326,9 @@ void	            animation_draw_sprite(t_app *app, t_animation *anim);
 void	            animation_next_frame(t_app *app, t_animation *anim);
 void				map_init(t_map *map);
 void				fill_row(t_app *app, char **data, int row);
-
+int					map_count_rows(char *str, t_map *map);
 char				*create_lineTEMP(int fd);
+void				node_reset(t_node *node, int row, int col);
+void				map_type_empty(t_node *node);
+void				map_fill(t_app *app);
 #endif

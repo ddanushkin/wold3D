@@ -28,7 +28,6 @@ void	start_the_game(t_app *app)
 		animation_next_frame(app, &anim_idle);
 		idle_draw(app, &anim_idle);
 		redraw(app, app->time->frame);
-		//draw_test_animation(app , &animation);
 		get_fps(&fps, app->sdl->renderer);
 		SDL_RenderPresent(app->sdl->renderer);
 	}
@@ -68,7 +67,7 @@ int		keyboard_input2(t_app *app)
 	return (0);
 }
 
-void	display_logo(t_app *app)
+int	display_logo(t_app *app)
 {
 	SDL_Rect	area;
 
@@ -83,11 +82,10 @@ void	display_logo(t_app *app)
 	{
 		SDL_PollEvent(&app->sdl->event);
 		if (check_for_quit(&app->sdl->event, app->inputs))
-			break ;
+			return (0);
 		if (keyboard_input2(app))
-			break ;
+			return (1);
 	}
-
 }
 int		main(void)
 {
@@ -95,8 +93,7 @@ int		main(void)
 
 	init(&app);
 	player_init(app.sdl, app.player);
-	display_logo(&app);
-	if (load_level(&app, 1))
+	if (display_logo(&app) && load_level(&app, 1))
 		start_the_game(&app);
 	quit_properly(&app);
 	return (0);

@@ -35,3 +35,17 @@ void		map_type_door(t_app *app, t_node *node, int index)
 	node->collidable = true;
 	app->map->doors[app->map->doors_count++] = node;
 }
+
+void		map_type_empty(t_node *node)
+{
+	node->type = MAP_TYPE_EMPTY;
+	node->collidable = false;
+}
+
+void		node_reset(t_node *node, int row, int col)
+{
+	node->visible = false;
+	node->collidable = false;
+	node->x = col;
+	node->y = row;
+}

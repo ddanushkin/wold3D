@@ -21,7 +21,9 @@ void		keyboard_input(t_app *app, float frame)
 	if (is_move_input(key) && app->player->move_acc < 3.5)
 		app->player->move_acc += 0.8;
 	else if (!is_move_input(key) && app->player->move_acc > 0)
-		app->player->move_acc -= 0.8;
+		app->player->move_acc -= 1.5;
+	if (key[SDL_SCANCODE_LSHIFT] && app->player->move_acc < 10.0)
+		app->player->move_acc += 0.2;
 	if (app->player->move_acc > 0)
 		app->player->speed = 50.0 * app->player->move_acc * app->time->delta;
 	if (app->player->speed > 0)
@@ -38,8 +40,6 @@ void		keyboard_input(t_app *app, float frame)
 		door_interaction(app, frame);
 	if (key[SDL_SCANCODE_M] || key[SDL_SCANCODE_P])
 		update_sound(key, app->sfx);
-	if (key[SDL_SCANCODE_BACKSPACE])
-		SDL_SetRelativeMouseMode(!SDL_GetRelativeMouseMode());
 }
 
 void		player_rotate(t_player *player, const Uint8 *state)
