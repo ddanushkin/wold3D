@@ -6,7 +6,7 @@ int		valid_characters(char *c)
 		return (1);
 	if (*c == 'W' || *c == 'I' || *c == 'D' || *c == 'P')
 		if (ft_isdigit(*(c + 1)) && *(c + 2) == '\0')
-			return 1;
+			return (1);
 	return (0);
 }
 

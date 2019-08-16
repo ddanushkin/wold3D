@@ -22,8 +22,6 @@ void		keyboard_input(t_app *app, float frame)
 		app->player->move_acc += 0.8;
 	else if (!is_move_input(key) && app->player->move_acc > 0)
 		app->player->move_acc -= 1.5;
-	if (key[SDL_SCANCODE_LSHIFT] && app->player->move_acc < 10.0)
-		app->player->move_acc += 0.2;
 	if (app->player->move_acc > 0)
 		app->player->speed = 50.0 * app->player->move_acc * app->time->delta;
 	if (app->player->speed > 0)

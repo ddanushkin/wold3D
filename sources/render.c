@@ -98,14 +98,14 @@ void	draw_veiw(t_app *app)
 
 void	redraw(t_app *app, float frame)
 {
-	if (app->player->shooting)
-		shooting_animation(app->sdl, app->player, frame);
-	if (app->player->changing)
-		changing_animation(app->sdl, app->player, frame);
-	if (app->player->reloading)
-		reloading_animation(app->sdl, app->player, frame);
-	if (app->player->anim_is_done)
-		idle_gun_animation(app->sdl, app->player, frame);
+//	if (app->player->shooting)
+//		shooting_animation(app->sdl, app->player, frame);
+//	if (app->player->changing)
+//		changing_animation(app->sdl, app->player, frame);
+//	if (app->player->reloading)
+//		reloading_animation(app->sdl, app->player, frame);
+//	if (app->player->anim_is_done)
+//		idle_gun_animation(app->sdl, app->player, frame);
 	create_hud(app->sdl, app->player);
 	draw_face(app->sdl, app->player, frame);
 }

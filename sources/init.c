@@ -41,7 +41,7 @@ static	void	create_stuff(t_sdl *sdl, t_textures *textures)
 
 	format = SDL_PIXELFORMAT_RGB888;
 	access = SDL_TEXTUREACCESS_STATIC;
-	flags = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
+	flags = SDL_RENDERER_SOFTWARE;
 	check_for_init_errors();
 	sdl->window = SDL_CreateWindow("SDL2", SDL_WINDOWPOS_CENTERED,
 			SDL_WINDOWPOS_CENTERED, sdl->width, sdl->height, 0);
@@ -56,7 +56,6 @@ static	void	create_stuff(t_sdl *sdl, t_textures *textures)
 	load_surfaces(textures->walls, "../resources/walls/");
 	load_surfaces(textures->doors, "../resources/doors/");
 	load_surfaces(textures->sprites, "../resources/interior/");
-	//fill_diag_dist(sdl);
 }
 
 static	void	init_sdl(t_sdl *sdl)

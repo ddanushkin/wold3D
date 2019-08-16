@@ -3,15 +3,18 @@
 void	start_the_game(t_app *app)
 {
 	t_fps		fps;
-	t_animation	animation;
-	t_animation	anim_idle;
 
 	init_time(app->time, &fps);
 	SDL_SetRelativeMouseMode(SDL_TRUE);
 	app->inputs->keyboard = SDL_GetKeyboardState(NULL);
 	update_time(app->time);
-	init_test_animation(app, &animation);
-	init_idle_animation(app, &anim_idle);
+
+	t_animation	anim_idle;
+	init_idle_anim(app, &anim_idle);
+
+	t_animation	anim_shoot;
+	init_shoot_anim(app, &anim_shoot);
+
 	while (1)
 	{
 		SDL_PollEvent(&app->sdl->event);
@@ -25,8 +28,34 @@ void	start_the_game(t_app *app)
 		create_field_of_view(app);
 		update_objects(app);
 		draw_veiw(app);
-		animation_next_frame(app, &anim_idle);
-		idle_draw(app, &anim_idle);
+
+		if (app->inputs->left_pressed)
+		{
+			if (!anim_shoot.delayed)
+				animation_start(&anim_shoot);
+			if (anim_shoot.play)
+			{
+				anim_idle.play = 0;
+				app->player->state = PL_STATE_SHOOT;
+			}
+		}
+
+		animation_update(app, &anim_shoot);
+
+		if (app->player->state == PL_STATE_IDLE)
+		{
+			animation_next_frame(&anim_shoot);
+			idle_draw(app, &anim_shoot);
+		}
+
+		if (app->player->state == PL_STATE_SHOOT)
+		{
+			animation_next_frame(&anim_shoot);
+			shoot_draw(app, &anim_shoot);
+			if (!anim_shoot.play && anim_shoot.counter >= anim_shoot.speed)
+				app->player->state = PL_STATE_IDLE;
+		}
+
 		redraw(app, app->time->frame);
 		get_fps(&fps, app->sdl->renderer);
 		SDL_RenderPresent(app->sdl->renderer);
@@ -67,7 +96,7 @@ int		keyboard_input2(t_app *app)
 	return (0);
 }
 
-int	display_logo(t_app *app)
+int		display_logo(t_app *app)
 {
 	SDL_Rect	area;
 
@@ -87,13 +116,18 @@ int	display_logo(t_app *app)
 			return (1);
 	}
 }
+
 int		main(void)
 {
 	t_app	app;
 
+	//getchar();
+
 	init(&app);
 	player_init(app.sdl, app.player);
-	if (display_logo(&app) && load_level(&app, 1))
+//	if (display_logo(&app) && load_level(&app, 1))
+//		start_the_game(&app);
+	if (load_level(&app, 1))
 		start_the_game(&app);
 	quit_properly(&app);
 	return (0);

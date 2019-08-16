@@ -21,12 +21,12 @@ void	gun_shoot(t_sdl *sdl, t_player *player, float delta)
 	else if (cur_frame > 10)
 	{
 		player->anim_is_done = 1;
-		SDL_RenderCopy(sdl->renderer, player->weapon[id].sprites[1],
-			NULL, &area);
+		//SDL_RenderCopy(sdl->renderer, player->weapon[id].sprites[1],
+	//		NULL, &area);
 		return ;
 	}
-	SDL_RenderCopy(sdl->renderer, player->weapon[id].sprites[cur_frame],
-				NULL, &area);
+	//SDL_RenderCopy(sdl->renderer, player->weapon[id].sprites[cur_frame],
+	//			NULL, &area);
 }
 
 void	player_shoot(t_player *player, float frame)
@@ -37,7 +37,7 @@ void	player_shoot(t_player *player, float frame)
 		player->anim_frame = frame;
 		player->anim_is_done = 0;
 		player->shooting = 1;
-		Mix_PlayChannel(-1, player->weapon[player->cur_weapon].gun_sound, 0);
+		//Mix_PlayChannel(-1, player->weapon[player->cur_weapon].gun_sound, 0);
 	}
 	else if (player->anim_frame == 0 && player->weapon[player->cur_weapon].ammo_cur == 0)
 	{

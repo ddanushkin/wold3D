@@ -93,7 +93,7 @@ void	fill_row(t_app *app, char **data, int row)
 		else if (type == '.')
 			map_type_empty(node);
 		else if (type == 'P')
-			place_player(app->player, node, row, col);
+			place_player(app->player, node, row + 1, col + 1);
 		col++;
 	}
 }

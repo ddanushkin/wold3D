@@ -43,12 +43,6 @@ typedef struct		s_fpoint
 	float			y;
 }					t_fpoint;
 
-typedef struct		s_dpoint
-{
-	double			x;
-	double			y;
-}					t_dpoint;
-
 typedef struct		s_iiter
 {
 	int				min;
@@ -56,24 +50,17 @@ typedef struct		s_iiter
 	int				max;
 }					t_iiter;
 
-typedef struct		s_timers
-{
-	float			backspace;
-	float			left_shift;
-	float			space;
-}					t_timers;
-
 typedef struct		s_animation
 {
-	int				start_frame;
-	int				delay_frames;
-	int				total_frames;
-	int				current_frame;
-	float			speed;
-	int				play_once;
 	SDL_Rect		*area;
-	int				played;
-	int				finished;
+	int 			play;
+	int				current_frame;
+	int				total_frames;
+	int				loop;
+	float 			delay;
+	float 			counter;
+	float 			speed;
+	float 			delayed;
 }					t_animation;
 
 typedef	struct		s_time
@@ -321,14 +308,15 @@ void				draw_veiw(t_app *app);
 TTF_Font			*load_font(int size);
 int					count_files(char *path);
 
-void	            init_test_animation(t_app *app, t_animation *anim);
-void	            init_idle_animation(t_app *app, t_animation *anim);
+void	            init_idle_anim(t_app *app, t_animation *anim);
+void				init_shoot_anim(t_app *app, t_animation *anim);
+void				shoot_draw(t_app *app, t_animation *anim);
 void		        idle_draw(t_app *app, t_animation *anim);
-void	            animation_draw_sprite(t_app *app, t_animation *anim);
-void	            animation_next_frame(t_app *app, t_animation *anim);
+void				animation_start(t_animation *anim);
+void				animation_update(t_app *app, t_animation *anim);
+void	            animation_next_frame(t_animation *anim);
 void				map_init(t_map *map);
 void				fill_row(t_app *app, char **data, int row);
-char				*create_lineTEMP(int fd);
 void				node_reset(t_node *node, int row, int col);
 void				map_type_empty(t_node *node);
 void				map_fill(t_app *app);

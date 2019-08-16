@@ -68,6 +68,7 @@ void	draw_column(t_app *app, t_ray *ray, int x, float angle)
 	t_iiter		y;
 	double		ratio;
 	t_color		col;
+	SDL_Color	*colors;
 
 	ratio = TEXTURE_SIZE / ray->height;
 	y.min = (app->sdl->half_height - app->debug_angle) - (ray->height * 0.5);
@@ -77,6 +78,7 @@ void	draw_column(t_app *app, t_ray *ray, int x, float angle)
 	y.cur = (y.min < 0) ? 0 : y.min;
 	if (ray->dist > app->sdl->draw_dist)
 		y.cur = draw_back(app->sdl, y.cur, x, y.max);
+	colors = ray->texture->format->palette->colors;
 	while (y.cur < y.max)
 	{
 		get_color(ray->texture, &col, ray->offset, (y.cur - y.min) * ratio);
