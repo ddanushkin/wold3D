@@ -40,3 +40,19 @@ void	animation_next_frame(t_animation *anim)
 		anim->delayed = 1;
 	}
 }
+
+void	state_change(t_app *app, t_animation *idle, t_animation *change,
+		t_animation *shoot, t_animation *reload)
+{
+	if (app->player->state == PL_STATE_IDLE)
+	{
+		if (shoot->play)
+			app->player->state = PL_STATE_SHOOT;
+		else if (change->play)
+			app->player->state = PL_STATE_CHANGE;
+		else if (reload->play)
+			app->player->state = PL_STATE_RELOAD;
+	}
+	if (app->player->state != PL_STATE_IDLE)
+		idle->play = 0;
+}

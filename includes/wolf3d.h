@@ -270,6 +270,11 @@ t_ray				*get_ray(t_app *app, int x, float angle);
 void				draw_face(t_sdl *sdl, t_player *player, float delta);
 void				idle_gun_animation(t_sdl *sdl, t_player *player,
 									float delta);
+void				change_draw(t_app *app, t_animation *anim);
+void				state_change(t_app *app, t_animation *idle, t_animation *change,
+					 t_animation *shoot, t_animation *reload);
+void				init_reload_anim(t_app *app, t_animation *anim);
+void				init_change_anim(t_app *app, t_animation *anim);
 void				gun_shoot(t_sdl *sdl, t_player *player, float delta);
 void				gun_change(t_sdl *sdl, t_player *player, float delta);
 void				gun_reload(t_sdl *sdl, t_player *player, float frame);

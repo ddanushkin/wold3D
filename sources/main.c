@@ -15,6 +15,12 @@ void	start_the_game(t_app *app)
 	t_animation	anim_shoot;
 	init_shoot_anim(app, &anim_shoot);
 
+	t_animation anim_change;
+	init_change_anim(app, &anim_change);
+
+	t_animation anim_reload;
+	init_reload_anim(app, &anim_reload);
+
 	while (1)
 	{
 		SDL_PollEvent(&app->sdl->event);
@@ -30,14 +36,20 @@ void	start_the_game(t_app *app)
 		draw_veiw(app);
 
 		if (app->inputs->left_pressed)
+			animation_start(&anim_shoot);
+
+		if (app->inputs->keyboard[SDL_SCANCODE_Q])
+			animation_start(&anim_change);
+
+		state_change(app, &anim_idle, &anim_change, &anim_shoot, &anim_reload);
+		animation_update(app, &anim_change);
+
+		if (app->player->state == PL_STATE_CHANGE)
 		{
-			if (!anim_shoot.delayed)
-				animation_start(&anim_shoot);
-			if (anim_shoot.play)
-			{
-				anim_idle.play = 0;
-				app->player->state = PL_STATE_SHOOT;
-			}
+			animation_next_frame(&anim_change);
+			change_draw(app, &anim_change);
+			if (!anim_change.play && anim_change.counter >= anim_change.speed)
+				app->player->state = PL_STATE_IDLE;
 		}
 
 		animation_update(app, &anim_shoot);

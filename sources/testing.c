@@ -13,8 +13,42 @@ void	init_shoot_anim(t_app *app, t_animation *anim)
 	anim->counter = 0;
 	anim->total_frames = 11;
 	anim->loop = 0;
-	anim->delay = 5;
-	anim->speed = 0.2f;
+	anim->delay = 0.4f;
+	anim->speed = 0.1f;
+}
+
+void	init_change_anim(t_app *app, t_animation *anim)
+{
+	anim->area = (SDL_Rect *)malloc(sizeof(SDL_Rect));
+	anim->area->y = app->sdl->height - 130 - 550;
+	anim->area->w = 96 * 5;
+	anim->area->x = app->sdl->half_width - anim->area->w + 244;
+	anim->area->h = 116 * 5;
+	anim->play = 0;
+	anim->delayed = 0;
+	anim->current_frame = 0;
+	anim->counter = 0;
+	anim->total_frames = 30;
+	anim->loop = 0;
+	anim->delay = 0.4f;
+	anim->speed = 0.1f;
+}
+
+void	init_reload_anim(t_app *app, t_animation *anim)
+{
+	anim->area = (SDL_Rect *)malloc(sizeof(SDL_Rect));
+	anim->area->y = app->sdl->height - 130 - 550;
+	anim->area->w = 96 * 5;
+	anim->area->x = app->sdl->half_width - anim->area->w + 244;
+	anim->area->h = 116 * 5;
+	anim->play = 0;
+	anim->delayed = 0;
+	anim->current_frame = 0;
+	anim->counter = 0;
+	anim->total_frames = 30;
+	anim->loop = 0;
+	anim->delay = 0.4f;
+	anim->speed = 0.1f;
 }
 
 void	init_idle_anim(t_app *app, t_animation *anim)
@@ -67,4 +101,30 @@ void		shoot_draw(t_app *app, t_animation *anim)
 		weapon->fired = 1;
 	}
 	SDL_RenderCopy(app->sdl->renderer, sprite, NULL, anim->area);
+}
+
+void		change_draw(t_app *app, t_animation *anim)
+{
+	SDL_Texture		*sprite;
+	t_weapon		*weapon;
+	SDL_Rect		pos;
+
+	pos.x = anim->area->x;
+	pos.w = anim->area->w;
+	pos.h = anim->area->h;
+	pos.y = anim->area->y + anim->current_frame * 10;
+	weapon = &app->player->weapon[app->player->cur_weapon];
+	if (anim->current_frame > anim->total_frames * 0.5)
+	{
+		weapon = &app->player->weapon[app->player->cur_weapon + 1];
+		pos.y = 200 - anim->area->y - anim->current_frame * 10;
+	}
+	sprite = weapon->sprites[1];
+	SDL_RenderCopy(app->sdl->renderer, sprite, NULL, &pos);
+	if (anim->current_frame >= anim->total_frames - 1)
+	{
+		app->player->cur_weapon++;
+		anim->play = 0;
+		app->player->state = PL_STATE_IDLE;
+	}
 }
