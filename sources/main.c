@@ -9,6 +9,7 @@ void	start_the_game(t_app *app)
 	app->inputs->keyboard = SDL_GetKeyboardState(NULL);
 	update_time(app->time);
 
+	//TODO: Put all animations to t_animation array.
 	t_animation	anim_idle;
 	init_idle_anim(app, &anim_idle);
 
@@ -35,6 +36,7 @@ void	start_the_game(t_app *app)
 		update_objects(app);
 		draw_veiw(app);
 
+		//TODO: Replace old system with new system.
 		if (app->inputs->left_pressed)
 			animation_start(&anim_shoot);
 
@@ -42,16 +44,9 @@ void	start_the_game(t_app *app)
 			animation_start(&anim_change);
 
 		state_change(app, &anim_idle, &anim_change, &anim_shoot, &anim_reload);
+
+		//TODO: Wrap this to functiuon that loop over t_animation array.
 		animation_update(app, &anim_change);
-
-		if (app->player->state == PL_STATE_CHANGE)
-		{
-			animation_next_frame(&anim_change);
-			change_draw(app, &anim_change);
-			if (!anim_change.play && anim_change.counter >= anim_change.speed)
-				app->player->state = PL_STATE_IDLE;
-		}
-
 		animation_update(app, &anim_shoot);
 
 		if (app->player->state == PL_STATE_IDLE)
@@ -60,12 +55,18 @@ void	start_the_game(t_app *app)
 			idle_draw(app, &anim_shoot);
 		}
 
+		if (app->player->state == PL_STATE_CHANGE)
+		{
+			animation_next_frame(&anim_change);
+			change_draw(app, &anim_change);
+			animation_check_end(app, &anim_change);
+		}
+
 		if (app->player->state == PL_STATE_SHOOT)
 		{
 			animation_next_frame(&anim_shoot);
 			shoot_draw(app, &anim_shoot);
-			if (!anim_shoot.play && anim_shoot.counter >= anim_shoot.speed)
-				app->player->state = PL_STATE_IDLE;
+			animation_check_end(app, &anim_change);
 		}
 
 		redraw(app, app->time->frame);

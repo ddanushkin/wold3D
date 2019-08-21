@@ -41,8 +41,14 @@ void	animation_next_frame(t_animation *anim)
 	}
 }
 
+void	animation_check_end(t_app *app, t_animation *anim)
+{
+	if (!anim->play && anim->counter >= anim->speed)
+		app->player->state = PL_STATE_IDLE;
+}
+
 void	state_change(t_app *app, t_animation *idle, t_animation *change,
-		t_animation *shoot, t_animation *reload)
+					 t_animation *shoot, t_animation *reload)
 {
 	if (app->player->state == PL_STATE_IDLE)
 	{
