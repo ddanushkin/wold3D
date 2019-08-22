@@ -1,111 +1,50 @@
 #include "wolf3d.h"
 
-void	shooting_animation(t_sdl *sdl, t_player *player, float time)
-{
-	if (time - player->anim_frame < player->weapon[player->cur_weapon].firerate)
-	{
-		if (!player->anim_is_done)
-			gun_shoot(sdl, player, time - player->anim_frame);
-		else
-			printf("SHOOT: WAIT\n");
-	}
-	else
-	{
-		player->shooting = 0;
-		player->anim_frame = 0;
-		player->weapon[player->cur_weapon].fired = 0;
-		printf("SHOOT: DONE\n");
-	}
-}
-
-void	changing_animation(t_sdl *sdl, t_player *player, float time)
-{
-	if (time - player->anim_frame < 1.8)
-	{
-		if (!player->anim_is_done)
-			gun_change(sdl, player, time - player->anim_frame);
-		else
-			printf("CHANGE: WAIT\n");
-	}
-	else
-	{
-		player->changing = 0;
-		player->anim_frame = 0;
-		printf("CHANGE: DONE\n");
-	}
-}
-
-void	reloading_animation(t_sdl *sdl, t_player *player, float time)
-{
-	if (time - player->anim_frame < 1.8)
-	{
-		if (!player->anim_is_done)
-			gun_reload(sdl, player, time - player->anim_frame);
-		else
-			printf("RELOAD: WAIT\n");
-	}
-	else
-	{
-		player->reloading = 0;
-		player->anim_frame = 0;
-		printf("CHANGE: DONE\n");
-	}
-}
-
-void	idle_gun_animation(t_sdl *sdl, t_player *player, float delta)
-{
-	SDL_Rect		area;
-	int				cur_frame;
-	unsigned char	id;
-
-	id = player->cur_weapon;
-	cur_frame = (long)(delta * 1.9);
-	//player->idle_frame += 0.10 + (player->head_acc / 8);
-	//player->head_offset = sinf(player->idle_frame) * (3.5 + player->head_acc * 2);
-//	if (player->idle_frame > M_PI && player->head_acc > 0 && delta - player->last_step >= 0.3)
-//	{
-//		Mix_PlayChannel(1, player->steps[rand() % 8], 0);
-//		player->last_step = delta;
-//	}
-//	if (player->idle_frame > M_PI * 2)
-//		player->idle_frame = 0;
-	area.y = sdl->height - 130 - 550 + player->head_offset;
-	area.w = 96 * 5;
-	area.x = sdl->half_width - area.w + 244;
-	area.h = 116 * 5;
-	cur_frame %= 2;
-	if (cur_frame == 0)
-		cur_frame++;
-	SDL_RenderCopy(sdl->renderer, player->weapon[id].sprites[cur_frame], NULL, &area);
-}
-
 void	draw_veiw(t_app *app)
 {
 	SDL_Rect		screen;
 
 	if (app->inputs->right_pressed && app->offset < app->inputs->zoom)
-		app->offset += 10;
+		app->offset += 35;
 	if (!app->inputs->right_pressed && app->offset > 50)
-		app->offset -= 25;
-
-	screen.x = -app->offset * 0.5;
+		app->offset -= 45;
+	screen.x = -app->offset * 0.5 * 1.76;
 	screen.y = -app->offset * 0.5 + app->player->head_offset;
-	screen.w = app->sdl->width + app->offset;
+	screen.w = app->sdl->width + app->offset * 1.76;
 	screen.h = app->sdl->height + app->offset;
-	SDL_UpdateTexture(app->sdl->texture, NULL, app->sdl->pixels, app->sdl->width * sizeof(Uint32));
+	SDL_UpdateTexture(app->sdl->texture, NULL, app->sdl->pixels,
+			app->sdl->width * sizeof(Uint32));
 	SDL_RenderCopy(app->sdl->renderer, app->sdl->texture, NULL, &screen);
 }
 
 void	redraw(t_app *app, float frame)
 {
-//	if (app->player->shooting)
-//		shooting_animation(app->sdl, app->player, frame);
-//	if (app->player->changing)
-//		changing_animation(app->sdl, app->player, frame);
-//	if (app->player->reloading)
-//		reloading_animation(app->sdl, app->player, frame);
-//	if (app->player->anim_is_done)
-//		idle_gun_animation(app->sdl, app->player, frame);
+	if (app->player->state == PL_STATE_IDLE)
+	{
+		animation_next_frame(&app->animations[ANIM_IDLE]);
+		idle_draw(app, &app->animations[ANIM_IDLE]);
+	}
+	if (app->player->state == PL_STATE_CHANGE)
+	{
+		animation_next_frame(&app->animations[ANIM_CHANGE]);
+		change_draw(app, &app->animations[ANIM_CHANGE]);
+		if (animation_ended(app, &app->animations[ANIM_CHANGE]))
+			app->player->changed = 0;
+	}
+	if (app->player->state == PL_STATE_RELOAD)
+	{
+		animation_next_frame(&app->animations[ANIM_RELOAD]);
+		reload_draw(app, &app->animations[ANIM_RELOAD]);
+		if (animation_ended(app, &app->animations[ANIM_RELOAD]))
+			app->player->reloaded = 0;
+	}
+	if (app->player->state == PL_STATE_SHOOT)
+	{
+		animation_next_frame(&app->animations[ANIM_SHOOT]);
+		shoot_draw(app, &app->animations[ANIM_SHOOT]);
+		if (animation_ended(app, &app->animations[ANIM_SHOOT]))
+			app->player->weapon[app->player->cur_weapon].fired = 0;
+	}
 	create_hud(app->sdl, app->player);
 	draw_face(app->sdl, app->player, frame);
 }

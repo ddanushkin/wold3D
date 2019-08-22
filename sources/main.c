@@ -8,20 +8,6 @@ void	start_the_game(t_app *app)
 	SDL_SetRelativeMouseMode(SDL_TRUE);
 	app->inputs->keyboard = SDL_GetKeyboardState(NULL);
 	update_time(app->time);
-
-	//TODO: Put all animations to t_animation array.
-	t_animation	anim_idle;
-	init_idle_anim(app, &anim_idle);
-
-	t_animation	anim_shoot;
-	init_shoot_anim(app, &anim_shoot);
-
-	t_animation anim_change;
-	init_change_anim(app, &anim_change);
-
-	t_animation anim_reload;
-	init_reload_anim(app, &anim_reload);
-
 	while (1)
 	{
 		SDL_PollEvent(&app->sdl->event);
@@ -35,40 +21,8 @@ void	start_the_game(t_app *app)
 		create_field_of_view(app);
 		update_objects(app);
 		draw_veiw(app);
-
-		//TODO: Replace old system with new system.
-		if (app->inputs->left_pressed)
-			animation_start(&anim_shoot);
-
-		if (app->inputs->keyboard[SDL_SCANCODE_Q])
-			animation_start(&anim_change);
-
-		state_change(app, &anim_idle, &anim_change, &anim_shoot, &anim_reload);
-
-		//TODO: Wrap this to functiuon that loop over t_animation array.
-		animation_update(app, &anim_change);
-		animation_update(app, &anim_shoot);
-
-		if (app->player->state == PL_STATE_IDLE)
-		{
-			animation_next_frame(&anim_shoot);
-			idle_draw(app, &anim_shoot);
-		}
-
-		if (app->player->state == PL_STATE_CHANGE)
-		{
-			animation_next_frame(&anim_change);
-			change_draw(app, &anim_change);
-			animation_check_end(app, &anim_change);
-		}
-
-		if (app->player->state == PL_STATE_SHOOT)
-		{
-			animation_next_frame(&anim_shoot);
-			shoot_draw(app, &anim_shoot);
-			animation_check_end(app, &anim_change);
-		}
-
+		state_change(app);
+		animations_update(app);
 		redraw(app, app->time->frame);
 		get_fps(&fps, app->sdl->renderer);
 		SDL_RenderPresent(app->sdl->renderer);

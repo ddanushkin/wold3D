@@ -27,7 +27,12 @@
 # define PL_STATE_SHOOT 1
 # define PL_STATE_RELOAD 2
 # define PL_STATE_CHANGE 3
-# define PL_STATE_WALK 4
+
+# define ANIM_IDLE 0
+# define ANIM_SHOOT 1
+# define ANIM_CHANGE 2
+# define ANIM_RELOAD 3
+# define ANIM_COUNT 4
 
 # define PI 3.14159265
 
@@ -154,6 +159,8 @@ typedef struct		s_player
 	float			last_shift;
 	float			last_space;
 	int				step;
+	int 			changed;
+	int 			reloaded;
 	int				lives;
 	int				max_dist;
 	float			move_acc;
@@ -268,17 +275,7 @@ void		        draw_text_font(SDL_Renderer *renderer, t_ui_elem *ui_elem, TTF_Fon
 void				create_hud(t_sdl *sdl, t_player *player);
 t_ray				*get_ray(t_app *app, int x, float angle);
 void				draw_face(t_sdl *sdl, t_player *player, float delta);
-void				idle_gun_animation(t_sdl *sdl, t_player *player,
-									float delta);
-void				change_draw(t_app *app, t_animation *anim);
-void				state_change(t_app *app, t_animation *idle, t_animation *change,
-					 t_animation *shoot, t_animation *reload);
-void				init_reload_anim(t_app *app, t_animation *anim);
-void				init_change_anim(t_app *app, t_animation *anim);
-void				animation_check_end(t_app *app, t_animation *anim);
-void				gun_shoot(t_sdl *sdl, t_player *player, float delta);
-void				gun_change(t_sdl *sdl, t_player *player, float delta);
-void				gun_reload(t_sdl *sdl, t_player *player, float frame);
+int					animation_ended(t_app *app, t_animation *anim);
 void				get_weapon_sprites(t_sdl *sdl, t_weapon *weapon,
 									char *weapon_folder);
 void				init_weapon(t_weapon *weapon, u_int ammo, float rate,
@@ -295,9 +292,6 @@ void				draw_column(t_app *app, t_ray *ray, int x, float angle);
 void				map_type_wall(t_app *app, t_node *node, int index);
 void				map_type_interior(t_app *app, t_node *node, int index);
 void				map_type_door(t_app *app, t_node *node, int index);
-void				player_shoot(t_player *player, float frame);
-void				player_change_weapon(t_player *player, float frame);
-void				player_reloading(t_player *player, float frame);
 void	            update_objects(t_app *app);
 void				draw_object(t_app *app, t_node *obj);
 
@@ -316,10 +310,14 @@ int					count_files(char *path);
 
 void	            init_idle_anim(t_app *app, t_animation *anim);
 void				init_shoot_anim(t_app *app, t_animation *anim);
-void				shoot_draw(t_app *app, t_animation *anim);
+void				init_change_anim(t_app *app, t_animation *anim);
+void				init_reload_anim(t_app *app, t_animation *anim);
 void		        idle_draw(t_app *app, t_animation *anim);
+void				shoot_draw(t_app *app, t_animation *anim);
+void				change_draw(t_app *app, t_animation *anim);
+void				reload_draw(t_app *app, t_animation *anim);
 void				animation_start(t_animation *anim);
-void				animation_update(t_app *app, t_animation *anim);
+void				animations_update(t_app *app);
 void	            animation_next_frame(t_animation *anim);
 void				map_init(t_map *map);
 void				fill_row(t_app *app, char **data, int row);
@@ -328,5 +326,9 @@ void				map_type_empty(t_node *node);
 void				map_fill(t_app *app);
 int					map_count_cols(char *row, t_map *map);
 int					map_count_rows(char *str, t_map *map);
-void				place_player(t_player *player, t_node *node, int row, int col);
+void				place_player(t_player *player, t_node *node, int row,
+									int col);
+void				change_weapon(t_app *app);
+void				reload_weapon(t_app *app);
+void				state_change(t_app *app);
 #endif

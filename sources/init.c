@@ -99,7 +99,6 @@ static	void	malloc_stuff(t_app *app)
 	app->player = (t_player *)malloc(sizeof(t_player));
 	app->sfx = (t_sfx *)malloc(sizeof(t_sfx));
 	app->time = (t_time *)malloc(sizeof(t_time));
-	app->animations = (t_animation *)malloc(sizeof(t_animation) * 10);
 	app->textures = (t_textures *)malloc(sizeof(t_textures));
 	malloc_textures(app->textures);
 }
@@ -116,4 +115,9 @@ void			init(t_app *app)
 	app->inputs->zoom = 300;
 	app->debug_angle = 0;
 	app->offset = 0;
+	app->animations = (t_animation *)malloc(sizeof(t_animation) * 10);
+	init_idle_anim(app, &app->animations[0]);
+	init_shoot_anim(app, &app->animations[1]);
+	init_change_anim(app, &app->animations[2]);
+	init_reload_anim(app, &app->animations[3]);
 }

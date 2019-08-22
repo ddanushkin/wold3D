@@ -10,12 +10,20 @@ void	animation_start(t_animation *anim)
 	}
 }
 
-void	animation_update(t_app *app, t_animation *anim)
+void	animations_update(t_app *app)
 {
-	if (anim->counter < anim->speed || anim->delayed)
-		anim->counter += app->time->delta;
-	if (anim->counter >= anim->delay)
-		anim->delayed = 0;
+	int i = 0;
+	t_animation *anim;
+
+	while (i < ANIM_COUNT)
+	{
+		anim = &app->animations[i];
+		if (anim->counter < anim->speed || anim->delayed)
+			anim->counter += app->time->delta;
+		if (anim->counter >= anim->delay)
+			anim->delayed = 0;
+		i++;
+	}
 }
 
 void	animation_next_frame(t_animation *anim)
@@ -41,24 +49,12 @@ void	animation_next_frame(t_animation *anim)
 	}
 }
 
-void	animation_check_end(t_app *app, t_animation *anim)
+int		animation_ended(t_app *app, t_animation *anim)
 {
 	if (!anim->play && anim->counter >= anim->speed)
-		app->player->state = PL_STATE_IDLE;
-}
-
-void	state_change(t_app *app, t_animation *idle, t_animation *change,
-					 t_animation *shoot, t_animation *reload)
-{
-	if (app->player->state == PL_STATE_IDLE)
 	{
-		if (shoot->play)
-			app->player->state = PL_STATE_SHOOT;
-		else if (change->play)
-			app->player->state = PL_STATE_CHANGE;
-		else if (reload->play)
-			app->player->state = PL_STATE_RELOAD;
+		app->player->state = PL_STATE_IDLE;
+		return (1);
 	}
-	if (app->player->state != PL_STATE_IDLE)
-		idle->play = 0;
+	return (0);
 }

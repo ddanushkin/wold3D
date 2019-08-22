@@ -106,3 +106,46 @@ void	place_player(t_player *player, t_node *node, int row, int col)
 	player->x = col * TEXTURE_SIZE + (TEXTURE_SIZE * 0.5);
 	map_type_empty(node);
 }
+
+void	state_change(t_app *app)
+{
+	if (app->player->state == PL_STATE_IDLE)
+	{
+		if (app->animations[ANIM_SHOOT].play)
+			app->player->state = PL_STATE_SHOOT;
+		else if (app->animations[ANIM_CHANGE].play)
+			app->player->state = PL_STATE_CHANGE;
+		else if (app->animations[ANIM_RELOAD].play)
+			app->player->state = PL_STATE_RELOAD;
+	}
+	if (app->player->state != PL_STATE_IDLE)
+		app->animations[ANIM_IDLE].play = 0;
+}
+
+void	change_weapon(t_app *app)
+{
+	app->player->cur_weapon++;
+	if (app->player->cur_weapon > 2)
+		app->player->cur_weapon = 0;
+	app->player->changed = 1;
+}
+
+void	reload_weapon(t_app *app)
+{
+	int old_ammo;
+	t_weapon		*weapon;
+
+	weapon = &app->player->weapon[app->player->cur_weapon];
+	old_ammo = weapon->ammo_cur;
+	if (weapon->mag_cur >= weapon->ammo_max)
+	{
+		weapon->ammo_cur = weapon->ammo_max;
+		weapon->mag_cur -= weapon->ammo_max - old_ammo;
+	}
+	else
+	{
+		weapon->ammo_cur = weapon->mag_cur;
+		weapon->mag_cur = 0;
+	}
+	app->player->reloaded = 1;
+}

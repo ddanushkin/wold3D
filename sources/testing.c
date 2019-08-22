@@ -1,5 +1,22 @@
 #include "wolf3d.h"
 
+void	init_idle_anim(t_app *app, t_animation *anim)
+{
+	anim->area = (SDL_Rect *)malloc(sizeof(SDL_Rect));
+	anim->area->y = app->sdl->height - 130 - 550;
+	anim->area->w = 96 * 5;
+	anim->area->x = app->sdl->half_width - anim->area->w + 244;
+	anim->area->h = 116 * 5;
+	anim->play = 0;
+	anim->delayed = 0;
+	anim->current_frame = 0;
+	anim->total_frames = 60;
+	anim->loop = 1;
+	anim->delay = 0;
+	anim->counter = 0;
+	anim->speed = 0.01f;
+}
+
 void	init_shoot_anim(t_app *app, t_animation *anim)
 {
 	anim->area = (SDL_Rect *)malloc(sizeof(SDL_Rect));
@@ -13,7 +30,7 @@ void	init_shoot_anim(t_app *app, t_animation *anim)
 	anim->counter = 0;
 	anim->total_frames = 11;
 	anim->loop = 0;
-	anim->delay = 0.4f;
+	anim->delay = 0;
 	anim->speed = 0.1f;
 }
 
@@ -30,8 +47,9 @@ void	init_change_anim(t_app *app, t_animation *anim)
 	anim->counter = 0;
 	anim->total_frames = 30;
 	anim->loop = 0;
-	anim->delay = 0.4f;
+	anim->delay = 0;
 	anim->speed = 0.1f;
+	app->player->changed = 0;
 }
 
 void	init_reload_anim(t_app *app, t_animation *anim)
@@ -47,25 +65,9 @@ void	init_reload_anim(t_app *app, t_animation *anim)
 	anim->counter = 0;
 	anim->total_frames = 30;
 	anim->loop = 0;
-	anim->delay = 0.4f;
-	anim->speed = 0.1f;
-}
-
-void	init_idle_anim(t_app *app, t_animation *anim)
-{
-	anim->area = (SDL_Rect *)malloc(sizeof(SDL_Rect));
-	anim->area->y = app->sdl->height - 130 - 550;
-	anim->area->w = 96 * 5;
-	anim->area->x = app->sdl->half_width - anim->area->w + 244;
-	anim->area->h = 116 * 5;
-	anim->play = 0;
-	anim->delayed = 0;
-	anim->current_frame = 0;
-	anim->total_frames = 60;
-	anim->loop = 1;
 	anim->delay = 0;
-	anim->counter = 0;
-	anim->speed = 0.01f;
+	anim->speed = 0.1f;
+	app->player->reloaded = 0;
 }
 
 void		idle_draw(t_app *app, t_animation *anim)
@@ -92,6 +94,10 @@ void		shoot_draw(t_app *app, t_animation *anim)
 	t_weapon		*weapon;
 
 	weapon = &app->player->weapon[app->player->cur_weapon];
+	if (weapon->ammo_cur == 0)
+	{
+		//Click sound
+	}
 	if (anim->current_frame == 0)
 		anim->current_frame++;
 	sprite = weapon->sprites[anim->current_frame];
@@ -113,18 +119,34 @@ void		change_draw(t_app *app, t_animation *anim)
 	pos.w = anim->area->w;
 	pos.h = anim->area->h;
 	pos.y = anim->area->y + anim->current_frame * 10;
-	weapon = &app->player->weapon[app->player->cur_weapon];
 	if (anim->current_frame > anim->total_frames * 0.5)
 	{
-		weapon = &app->player->weapon[app->player->cur_weapon + 1];
-		pos.y = 200 - anim->area->y - anim->current_frame * 10;
+		if(!app->player->changed)
+			change_weapon(app);
+		pos.y = 340 - anim->current_frame * 10;
 	}
+	weapon = &app->player->weapon[app->player->cur_weapon];
 	sprite = weapon->sprites[1];
 	SDL_RenderCopy(app->sdl->renderer, sprite, NULL, &pos);
-	if (anim->current_frame >= anim->total_frames - 1)
+}
+
+void		reload_draw(t_app *app, t_animation *anim)
+{
+	SDL_Texture		*sprite;
+	t_weapon		*weapon;
+	SDL_Rect		pos;
+
+	pos.x = anim->area->x;
+	pos.w = anim->area->w;
+	pos.h = anim->area->h;
+	pos.y = anim->area->y + anim->current_frame * 10;
+	if (anim->current_frame > anim->total_frames * 0.5)
 	{
-		app->player->cur_weapon++;
-		anim->play = 0;
-		app->player->state = PL_STATE_IDLE;
+		if(!app->player->reloaded)
+			reload_weapon(app);
+		pos.y = 340 - anim->current_frame * 10;
 	}
+	weapon = &app->player->weapon[app->player->cur_weapon];
+	sprite = weapon->sprites[1];
+	SDL_RenderCopy(app->sdl->renderer, sprite, NULL, &pos);
 }

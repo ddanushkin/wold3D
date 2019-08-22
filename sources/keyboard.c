@@ -28,12 +28,12 @@ void		keyboard_input(t_app *app, float frame)
 		player_movement(app->map->nodes, key, app->player);
 	if (key[SDL_SCANCODE_LEFT] || key[SDL_SCANCODE_RIGHT])
 		player_rotate(app->player, key);
-	if (app->inputs->left_pressed && frame - app->player->last_shift >= 2.5)
-		player_shoot(app->player, frame);
-	if (key[SDL_SCANCODE_Q] && app->player->anim_frame == 0)
-		player_change_weapon(app->player, frame);
-	if (key[SDL_SCANCODE_R] && app->player->anim_frame == 0)
-		player_reloading(app->player, frame);
+	if (app->inputs->left_pressed)
+		animation_start(&app->animations[ANIM_SHOOT]);
+	if (key[SDL_SCANCODE_Q])
+		animation_start(&app->animations[ANIM_CHANGE]);
+	if (key[SDL_SCANCODE_R])
+		animation_start(&app->animations[ANIM_RELOAD]);
 	if (key[SDL_SCANCODE_SPACE] && frame - app->player->last_space >= 0.3)
 		door_interaction(app, frame);
 	if (key[SDL_SCANCODE_M] || key[SDL_SCANCODE_P])
