@@ -142,10 +142,6 @@ typedef struct		s_ray
 
 typedef struct		s_player
 {
-	float			anim_frame;
-	unsigned char	anim_is_done;
-	unsigned char	change_down;
-	unsigned char	changing;
 	char			*cur_level;
 	unsigned char	cur_weapon;
 	float			direction;
@@ -164,9 +160,7 @@ typedef struct		s_player
 	int				lives;
 	int				max_dist;
 	float			move_acc;
-	unsigned char	reloading;
 	int				score;
-	unsigned char	shooting;
 	Mix_Chunk		*sound_effect;
 	float			speed;
 	SDL_Texture		*faces[28];
@@ -177,6 +171,7 @@ typedef struct		s_player
 	float			x_v;
 	int				y;
 	float			y_v;
+
 }					t_player;
 
 typedef struct		s_ui_elem
@@ -237,9 +232,8 @@ typedef struct		s_app
 	t_time			*time;
 	t_animation		*animations;
 	int 			offset;
-	float			debug_angle;
-	int 			w;
-	int 			h;
+	float			camera_angle;
+	float			max_angle;
 }					t_app;
 
 typedef struct		s_color
@@ -343,5 +337,7 @@ void				update_health(SDL_Renderer *renderer, int health,
 void				update_ammo(SDL_Renderer *renderer, t_player *player,
 						t_ui_elem *ui_elem, TTF_Font *font);
 
-void		check_for_init_errors(void);
+void				fix_direction(t_app *app);
+
+void				check_for_init_errors(void);
 #endif

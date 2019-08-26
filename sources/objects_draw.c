@@ -23,7 +23,7 @@ void		draw_object(t_app *app, t_node *obj)
 
 	x.min = obj->screen_x - obj->height * 0.5;
 	x.max = x.min + obj->height;
-	y.min = (app->sdl->half_height - app->debug_angle) - obj->height * 0.5;
+	y.min = (app->sdl->half_height - app->camera_angle) - obj->height * 0.5;
 	y.max = y.min + obj->height;
 	if (x.max > app->sdl->width)
 		x.max = app->sdl->width;

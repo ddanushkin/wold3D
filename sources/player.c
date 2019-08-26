@@ -52,7 +52,6 @@ void		load_faces(t_sdl *sdl, t_player *player)
 void		player_init(t_sdl *sdl, t_player *player)
 {
 	ft_bzero(player, sizeof(t_player));
-	player->anim_is_done = 1;
 	player->direction = 90;
 	player->lives = 99;
 	player->health = 100;
@@ -148,4 +147,12 @@ void		reload_weapon(t_app *app)
 		weapon->mag_cur = 0;
 	}
 	app->player->reloaded = 1;
+}
+
+void		fix_direction(t_app *app)
+{
+	if (app->player->direction > 359)
+		app->player->direction = 0;
+	if (app->player->direction < 0)
+		app->player->direction = 359;
 }

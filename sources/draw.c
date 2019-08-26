@@ -25,7 +25,7 @@ void	floor_(t_app *app, int x, int y, float angle)
 	while (y < app->sdl->height)
 	{
 		dist = app->sdl->dist_to_pp * (32.0) /
-				(y - app->sdl->half_height + app->debug_angle) / fish_fix;
+			   (y - app->sdl->half_height + app->camera_angle) / fish_fix;
 		end.y = dist * sinf(angle);
 		end.x = dist * cosf(angle);
 		end.y += app->player->y;
@@ -50,7 +50,7 @@ void	ceiling_(t_app *app, int x, int y, float angle)
 	while (y > 0)
 	{
 		dist = app->sdl->dist_to_pp * (32.0) /
-				(app->sdl->half_height - y - app->debug_angle) / fish_fix;
+			   (app->sdl->half_height - y - app->camera_angle) / fish_fix;
 		end.y = dist * sinf(angle);
 		end.x = dist * cosf(angle);
 		end.y += app->player->y;
@@ -70,7 +70,7 @@ void	draw_column(t_app *app, t_ray *ray, int x, float angle)
 	t_color		col;
 
 	ratio = TEXTURE_SIZE / ray->height;
-	y.min = (app->sdl->half_height - app->debug_angle) - (ray->height * 0.5);
+	y.min = (app->sdl->half_height - app->camera_angle) - (ray->height * 0.5);
 	y.max = y.min + ray->height;
 	if (y.max > app->sdl->height)
 		y.max = app->sdl->height;

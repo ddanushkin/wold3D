@@ -80,8 +80,9 @@ void			init(t_app *app)
 	app->sfx->door_move = Mix_LoadWAV("../resources/sounds/door_move.wav");
 	app->inputs->sensitivity = 1.5;
 	app->inputs->zoom = 300;
-	app->debug_angle = 0;
+	app->camera_angle = 0;
 	app->offset = 0;
+	app->max_angle = 250;
 	app->animations = (t_animation *)malloc(sizeof(t_animation) * 10);
 	init_idle_anim(app, &app->animations[0]);
 	init_shoot_anim(app, &app->animations[1]);
