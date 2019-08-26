@@ -6,7 +6,7 @@
 /*   By: lglover <lglover@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/21 17:36:42 by lglover           #+#    #+#             */
-/*   Updated: 2019/05/15 16:32:22 by lglover          ###   ########.fr       */
+/*   Updated: 2019/08/26 15:11:47 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,4 @@ void			ft_delarr(char **array);
 double			ft_powd(double num, int pow);
 float			ft_powf(float num, int pow);
 int				ft_powi(int num, int pow);
-
-
 #endif

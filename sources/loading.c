@@ -1,15 +1,36 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   loading.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lglover <lglover@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/08/26 11:25:42 by lglover           #+#    #+#             */
+/*   Updated: 2019/08/26 18:24:52 by lglover          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "wolf3d.h"
 
-SDL_Surface		*load_surface(char *folder, char *name)
+SDL_Surface		*load_surface(t_app *app, char *folder, char *name)
 {
-	char	file_path[50];
+	char		file_path[50];
+	SDL_Surface	*surf;
 
 	ft_strcpy(file_path, folder);
 	ft_strcat(file_path, name);
-	return (SDL_LoadBMP(file_path));
+	surf = SDL_LoadBMP(file_path);
+	if (surf != NULL && surf->w == 64 && surf->h == 64)
+		return (surf);
+	else
+	{
+		app->error = 1;
+		return (NULL);
+	}
 }
 
-SDL_Texture		*load_texture(SDL_Renderer *renderer, char *folder, char *name)
+SDL_Texture		*load_texture(t_app *app, char *folder,
+								char *name)
 {
 	char			file_path[50];
 	Uint32			key;
@@ -19,59 +40,57 @@ SDL_Texture		*load_texture(SDL_Renderer *renderer, char *folder, char *name)
 	ft_strcpy(file_path, folder);
 	ft_strcat(file_path, name);
 	surface = SDL_LoadBMP(file_path);
-	key = SDL_MapRGB(surface->format, 152, 0, 136);
-	SDL_SetColorKey(surface, SDL_TRUE, key);
-	texture = SDL_CreateTextureFromSurface(renderer, surface);
-	SDL_FreeSurface(surface);
-	return (texture);
-}
-
-void			load_textures(t_sdl *sdl, SDL_Texture *array[], char *path)
-{
-	DIR				*d;
-	struct dirent	*dir;
-	u_int			i;
-
-	i = 0;
-	printf("Load from: %s\n", path);
-	d = opendir(path);
-	if (d)
+	if (surface != NULL)
 	{
-		while ((dir = readdir(d)) != NULL)
-		{
-			if (dir->d_name[0] == '.')
-				continue ;
-			else
-			{
-				array[i++] = load_texture(sdl->renderer, path, dir->d_name);
-				printf("Sprite loaded: %s\n", dir->d_name);
-			}
-		}
-		closedir(d);
+		key = SDL_MapRGB(surface->format, 152, 0, 136);
+		SDL_SetColorKey(surface, SDL_TRUE, key);
+		texture = SDL_CreateTextureFromSurface(app->sdl->renderer, surface);
+		SDL_FreeSurface(surface);
+		return (texture);
+	}
+	else
+	{
+		app->error = 1;
+		return (NULL);
 	}
 }
 
-void			load_surfaces(SDL_Surface *array[], char *path)
+void			load_walls(t_app *app, t_textures *textures)
 {
-	DIR				*d;
-	struct dirent	*dir;
-	u_int			i;
+	textures->walls[0] = load_surface(app, "./resources/walls/", "1_e.bmp");
+	textures->walls[1] = load_surface(app, "./resources/walls/", "1_n.bmp");
+	textures->walls[2] = load_surface(app, "./resources/walls/", "1_s.bmp");
+	textures->walls[3] = load_surface(app, "./resources/walls/", "1_w.bmp");
+	textures->walls[4] = load_surface(app, "./resources/walls/", "2_e.bmp");
+	textures->walls[5] = load_surface(app, "./resources/walls/", "2_n.bmp");
+	textures->walls[6] = load_surface(app, "./resources/walls/", "2_s.bmp");
+	textures->walls[7] = load_surface(app, "./resources/walls/", "2_w.bmp");
+	textures->walls[8] = load_surface(app, "./resources/walls/", "3_e.bmp");
+	textures->walls[9] = load_surface(app, "./resources/walls/", "3_n.bmp");
+	textures->walls[10] = load_surface(app, "./resources/walls/", "3_s.bmp");
+	textures->walls[11] = load_surface(app, "./resources/walls/", "3_w.bmp");
+}
 
-	i = 0;
-	printf("Load from: %s\n", path);
-	d = opendir(path);
-	if (d)
-	{
-		while ((dir = readdir(d)) != NULL)
-		{
-			if (dir->d_name[0] == '.')
-				continue ;
-			else
-			{
-				array[i++] = load_surface(path, dir->d_name);
-				printf("Surface loaded: %s\n", dir->d_name);
-			}
-		}
-		closedir(d);
-	}
+void			load_sound(t_app *app, Mix_Chunk *sound, char *name)
+{
+	char		file_path[50];
+
+	file_path[0] = '\0';
+	ft_strcpy(file_path, "./resources/sounds/");
+	ft_strcat(file_path, name);
+	sound = Mix_LoadWAV(file_path);
+	if (sound == NULL)
+		app->error = 1;
+}
+
+void			load_music(t_app *app, Mix_Music *music, char *name)
+{
+	char		file_path[50];
+
+	file_path[0] = '\0';
+	ft_strcpy(file_path, "./resources/sounds/");
+	ft_strcat(file_path, name);
+	music = Mix_LoadMUS(file_path);
+	if (music == NULL)
+		app->error = 1;
 }

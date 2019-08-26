@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   wolf3d.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lglover <lglover@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/08/26 11:27:25 by lglover           #+#    #+#             */
+/*   Updated: 2019/08/26 19:27:05 by lglover          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef WOLF3D_WOLF3D_H
 # define WOLF3D_WOLF3D_H
 
@@ -12,8 +24,6 @@
 
 # define TEXTURE_SIZE 64
 # define M_PI_180 0.017453292519943295
-# define FPS_INTERVAL 1000
-# define MAX(a,b) (a > b) ? a : b
 
 # define MAP_TYPE_EMPTY 0
 # define MAP_TYPE_WALL 1
@@ -33,8 +43,6 @@
 # define ANIM_CHANGE 2
 # define ANIM_RELOAD 3
 # define ANIM_COUNT 4
-
-# define PI 3.14159265
 
 typedef struct		s_ipoint
 {
@@ -234,6 +242,8 @@ typedef struct		s_app
 	int				offset;
 	float			camera_angle;
 	float			max_angle;
+	int				players_count;
+	int 			error;
 }					t_app;
 
 typedef struct		s_color
@@ -243,38 +253,28 @@ typedef struct		s_color
 	Uint8			b;
 }					t_color;
 
-typedef struct		s_fps
-{
-	Uint32			lasttime;
-	Uint32			current;
-	Uint32			frames;
-}					t_fps;
 
 void				init(t_app *app);
 int					map_read(int fd, t_app *app);
 void				ft_error(char *str);
 void				quit_properly(t_app *sdl);
-void				draw_minimap(t_map *map, t_sdl *sdl, t_player *player);
-void				player_init(t_sdl *sdl, t_player *player);
+void				player_init(t_app *app, t_player *player);
 void				keyboard_input(t_app *app, float frame);
 void				create_field_of_view(t_app *app);
 void				get_color(SDL_Surface *surface, t_color *c, int x, int y);
 void				shade_color(double dist, t_color *color, double draw_dist);
 void				set_pixel(t_sdl *sdl, int x, int y, t_color *col);
 void				draw_obj_column(t_sdl *sdl, t_ray *ray, int x, int height);
-void				init_time(t_time *time, t_fps *fps);
+void				init_time(t_time *time);
 void				update_time(t_time *time);
-void				draw_text(SDL_Renderer	*renderer, t_ui_elem *ui_elem);
+void				draw_text(t_app *app, SDL_Renderer *renderer, t_ui_elem *ui_elem);
 void				draw_text_font(SDL_Renderer *renderer, t_ui_elem *ui_elem,
 						TTF_Font *font);
 void				create_hud(t_sdl *sdl, t_player *player);
 t_ray				*get_ray(t_app *app, int x, float angle);
 void				draw_face(t_sdl *sdl, t_player *player, float delta);
 int					animation_ended(t_app *app, t_animation *anim);
-void				get_weapon_sprites(t_sdl *sdl, t_weapon *weapon,
-									char *weapon_folder);
-void				init_weapon(t_weapon *weapon, u_int ammo, float rate,
-									char *sound);
+void				init_weapon(t_weapon *weapon, u_int ammo, float rate);
 void				update_sound(const Uint8 *key, t_sfx *sfx);
 void				player_movement(t_node **nodes, const Uint8 *key,
 									t_player *player);
@@ -284,21 +284,13 @@ void				update_doors(t_app *app, float frame);
 void				door_interaction(t_app *app, float frame);
 void				draw_column(t_app *app, t_ray *ray, int x, float angle);
 void				map_type_wall(t_app *app, t_node *node, int index);
-void				map_type_interior(t_app *app, t_node *node, int index);
-void				map_type_door(t_app *app, t_node *node, int index);
+void				map_type_interior(t_app *app, t_node *node);
+void				map_type_door(t_app *app, t_node *node);
 void				update_objects(t_app *app);
 void				draw_object(t_app *app, t_node *obj);
 void				on_mouse_update(t_app *app);
-void				debug_show_fps(SDL_Renderer *renderer, int fps);
-void				get_fps(t_fps *fps, SDL_Renderer *renderer);
-void				debug_player(t_app *app);
-SDL_Surface			*load_surface(char *folder, char *sprite);
-SDL_Texture			*load_texture(SDL_Renderer *renderer, char *folder,
-						char *sprite);
-void				load_textures(t_sdl *sdl, SDL_Texture *array[], char *path);
-void				load_surfaces(SDL_Surface *array[], char *path);
-TTF_Font			*load_font(int size);
-int					count_files(char *path);
+SDL_Surface			*load_surface(t_app *app, char *folder, char *sprite);
+SDL_Texture			*load_texture(t_app *app, char *folder, char *sprite);
 void				init_idle_anim(t_app *app, t_animation *anim);
 void				init_shoot_anim(t_app *app, t_animation *anim);
 void				init_change_anim(t_app *app, t_animation *anim);
@@ -310,18 +302,17 @@ void				reload_draw(t_app *app, t_animation *anim);
 void				animation_start(t_animation *anim);
 void				animations_update(t_app *app);
 void				animation_next_frame(t_animation *anim);
-void				map_init(t_map *map);
+void				map_init(t_app *app);
 void				fill_row(t_app *app, char **data, int row);
 void				node_reset(t_node *node, int row, int col);
 void				map_type_empty(t_node *node);
-void				map_fill(t_app *app);
 int					map_count_cols(char *row, t_map *map);
 int					map_count_rows(char *str, t_map *map);
 void				change_weapon(t_app *app);
 void				reload_weapon(t_app *app);
 void				state_change(t_app *app);
-void				place_player(t_player *player, t_node *node,
-						int row, int col);
+void				place_player(t_app *app, t_node *node,
+								int row, int col);
 void				update_level(SDL_Renderer *renderer, char *level,
 						t_ui_elem *ui_elem, TTF_Font *font);
 void				update_score(SDL_Renderer *renderer, int score,
@@ -338,14 +329,19 @@ void				animation_reload_weapon(t_app *app);
 void				animation_shoot_weapon(t_app *app);
 int					is_wall(t_map *map, t_ray *ray);
 void				calc_wall_data(t_ray *ray, float angle);
-void				calc_door_data(t_ray *ray, float angle);
+void				calc_door_data(t_ray *ray);
 t_ray				*init_horz(int x, int y, float angle);
 t_ray				*init_vert(int x, int y, float angle);
-void				load_sounds(t_player *player);
-void				load_weapons(t_sdl *sdl, t_player *player);
-void				load_faces(t_sdl *sdl, t_player *player);
+void				load_sounds(t_app *app, t_player *player);
+void				load_weapons(t_app *app, t_player *player);
+void				load_faces(t_app *app, t_player *player);
 t_node				*get_node(t_node **nodes, float x, float y);
 void				draw_view(t_app *app);
 void				fix_direction(t_app *app);
 void				check_for_init_errors(void);
+void				init_weapon_sprite(t_app *app, t_weapon *weapon, char *weapon_name);
+void				load_walls(t_app *app, t_textures *textures);
+void				load_sound(t_app *app, Mix_Chunk *sound, char *name);
+void				load_music(t_app *app, Mix_Music *music, char *name);
+void				load_font(t_app *app, int size);
 #endif

@@ -1,10 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lglover <lglover@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/08/26 11:24:31 by lglover           #+#    #+#             */
+/*   Updated: 2019/08/26 19:18:05 by lglover          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "wolf3d.h"
 
 void	start_the_game(t_app *app)
 {
-	t_fps		fps;
-
-	init_time(app->time, &fps);
+	init_time(app->time);
 	SDL_SetRelativeMouseMode(SDL_TRUE);
 	app->inputs->keyboard = SDL_GetKeyboardState(NULL);
 	update_time(app->time);
@@ -16,7 +26,6 @@ void	start_the_game(t_app *app)
 			break ;
 		on_mouse_update(app);
 		keyboard_input(app, app->time->frame);
-		debug_player(app);
 		update_doors(app, app->time->frame);
 		create_field_of_view(app);
 		update_objects(app);
@@ -24,7 +33,6 @@ void	start_the_game(t_app *app)
 		state_change(app);
 		animations_update(app);
 		redraw(app, app->time->frame);
-		get_fps(&fps, app->sdl->renderer);
 		SDL_RenderPresent(app->sdl->renderer);
 	}
 }
@@ -38,14 +46,17 @@ int		load_level(t_app *app, int level)
 	ft_strdel(&app->player->cur_level);
 	level_char = ft_itoa(level);
 	app->player->cur_level = level_char;
-	ft_strcpy(level_path, "../levels/");
+	ft_strcpy(level_path, "./levels/");
 	ft_strcat(level_path, level_char);
 	ft_strcat(level_path, ".wolf3d");
 	if ((fd = open(level_path, O_RDONLY)) != -1)
 		if (map_read(fd, app))
 			return (1);
 		else
+		{
+			ft_error("Map path error.");
 			return (0);
+		}
 	else
 	{
 		ft_error("Map path error.");
@@ -89,7 +100,12 @@ int		main(void)
 	t_app	app;
 
 	init(&app);
-	player_init(app.sdl, app.player);
+	player_init(&app, app.player);
+	if (app.error)
+	{
+		ft_error("Error!");
+		quit_properly(&app);
+	}
 	if (display_logo(&app) && load_level(&app, 1))
 		start_the_game(&app);
 	quit_properly(&app);

@@ -6,32 +6,39 @@
 #    By: lglover <lglover@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/26 09:56:17 by lglover           #+#    #+#              #
-#    Updated: 2019/08/26 13:19:26 by lglover          ###   ########.fr        #
+#    Updated: 2019/08/26 15:11:47 by lglover          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = gcc
-CFLAGS = -c -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -O3
 
-NAME = libft.a
-INCLUDES = ./includes
+NAME = wolf3d
+INCLUDES = 	-I ./libft/includes \
+			-I ./includes \
+			-I ./sdl/SDL2.framework/Versions/A/Headers \
+			-I ./sdl/SDL2_ttf.framework/Versions/A/Headers \
+			-I ./sdl/SDL2_mixer.framework/Versions/A/Headers
 
-SRC_PATH = src
-SRC_LIST = ft_atoi.c ft_bzero.c ft_isalnum.c ft_isalpha.c ft_isascii.c ft_isdigit.c\
-			ft_isprint.c ft_itoa.c ft_lstadd.c ft_lstdel.c ft_lstdelone.c ft_lstiter.c ft_lstmap.c\
-			ft_lstnew.c ft_memalloc.c ft_memccpy.c ft_memchr.c ft_memcmp.c ft_memcpy.c ft_memdel.c\
-			ft_memmove.c ft_memset.c ft_putchar.c ft_putchar_fd.c ft_putendl.c ft_putendl_fd.c\
-			ft_putnbr.c ft_putnbr_fd.c ft_putstr.c ft_putstr_fd.c ft_strcat.c ft_strchr.c ft_strclr.c\
-			ft_strcmp.c ft_strcpy.c ft_strdel.c ft_strdup.c ft_strequ.c ft_striter.c ft_striteri.c\
-			ft_strjoin.c ft_strlcat.c ft_strlen.c ft_strmap.c ft_strmapi.c ft_strncat.c ft_strncmp.c\
-			ft_strncpy.c ft_strnequ.c ft_strnew.c ft_strnstr.c ft_strrchr.c ft_strsplit.c ft_strstr.c\
-			ft_strsub.c ft_strtrim.c ft_tolower.c ft_toupper.c ft_gnl.c \
-			ft_delarr.c
+SRC_PATH = sources
+SRC_LIST = animation_system.c door.c  hud_system.c init_rays.c main.c  map_validation.c objects_draw.c utils.c \
+animations.c draw.c hud_ui.c  keyboard.c  map.c  mouse.c  player.c  weapons.c \
+choose_obsticle.c draw_weapons.c init.c  load_files.c map_init.c  movement.c raycasting.c \
+color.c  errors.c  init_animations.c loading.c  map_type.c  objects.c  render.c
+
 SRC = $(addprefix $(SRC_PATH)/, $(SRC_LIST))
 
 OBJ_LIST = $(SRC_LIST:.c=.o)
 OBJ_PATH = obj
 OBJ = $(addprefix $(OBJ_PATH)/, $(OBJ_LIST))
+
+LIBFT_PATH = libft
+LIBFT = -L $(LIBFT_PATH) -lft
+
+LIBS = 	-lm \
+		-F ./sdl -framework SDL2 \
+		-F ./sdl -framework SDL2_ttf \
+		-F ./sdl -framework SDL2_mixer
 
 YELLOW = \033[1;33m
 PURPLE = \033[0;35m
@@ -39,22 +46,24 @@ NC = \033[0m
 
 .PHONY: all
 
-all: intro make_obj $(NAME)
+all: make_libft intro make_obj $(NAME)
 	@echo "$(PURPLE)MAKE $(NAME) Done!$(NC)"
 
 intro:
 	@echo "\n$(PURPLE)MAKE $(NAME) Start!$(NC)"
 
-make_obj :
-	@mkdir -p obj
-
 $(NAME): $(OBJ)
-	@ar rc $(NAME) $(OBJ)
-	@ranlib $(NAME)
+	@$(CC) $(CFLAGS) $(INCLUDES) $(LIBS) $(OBJ) -o $(NAME) $(LIBFT)
 
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.c
 	@echo "$(YELLOW)$(NAME): $(notdir $<)$(NC)"
-	@$(CC) $(CFLAGS) -I $(INCLUDES) -o $@ -c $<
+	@$(CC) $(CFLAGS) $(INCLUDES) -o $@ -c $<
+
+make_obj :
+	@mkdir -p obj
+
+make_libft :
+	@make -C ./libft/
 
 clean :
 	@echo "$(YELLOW)Objects Deleted.$(NC)"
@@ -65,3 +74,8 @@ fclean :	clean
 	@/bin/rm -f $(NAME)
 
 re :	fclean all
+
+rc :
+	make -C $(LIBFT_PATH) fclean && make fclean && make
+
+

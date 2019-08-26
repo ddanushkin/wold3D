@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   errors.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lglover <lglover@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/08/26 11:23:42 by lglover           #+#    #+#             */
+/*   Updated: 2019/08/26 11:23:42 by lglover          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "wolf3d.h"
 
 void	ft_error(char *str)
@@ -10,10 +22,6 @@ void	quit_properly(t_app *app)
 	SDL_DestroyWindow(app->sdl->window);
 	SDL_DestroyRenderer(app->sdl->renderer);
 	SDL_DestroyTexture(app->sdl->texture);
-	Mix_FreeChunk(app->player->sound_effect);
-	Mix_FreeMusic(app->sfx->background);
-	Mix_FreeChunk(app->sfx->door_move);
-	Mix_FreeChunk(app->sfx->door_open);
 	app->sfx->background = NULL;
 	app->player->sound_effect = NULL;
 	free(app->sdl->pixels);

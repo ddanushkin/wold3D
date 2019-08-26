@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   choose_obsticle.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lglover <lglover@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/08/26 11:21:53 by lglover           #+#    #+#             */
+/*   Updated: 2019/08/26 15:11:47 by lglover          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "wolf3d.h"
 
 int		is_door(t_ray *ray, t_node *node)
@@ -57,7 +69,7 @@ void	calc_wall_data(t_ray *ray, float angle)
 	}
 }
 
-void	calc_door_data(t_ray *ray, float angle)
+void	calc_door_data(t_ray *ray)
 {
 	ray->texture = ray->node->texture[0];
 	if (ray->type == RAY_TYPE_HORZ)

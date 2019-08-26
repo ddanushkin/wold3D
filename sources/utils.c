@@ -1,10 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lglover <lglover@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/08/26 11:26:53 by lglover           #+#    #+#             */
+/*   Updated: 2019/08/26 11:26:53 by lglover          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "wolf3d.h"
 
-void	init_time(t_time *time, t_fps *fps)
+void	init_time(t_time *time)
 {
 	ft_bzero(time, sizeof(*time));
-	ft_bzero(fps, sizeof(*fps));
-	fps->lasttime = SDL_GetTicks();
 	time->current = SDL_GetTicks();
 }
 

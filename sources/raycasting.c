@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   raycasting.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lglover <lglover@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/08/26 11:26:39 by lglover           #+#    #+#             */
+/*   Updated: 2019/08/26 11:27:22 by lglover          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "wolf3d.h"
 
 t_node	*get_node(t_node **nodes, float x, float y)
@@ -47,7 +59,7 @@ t_ray	*get_ray(t_app *app, int x, float angle)
 	vert = init_vert(app->player->x, app->player->y, angle);
 	result = choose_ray(app, horz, vert, angle);
 	if (result->node->type == MAP_TYPE_DOOR)
-		calc_door_data(result, angle);
+		calc_door_data(result);
 	else
 		calc_wall_data(result, angle);
 	result->dist *= cos(angle - app->player->direction * M_PI_180);

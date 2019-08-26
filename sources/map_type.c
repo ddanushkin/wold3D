@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   map_type.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lglover <lglover@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/08/26 11:25:55 by lglover           #+#    #+#             */
+/*   Updated: 2019/08/26 15:11:47 by lglover          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "wolf3d.h"
 
 void		map_type_wall(t_app *app, t_node *node, int index)
@@ -10,7 +22,7 @@ void		map_type_wall(t_app *app, t_node *node, int index)
 	node->collidable = true;
 }
 
-void		map_type_interior(t_app *app, t_node *node, int index)
+void		map_type_interior(t_app *app, t_node *node)
 {
 	node->type = MAP_TYPE_INTERIOR;
 	node->texture[0] = app->textures->sprites[0];
@@ -22,7 +34,7 @@ void		map_type_interior(t_app *app, t_node *node, int index)
 	node->screen_x = 0;
 }
 
-void		map_type_door(t_app *app, t_node *node, int index)
+void		map_type_door(t_app *app, t_node *node)
 {
 	node->type = MAP_TYPE_DOOR;
 	node->texture[0] = app->textures->doors[0];

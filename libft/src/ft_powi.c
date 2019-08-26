@@ -6,13 +6,13 @@
 /*   By: ndremora <ndremora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/03 14:33:08 by ndremora          #+#    #+#             */
-/*   Updated: 2019/04/16 12:54:13 by ndremora         ###   ########.fr       */
+/*   Updated: 2019/08/26 15:11:47 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 int		ft_powi(int num, int pow)
 {
-	int	out;
+	int		out;
 
 	out = num;
 	if (pow == 0)

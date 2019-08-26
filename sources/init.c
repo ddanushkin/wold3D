@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lglover <lglover@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/08/26 11:25:06 by lglover           #+#    #+#             */
+/*   Updated: 2019/08/26 18:47:20 by lglover          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "wolf3d.h"
 
-static	void	create_stuff(t_sdl *sdl, t_textures *textures)
+static	void	create_stuff(t_app *app, t_sdl *sdl, t_textures *textures)
 {
 	int			access;
 	Uint32		flags;
@@ -15,14 +27,14 @@ static	void	create_stuff(t_sdl *sdl, t_textures *textures)
 	sdl->renderer = SDL_CreateRenderer(sdl->window, -1, flags);
 	sdl->texture = SDL_CreateTexture(sdl->renderer, format, access,
 			sdl->width, sdl->height);
-	sdl->ui = load_texture(sdl->renderer, "../resources/", "main_ui.bmp");
-	sdl->logo = load_texture(sdl->renderer, "../resources/main/", "logo.bmp");
-	sdl->font = load_font(60);
-	load_surfaces(textures->floors, "../resources/floors/");
-	load_surfaces(textures->ceilings, "../resources/ceilings/");
-	load_surfaces(textures->walls, "../resources/walls/");
-	load_surfaces(textures->doors, "../resources/doors/");
-	load_surfaces(textures->sprites, "../resources/interior/");
+	sdl->ui = load_texture(app, "./resources/", "main_ui.bmp");
+	sdl->logo = load_texture(app, "./resources/main/", "logo.bmp");
+	load_font(app, 60);
+	textures->floors[0] = load_surface(app, "./resources/floors/", "1.bmp");
+	textures->doors[0] = load_surface(app, "./resources/doors/", "D1.bmp");
+	textures->ceilings[0] = load_surface(app, "./resources/ceilings/", "1.bmp");
+	textures->sprites[0] = load_surface(app, "./resources/interior/", "X.bmp");
+	load_walls(app, textures);
 }
 
 static	void	init_sdl(t_sdl *sdl)
@@ -42,22 +54,16 @@ static	void	init_sdl(t_sdl *sdl)
 
 void			malloc_textures(t_textures *textures)
 {
-	int files;
-
-	files = count_files("../resources/doors/");
-	textures->doors = (SDL_Surface **)malloc(sizeof(SDL_Surface *) * files);
-	files = count_files("../resources/walls/");
-	textures->walls = (SDL_Surface **)malloc(sizeof(SDL_Surface *) * files);
-	files = count_files("../resources/ceilings/");
-	textures->ceilings = (SDL_Surface **)malloc(sizeof(SDL_Surface *) * files);
-	files = count_files("../resources/floors/");
-	textures->floors = (SDL_Surface **)malloc(sizeof(SDL_Surface *) * files);
-	files = count_files("../resources/interior/");
-	textures->sprites = (SDL_Surface **)malloc(sizeof(SDL_Surface *) * files);
+	textures->doors = (SDL_Surface **)malloc(sizeof(SDL_Surface *) * 1);
+	textures->walls = (SDL_Surface **)malloc(sizeof(SDL_Surface *) * 50);
+	textures->ceilings = (SDL_Surface **)malloc(sizeof(SDL_Surface *) * 1);
+	textures->floors = (SDL_Surface **)malloc(sizeof(SDL_Surface *) * 1);
+	textures->sprites = (SDL_Surface **)malloc(sizeof(SDL_Surface *) * 1);
 }
 
 static	void	malloc_stuff(t_app *app)
 {
+	app->error = 0;
 	app->inputs = (t_inputs *)malloc(sizeof(t_inputs));
 	app->sdl = (t_sdl *)malloc(sizeof(t_sdl));
 	app->map = (t_map *)malloc(sizeof(t_map));
@@ -74,15 +80,16 @@ void			init(t_app *app)
 {
 	malloc_stuff(app);
 	init_sdl(app->sdl);
-	create_stuff(app->sdl, app->textures);
-	app->sfx->background = Mix_LoadMUS("../resources/sounds/bgm.mp3");
-	app->sfx->door_open = Mix_LoadWAV("../resources/sounds/door_open.wav");
-	app->sfx->door_move = Mix_LoadWAV("../resources/sounds/door_move.wav");
-	app->inputs->sensitivity = 1.5;
+	create_stuff(app, app->sdl, app->textures);
+	load_music(app, app->sfx->background, "bgm.mp3");
+	load_sound(app, app->sfx->door_open, "door_open.wav");
+	load_sound(app, app->sfx->door_move, "door_move.wav");
+	app->inputs->sensitivity = 1.5f;
 	app->inputs->zoom = 300;
 	app->camera_angle = 0;
 	app->offset = 0;
 	app->max_angle = 250;
+	app->players_count = 0;
 	app->animations = (t_animation *)malloc(sizeof(t_animation) * 10);
 	init_idle_anim(app, &app->animations[0]);
 	init_shoot_anim(app, &app->animations[1]);
