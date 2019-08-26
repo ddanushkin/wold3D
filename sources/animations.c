@@ -1,0 +1,31 @@
+#include "wolf3d.h"
+
+void	animation_idle_weapon(t_app *app)
+{
+	animation_next_frame(&app->animations[ANIM_IDLE]);
+	idle_draw(app, &app->animations[ANIM_IDLE]);
+}
+
+void	animation_change_weapon(t_app *app)
+{
+	animation_next_frame(&app->animations[ANIM_CHANGE]);
+	change_draw(app, &app->animations[ANIM_CHANGE]);
+	if (animation_ended(app, &app->animations[ANIM_CHANGE]))
+		app->player->changed = 0;
+}
+
+void	animation_reload_weapon(t_app *app)
+{
+	animation_next_frame(&app->animations[ANIM_RELOAD]);
+	reload_draw(app, &app->animations[ANIM_RELOAD]);
+	if (animation_ended(app, &app->animations[ANIM_RELOAD]))
+		app->player->reloaded = 0;
+}
+
+void	animation_shoot_weapon(t_app *app)
+{
+	animation_next_frame(&app->animations[ANIM_SHOOT]);
+	shoot_draw(app, &app->animations[ANIM_SHOOT]);
+	if (animation_ended(app, &app->animations[ANIM_SHOOT]))
+		app->player->weapon[app->player->cur_weapon].fired = 0;
+}

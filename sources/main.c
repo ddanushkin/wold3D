@@ -20,7 +20,7 @@ void	start_the_game(t_app *app)
 		update_doors(app, app->time->frame);
 		create_field_of_view(app);
 		update_objects(app);
-		draw_veiw(app);
+		draw_view(app);
 		state_change(app);
 		animations_update(app);
 		redraw(app, app->time->frame);

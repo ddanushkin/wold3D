@@ -1,6 +1,6 @@
 #include "wolf3d.h"
 
-void	draw_veiw(t_app *app)
+void	draw_view(t_app *app)
 {
 	SDL_Rect		screen;
 
@@ -20,31 +20,13 @@ void	draw_veiw(t_app *app)
 void	redraw(t_app *app, float frame)
 {
 	if (app->player->state == PL_STATE_IDLE)
-	{
-		animation_next_frame(&app->animations[ANIM_IDLE]);
-		idle_draw(app, &app->animations[ANIM_IDLE]);
-	}
+		animation_idle_weapon(app);
 	if (app->player->state == PL_STATE_CHANGE)
-	{
-		animation_next_frame(&app->animations[ANIM_CHANGE]);
-		change_draw(app, &app->animations[ANIM_CHANGE]);
-		if (animation_ended(app, &app->animations[ANIM_CHANGE]))
-			app->player->changed = 0;
-	}
+		animation_change_weapon(app);
 	if (app->player->state == PL_STATE_RELOAD)
-	{
-		animation_next_frame(&app->animations[ANIM_RELOAD]);
-		reload_draw(app, &app->animations[ANIM_RELOAD]);
-		if (animation_ended(app, &app->animations[ANIM_RELOAD]))
-			app->player->reloaded = 0;
-	}
+		animation_reload_weapon(app);
 	if (app->player->state == PL_STATE_SHOOT)
-	{
-		animation_next_frame(&app->animations[ANIM_SHOOT]);
-		shoot_draw(app, &app->animations[ANIM_SHOOT]);
-		if (animation_ended(app, &app->animations[ANIM_SHOOT]))
-			app->player->weapon[app->player->cur_weapon].fired = 0;
-	}
+		animation_shoot_weapon(app);
 	create_hud(app->sdl, app->player);
 	draw_face(app->sdl, app->player, frame);
 }
