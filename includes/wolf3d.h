@@ -58,14 +58,14 @@ typedef struct		s_iiter
 typedef struct		s_animation
 {
 	SDL_Rect		*area;
-	int 			play;
+	int				play;
 	int				current_frame;
 	int				total_frames;
 	int				loop;
-	float 			delay;
-	float 			counter;
-	float 			speed;
-	float 			delayed;
+	float			delay;
+	float			counter;
+	float			speed;
+	float			delayed;
 }					t_animation;
 
 typedef	struct		s_time
@@ -155,8 +155,8 @@ typedef struct		s_player
 	float			last_shift;
 	float			last_space;
 	int				step;
-	int 			changed;
-	int 			reloaded;
+	int				changed;
+	int				reloaded;
 	int				lives;
 	int				max_dist;
 	float			move_acc;
@@ -231,7 +231,7 @@ typedef struct		s_app
 	t_textures		*textures;
 	t_time			*time;
 	t_animation		*animations;
-	int 			offset;
+	int				offset;
 	float			camera_angle;
 	float			max_angle;
 }					t_app;
@@ -265,7 +265,8 @@ void				draw_obj_column(t_sdl *sdl, t_ray *ray, int x, int height);
 void				init_time(t_time *time, t_fps *fps);
 void				update_time(t_time *time);
 void				draw_text(SDL_Renderer	*renderer, t_ui_elem *ui_elem);
-void		        draw_text_font(SDL_Renderer *renderer, t_ui_elem *ui_elem, TTF_Font *font);
+void				draw_text_font(SDL_Renderer *renderer, t_ui_elem *ui_elem,
+						TTF_Font *font);
 void				create_hud(t_sdl *sdl, t_player *player);
 t_ray				*get_ray(t_app *app, int x, float angle);
 void				draw_face(t_sdl *sdl, t_player *player, float delta);
@@ -277,42 +278,38 @@ void				init_weapon(t_weapon *weapon, u_int ammo, float rate,
 void				update_sound(const Uint8 *key, t_sfx *sfx);
 void				player_movement(t_node **nodes, const Uint8 *key,
 									t_player *player);
-
 void				redraw(t_app *app, float time);
 int					check_for_quit(SDL_Event *event, t_inputs *inputs);
-void			    update_doors(t_app *app, float frame);
+void				update_doors(t_app *app, float frame);
 void				door_interaction(t_app *app, float frame);
 void				draw_column(t_app *app, t_ray *ray, int x, float angle);
 void				map_type_wall(t_app *app, t_node *node, int index);
 void				map_type_interior(t_app *app, t_node *node, int index);
 void				map_type_door(t_app *app, t_node *node, int index);
-void	            update_objects(t_app *app);
+void				update_objects(t_app *app);
 void				draw_object(t_app *app, t_node *obj);
-
 void				on_mouse_update(t_app *app);
 void				debug_show_fps(SDL_Renderer *renderer, int fps);
 void				get_fps(t_fps *fps, SDL_Renderer *renderer);
 void				debug_player(t_app *app);
 SDL_Surface			*load_surface(char *folder, char *sprite);
 SDL_Texture			*load_texture(SDL_Renderer *renderer, char *folder,
-									char *sprite);
+						char *sprite);
 void				load_textures(t_sdl *sdl, SDL_Texture *array[], char *path);
 void				load_surfaces(SDL_Surface *array[], char *path);
-void				draw_veiw(t_app *app);
 TTF_Font			*load_font(int size);
 int					count_files(char *path);
-
-void	            init_idle_anim(t_app *app, t_animation *anim);
+void				init_idle_anim(t_app *app, t_animation *anim);
 void				init_shoot_anim(t_app *app, t_animation *anim);
 void				init_change_anim(t_app *app, t_animation *anim);
 void				init_reload_anim(t_app *app, t_animation *anim);
-void		        idle_draw(t_app *app, t_animation *anim);
+void				idle_draw(t_app *app, t_animation *anim);
 void				shoot_draw(t_app *app, t_animation *anim);
 void				change_draw(t_app *app, t_animation *anim);
 void				reload_draw(t_app *app, t_animation *anim);
 void				animation_start(t_animation *anim);
 void				animations_update(t_app *app);
-void	            animation_next_frame(t_animation *anim);
+void				animation_next_frame(t_animation *anim);
 void				map_init(t_map *map);
 void				fill_row(t_app *app, char **data, int row);
 void				node_reset(t_node *node, int row, int col);
@@ -325,7 +322,6 @@ void				reload_weapon(t_app *app);
 void				state_change(t_app *app);
 void				place_player(t_player *player, t_node *node,
 						int row, int col);
-
 void				update_level(SDL_Renderer *renderer, char *level,
 						t_ui_elem *ui_elem, TTF_Font *font);
 void				update_score(SDL_Renderer *renderer, int score,
@@ -336,8 +332,20 @@ void				update_health(SDL_Renderer *renderer, int health,
 						t_ui_elem *ui_elem, TTF_Font *font);
 void				update_ammo(SDL_Renderer *renderer, t_player *player,
 						t_ui_elem *ui_elem, TTF_Font *font);
-
+void				animation_idle_weapon(t_app *app);
+void				animation_change_weapon(t_app *app);
+void				animation_reload_weapon(t_app *app);
+void				animation_shoot_weapon(t_app *app);
+int					is_wall(t_map *map, t_ray *ray);
+void				calc_wall_data(t_ray *ray, float angle);
+void				calc_door_data(t_ray *ray, float angle);
+t_ray				*init_horz(int x, int y, float angle);
+t_ray				*init_vert(int x, int y, float angle);
+void				load_sounds(t_player *player);
+void				load_weapons(t_sdl *sdl, t_player *player);
+void				load_faces(t_sdl *sdl, t_player *player);
+t_node				*get_node(t_node **nodes, float x, float y);
+void				draw_view(t_app *app);
 void				fix_direction(t_app *app);
-
 void				check_for_init_errors(void);
 #endif

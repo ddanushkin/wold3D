@@ -1,5 +1,20 @@
 #include "wolf3d.h"
 
+void	state_change(t_app *app)
+{
+	if (app->player->state == PL_STATE_IDLE)
+	{
+		if (app->animations[ANIM_SHOOT].play)
+			app->player->state = PL_STATE_SHOOT;
+		else if (app->animations[ANIM_CHANGE].play)
+			app->player->state = PL_STATE_CHANGE;
+		else if (app->animations[ANIM_RELOAD].play)
+			app->player->state = PL_STATE_RELOAD;
+	}
+	if (app->player->state != PL_STATE_IDLE)
+		app->animations[ANIM_IDLE].play = 0;
+}
+
 void	animation_idle_weapon(t_app *app)
 {
 	animation_next_frame(&app->animations[ANIM_IDLE]);

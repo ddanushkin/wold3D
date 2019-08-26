@@ -25,7 +25,7 @@ void	floor_(t_app *app, int x, int y, float angle)
 	while (y < app->sdl->height)
 	{
 		dist = app->sdl->dist_to_pp * (32.0) /
-			   (y - app->sdl->half_height + app->camera_angle) / fish_fix;
+				(y - app->sdl->half_height + app->camera_angle) / fish_fix;
 		end.y = dist * sinf(angle);
 		end.x = dist * cosf(angle);
 		end.y += app->player->y;
@@ -50,7 +50,7 @@ void	ceiling_(t_app *app, int x, int y, float angle)
 	while (y > 0)
 	{
 		dist = app->sdl->dist_to_pp * (32.0) /
-			   (app->sdl->half_height - y - app->camera_angle) / fish_fix;
+				(app->sdl->half_height - y - app->camera_angle) / fish_fix;
 		end.y = dist * sinf(angle);
 		end.x = dist * cosf(angle);
 		end.y += app->player->y;
