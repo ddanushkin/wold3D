@@ -254,14 +254,12 @@ void				init(t_app *app);
 int					map_read(int fd, t_app *app);
 void				ft_error(char *str);
 void				quit_properly(t_app *sdl);
-void				draw_minimap(t_map *map, t_sdl *sdl, t_player *player);
 void				player_init(t_sdl *sdl, t_player *player);
 void				keyboard_input(t_app *app, float frame);
 void				create_field_of_view(t_app *app);
 void				get_color(SDL_Surface *surface, t_color *c, int x, int y);
 void				shade_color(double dist, t_color *color, double draw_dist);
 void				set_pixel(t_sdl *sdl, int x, int y, t_color *col);
-void				draw_obj_column(t_sdl *sdl, t_ray *ray, int x, int height);
 void				init_time(t_time *time, t_fps *fps);
 void				update_time(t_time *time);
 void				draw_text(SDL_Renderer	*renderer, t_ui_elem *ui_elem);
@@ -277,7 +275,7 @@ void				init_weapon(t_weapon *weapon, u_int ammo, float rate,
 void				update_sound(const Uint8 *key, t_sfx *sfx);
 void				player_movement(t_node **nodes, const Uint8 *key,
 									t_player *player);
-void				player_rotate(t_player *player, const Uint8 *state);
+
 void				redraw(t_app *app, float time);
 int					check_for_quit(SDL_Event *event, t_inputs *inputs);
 void			    update_doors(t_app *app, float frame);

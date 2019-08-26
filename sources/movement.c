@@ -92,13 +92,13 @@ void			player_movement(t_node **nodes, const Uint8 *key,
 
 	old_x = player->x;
 	old_y = player->y;
-	if (key[SDL_SCANCODE_W])
+	if (key[SDL_SCANCODE_W] || key[SDL_SCANCODE_UP])
 		move_forward(nodes, player);
-	if (key[SDL_SCANCODE_S])
+	if (key[SDL_SCANCODE_S] || key[SDL_SCANCODE_DOWN])
 		move_backward(nodes, player);
-	if (key[SDL_SCANCODE_A])
+	if (key[SDL_SCANCODE_A] || key[SDL_SCANCODE_LEFT])
 		move_right(nodes, player);
-	if (key[SDL_SCANCODE_D])
+	if (key[SDL_SCANCODE_D] || key[SDL_SCANCODE_RIGHT])
 		move_left(nodes, player);
 	if (old_x != player->x || old_y != player->y)
 	{

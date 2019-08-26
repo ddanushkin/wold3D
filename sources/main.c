@@ -92,8 +92,6 @@ int		main(void)
 	player_init(app.sdl, app.player);
 	if (display_logo(&app) && load_level(&app, 1))
 		start_the_game(&app);
-	if (load_level(&app, 1))
-		start_the_game(&app);
 	quit_properly(&app);
 	return (0);
 }
