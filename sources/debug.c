@@ -1,6 +1,6 @@
 #include "wolf3d.h"
 
-void		debug_player(t_app *app)
+void	debug_player(t_app *app)
 {
 	const Uint8 *key;
 
@@ -13,7 +13,7 @@ void		debug_player(t_app *app)
 		printf("debug -> %d\n", app->player->health);
 }
 
-void		debug_show_fps(SDL_Renderer *renderer, int fps)
+void	debug_show_fps(SDL_Renderer *renderer, int fps)
 {
 	t_ui_elem	ui_elem;
 	char		*ui_text;

@@ -12,9 +12,10 @@ void	animation_start(t_animation *anim)
 
 void	animations_update(t_app *app)
 {
-	int i = 0;
-	t_animation *anim;
+	int			i;
+	t_animation	*anim;
 
+	i = 0;
 	while (i < ANIM_COUNT)
 	{
 		anim = &app->animations[i];

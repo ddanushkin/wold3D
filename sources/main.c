@@ -59,7 +59,7 @@ int		keyboard_input2(t_app *app)
 
 	key = app->inputs->keyboard;
 	if (key[SDL_SCANCODE_RETURN])
-		return 1;
+		return (1);
 	return (0);
 }
 
@@ -88,12 +88,10 @@ int		main(void)
 {
 	t_app	app;
 
-	//getchar();
-
 	init(&app);
 	player_init(app.sdl, app.player);
-//	if (display_logo(&app) && load_level(&app, 1))
-//		start_the_game(&app);
+	if (display_logo(&app) && load_level(&app, 1))
+		start_the_game(&app);
 	if (load_level(&app, 1))
 		start_the_game(&app);
 	quit_properly(&app);
