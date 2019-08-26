@@ -84,7 +84,8 @@ static void		move_right(t_node **nodes, t_player *player)
 		player->y += (player->x_v > 0 ? player->max_dist : -player->max_dist);
 }
 
-void			player_movement(t_node **nodes, const Uint8 *key, t_player *player)
+void			player_movement(t_node **nodes, const Uint8 *key,
+								t_player *player)
 {
 	int old_x;
 	int old_y;

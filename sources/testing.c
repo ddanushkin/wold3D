@@ -70,13 +70,14 @@ void	init_reload_anim(t_app *app, t_animation *anim)
 	app->player->reloaded = 0;
 }
 
-void		idle_draw(t_app *app, t_animation *anim)
+void	idle_draw(t_app *app, t_animation *anim)
 {
 	SDL_Texture		*sprite;
 
 	sprite = app->player->weapon[app->player->cur_weapon].sprites[1];
 	app->player->head_offset = sinf((float)app->time->current * 0.001f);
-	if (app->player->move_acc > 0 && app->player->step && anim->current_frame >= 30)
+	if (app->player->move_acc > 0 && app->player->step
+		&& anim->current_frame >= 30)
 	{
 		Mix_PlayChannel(1, app->player->steps[rand() % 8], 0);
 		app->player->step = 0;
@@ -88,16 +89,12 @@ void		idle_draw(t_app *app, t_animation *anim)
 	anim->area->y += (int)(app->player->head_offset);
 }
 
-void		shoot_draw(t_app *app, t_animation *anim)
+void	shoot_draw(t_app *app, t_animation *anim)
 {
 	SDL_Texture		*sprite;
 	t_weapon		*weapon;
 
 	weapon = &app->player->weapon[app->player->cur_weapon];
-	if (weapon->ammo_cur == 0)
-	{
-		//Click sound
-	}
 	if (anim->current_frame == 0)
 		anim->current_frame++;
 	sprite = weapon->sprites[anim->current_frame];
@@ -109,7 +106,7 @@ void		shoot_draw(t_app *app, t_animation *anim)
 	SDL_RenderCopy(app->sdl->renderer, sprite, NULL, anim->area);
 }
 
-void		change_draw(t_app *app, t_animation *anim)
+void	change_draw(t_app *app, t_animation *anim)
 {
 	SDL_Texture		*sprite;
 	t_weapon		*weapon;
@@ -121,7 +118,7 @@ void		change_draw(t_app *app, t_animation *anim)
 	pos.y = anim->area->y + anim->current_frame * 10;
 	if (anim->current_frame > anim->total_frames * 0.5)
 	{
-		if(!app->player->changed)
+		if (!app->player->changed)
 			change_weapon(app);
 		pos.y = 340 - anim->current_frame * 10;
 	}
@@ -130,7 +127,7 @@ void		change_draw(t_app *app, t_animation *anim)
 	SDL_RenderCopy(app->sdl->renderer, sprite, NULL, &pos);
 }
 
-void		reload_draw(t_app *app, t_animation *anim)
+void	reload_draw(t_app *app, t_animation *anim)
 {
 	SDL_Texture		*sprite;
 	t_weapon		*weapon;
@@ -142,7 +139,7 @@ void		reload_draw(t_app *app, t_animation *anim)
 	pos.y = anim->area->y + anim->current_frame * 10;
 	if (anim->current_frame > anim->total_frames * 0.5)
 	{
-		if(!app->player->reloaded)
+		if (!app->player->reloaded)
 			reload_weapon(app);
 		pos.y = 340 - anim->current_frame * 10;
 	}

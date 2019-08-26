@@ -100,14 +100,14 @@ void		update_sound(const Uint8 *key, t_sfx *sfx)
 		Mix_PauseMusic();
 }
 
-void	place_player(t_player *player, t_node *node, int row, int col)
+void		place_player(t_player *player, t_node *node, int row, int col)
 {
 	player->y = row * TEXTURE_SIZE + (TEXTURE_SIZE * 0.5);
 	player->x = col * TEXTURE_SIZE + (TEXTURE_SIZE * 0.5);
 	map_type_empty(node);
 }
 
-void	state_change(t_app *app)
+void		state_change(t_app *app)
 {
 	if (app->player->state == PL_STATE_IDLE)
 	{
@@ -122,7 +122,7 @@ void	state_change(t_app *app)
 		app->animations[ANIM_IDLE].play = 0;
 }
 
-void	change_weapon(t_app *app)
+void		change_weapon(t_app *app)
 {
 	app->player->cur_weapon++;
 	if (app->player->cur_weapon > 2)
@@ -130,10 +130,10 @@ void	change_weapon(t_app *app)
 	app->player->changed = 1;
 }
 
-void	reload_weapon(t_app *app)
+void		reload_weapon(t_app *app)
 {
-	int old_ammo;
-	t_weapon		*weapon;
+	int			old_ammo;
+	t_weapon	*weapon;
 
 	weapon = &app->player->weapon[app->player->cur_weapon];
 	old_ammo = weapon->ammo_cur;

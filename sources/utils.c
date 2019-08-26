@@ -28,19 +28,19 @@ int		check_for_quit(SDL_Event *event, t_inputs *inputs)
 	return (0);
 }
 
-int     count_files(char *path)
+int		count_files(char *path)
 {
-    int				file_count;
+	int				file_count;
 	DIR				*dirp;
 	struct dirent	*entry;
 
 	file_count = 0;
-    dirp = opendir(path);
-    while ((entry = readdir(dirp)) != NULL)
-    {
-        if (entry->d_type == DT_REG)
-            file_count++;
-    }
-    closedir(dirp);
-    return (file_count);
+	dirp = opendir(path);
+	while ((entry = readdir(dirp)) != NULL)
+	{
+		if (entry->d_type == DT_REG)
+			file_count++;
+	}
+	closedir(dirp);
+	return (file_count);
 }

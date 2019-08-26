@@ -46,7 +46,7 @@ static void	reset_objects(t_app *app)
 
 static void	sort_objects(t_app *app)
 {
-	int     i;
+	int		i;
 	int		objects_count;
 	t_node	**objects;
 	t_node	*tmp_object;
@@ -86,19 +86,19 @@ static void	draw_objects(t_app *app)
 
 void		update_objects(t_app *app)
 {
-    int     i;
+	int		i;
 	int		objects_count;
-    t_node	*object;
+	t_node	*object;
 
-    reset_objects(app);
+	reset_objects(app);
 	objects_count = app->map->objects_count;
-    i = 0;
-    while (i < objects_count)
-    {
-        object = app->map->objects[i];
-        fill_object(app->sdl, app->player, object);
-        i++;
-    }
-    sort_objects(app);
-    draw_objects(app);
+	i = 0;
+	while (i < objects_count)
+	{
+		object = app->map->objects[i];
+		fill_object(app->sdl, app->player, object);
+		i++;
+	}
+	sort_objects(app);
+	draw_objects(app);
 }

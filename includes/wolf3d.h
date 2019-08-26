@@ -326,9 +326,22 @@ void				map_type_empty(t_node *node);
 void				map_fill(t_app *app);
 int					map_count_cols(char *row, t_map *map);
 int					map_count_rows(char *str, t_map *map);
-void				place_player(t_player *player, t_node *node, int row,
-									int col);
 void				change_weapon(t_app *app);
 void				reload_weapon(t_app *app);
 void				state_change(t_app *app);
+void				place_player(t_player *player, t_node *node,
+						int row, int col);
+
+void				update_level(SDL_Renderer *renderer, char *level,
+						t_ui_elem *ui_elem, TTF_Font *font);
+void				update_score(SDL_Renderer *renderer, int score,
+						t_ui_elem *ui_elem, TTF_Font *font);
+void				update_life(SDL_Renderer *renderer, int lives,
+						t_ui_elem *ui_elem, TTF_Font *font);
+void				update_health(SDL_Renderer *renderer, int health,
+						t_ui_elem *ui_elem, TTF_Font *font);
+void				update_ammo(SDL_Renderer *renderer, t_player *player,
+						t_ui_elem *ui_elem, TTF_Font *font);
+
+void		check_for_init_errors(void);
 #endif

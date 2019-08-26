@@ -1,6 +1,6 @@
 #include "wolf3d.h"
 
-SDL_Surface	*load_surface(char *folder, char *name)
+SDL_Surface		*load_surface(char *folder, char *name)
 {
 	char	file_path[50];
 
@@ -26,7 +26,7 @@ SDL_Texture		*load_texture(SDL_Renderer *renderer, char *folder, char *name)
 	return (texture);
 }
 
-void		load_textures(t_sdl *sdl, SDL_Texture *array[], char *path)
+void			load_textures(t_sdl *sdl, SDL_Texture *array[], char *path)
 {
 	DIR				*d;
 	struct dirent	*dir;
@@ -51,7 +51,7 @@ void		load_textures(t_sdl *sdl, SDL_Texture *array[], char *path)
 	}
 }
 
-void		load_surfaces(SDL_Surface *array[], char *path)
+void			load_surfaces(SDL_Surface *array[], char *path)
 {
 	DIR				*d;
 	struct dirent	*dir;

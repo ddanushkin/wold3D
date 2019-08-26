@@ -1,38 +1,5 @@
 #include "wolf3d.h"
 
-static	void	check_for_init_errors(void)
-{
-	if (SDL_Init(SDL_INIT_VIDEO) < 0)
-		ft_error("SDL video initialization error");
-	if (SDL_Init(SDL_INIT_AUDIO) < 0)
-		ft_error("SDL audio initialization error");
-	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
-		ft_error("Open Audio error");
-	if (TTF_Init() < 0)
-		ft_error("TTF error");
-}
-
-void	fill_diag_dist(t_sdl *sdl)
-{
-	int		row;
-	float	step;
-	float	angle;
-	float	dist_32;
-
-	angle = 30.0 * M_PI_180;
-	dist_32 = sdl->dist_to_pp * 32;
-	step = (60.0 / sdl->width) * M_PI_180;
-	sdl->diag_dist = (float *)malloc(sizeof(float) * sdl->height);
-	row = sdl->height;
-	while (row >= 0)
-	{
-		sdl->diag_dist[row] = dist_32 / (row - sdl->half_height);
-		sdl->diag_dist[row] /= cosf(angle);
-		angle -= step;
-		row--;
-	}
-}
-
 static	void	create_stuff(t_sdl *sdl, t_textures *textures)
 {
 	int			access;
@@ -73,7 +40,7 @@ static	void	init_sdl(t_sdl *sdl)
 	sdl->dist_per_x = (float *)malloc(sizeof(float) * sdl->width);
 }
 
-void	malloc_textures(t_textures *textures)
+void			malloc_textures(t_textures *textures)
 {
 	int files;
 
