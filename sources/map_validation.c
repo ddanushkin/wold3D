@@ -78,7 +78,6 @@ int		map_count_rows(char *str, t_map *map)
 		if (!map_count_cols(*rows, map))
 		{
 			ft_delarr(tmp_rows);
-			ft_error("Bad map. GoodBye");
 			return (0);
 		}
 		rows++;

@@ -38,19 +38,18 @@ int		check_for_quit(SDL_Event *event, t_inputs *inputs)
 	return (0);
 }
 
-int		count_files(char *path)
+void	shoot_weapon(t_app *app)
 {
-	int				file_count;
-	DIR				*dirp;
-	struct dirent	*entry;
+	t_weapon		*weapon;
 
-	file_count = 0;
-	dirp = opendir(path);
-	while ((entry = readdir(dirp)) != NULL)
+	weapon = &app->player->weapon[app->player->cur_weapon];
+	if (weapon->ammo_cur != 0)
 	{
-		if (entry->d_type == DT_REG)
-			file_count++;
+		weapon->ammo_cur--;
+		app->player->last_shoot = 1;
+		Mix_PlayChannel(1, weapon->gun_sound, 0);
 	}
-	closedir(dirp);
-	return (file_count);
+	else
+		Mix_PlayChannel(1, app->player->fx_empty, 0);
+	weapon->fired = 1;
 }

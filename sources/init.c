@@ -6,7 +6,7 @@
 /*   By: lglover <lglover@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/26 11:25:06 by lglover           #+#    #+#             */
-/*   Updated: 2019/08/26 18:47:20 by lglover          ###   ########.fr       */
+/*   Updated: 2019/08/30 16:37:44 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ static	void	create_stuff(t_app *app, t_sdl *sdl, t_textures *textures)
 	textures->doors[0] = load_surface(app, "./resources/doors/", "D1.bmp");
 	textures->ceilings[0] = load_surface(app, "./resources/ceilings/", "1.bmp");
 	textures->sprites[0] = load_surface(app, "./resources/interior/", "X.bmp");
-	load_walls(app, textures);
+	load_walls_1(app, textures);
+	load_walls_2(app, textures);
 }
 
 static	void	init_sdl(t_sdl *sdl)
@@ -55,7 +56,7 @@ static	void	init_sdl(t_sdl *sdl)
 void			malloc_textures(t_textures *textures)
 {
 	textures->doors = (SDL_Surface **)malloc(sizeof(SDL_Surface *) * 1);
-	textures->walls = (SDL_Surface **)malloc(sizeof(SDL_Surface *) * 50);
+	textures->walls = (SDL_Surface **)malloc(sizeof(SDL_Surface *) * 36);
 	textures->ceilings = (SDL_Surface **)malloc(sizeof(SDL_Surface *) * 1);
 	textures->floors = (SDL_Surface **)malloc(sizeof(SDL_Surface *) * 1);
 	textures->sprites = (SDL_Surface **)malloc(sizeof(SDL_Surface *) * 1);
@@ -81,9 +82,9 @@ void			init(t_app *app)
 	malloc_stuff(app);
 	init_sdl(app->sdl);
 	create_stuff(app, app->sdl, app->textures);
-	load_music(app, app->sfx->background, "bgm.mp3");
-	load_sound(app, app->sfx->door_open, "door_open.wav");
-	load_sound(app, app->sfx->door_move, "door_move.wav");
+	load_music(app, &app->sfx->background, "bgm.mp3");
+	load_sound(app, &app->sfx->door_open, "door_open.wav");
+	load_sound(app, &app->sfx->door_move, "door_move.wav");
 	app->inputs->sensitivity = 1.5f;
 	app->inputs->zoom = 300;
 	app->camera_angle = 0;

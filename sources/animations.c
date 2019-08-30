@@ -6,7 +6,7 @@
 /*   By: lglover <lglover@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/26 11:21:51 by lglover           #+#    #+#             */
-/*   Updated: 2019/08/26 11:22:01 by lglover          ###   ########.fr       */
+/*   Updated: 2019/08/30 13:07:09 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	state_change(t_app *app)
 
 void	animation_idle_weapon(t_app *app)
 {
+	animation_start(&app->animations[ANIM_IDLE]);
 	animation_next_frame(&app->animations[ANIM_IDLE]);
 	idle_draw(app, &app->animations[ANIM_IDLE]);
 }
@@ -51,6 +52,10 @@ void	animation_reload_weapon(t_app *app)
 
 void	animation_shoot_weapon(t_app *app)
 {
+	t_weapon		*weapon;
+
+	weapon = &app->player->weapon[app->player->cur_weapon];
+	app->animations[ANIM_SHOOT].speed = weapon->firerate;
 	animation_next_frame(&app->animations[ANIM_SHOOT]);
 	shoot_draw(app, &app->animations[ANIM_SHOOT]);
 	if (animation_ended(app, &app->animations[ANIM_SHOOT]))

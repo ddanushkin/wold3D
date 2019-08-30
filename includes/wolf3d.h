@@ -6,7 +6,7 @@
 /*   By: lglover <lglover@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/26 11:27:25 by lglover           #+#    #+#             */
-/*   Updated: 2019/08/26 19:27:05 by lglover          ###   ########.fr       */
+/*   Updated: 2019/08/30 16:16:47 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,6 +165,7 @@ typedef struct		s_player
 	int				step;
 	int				changed;
 	int				reloaded;
+	int				last_shoot;
 	int				lives;
 	int				max_dist;
 	float			move_acc;
@@ -243,7 +244,7 @@ typedef struct		s_app
 	float			camera_angle;
 	float			max_angle;
 	int				players_count;
-	int 			error;
+	int				error;
 }					t_app;
 
 typedef struct		s_color
@@ -252,7 +253,6 @@ typedef struct		s_color
 	Uint8			g;
 	Uint8			b;
 }					t_color;
-
 
 void				init(t_app *app);
 int					map_read(int fd, t_app *app);
@@ -267,7 +267,6 @@ void				set_pixel(t_sdl *sdl, int x, int y, t_color *col);
 void				draw_obj_column(t_sdl *sdl, t_ray *ray, int x, int height);
 void				init_time(t_time *time);
 void				update_time(t_time *time);
-void				draw_text(t_app *app, SDL_Renderer *renderer, t_ui_elem *ui_elem);
 void				draw_text_font(SDL_Renderer *renderer, t_ui_elem *ui_elem,
 						TTF_Font *font);
 void				create_hud(t_sdl *sdl, t_player *player);
@@ -308,6 +307,7 @@ void				node_reset(t_node *node, int row, int col);
 void				map_type_empty(t_node *node);
 int					map_count_cols(char *row, t_map *map);
 int					map_count_rows(char *str, t_map *map);
+void				shoot_weapon(t_app *app);
 void				change_weapon(t_app *app);
 void				reload_weapon(t_app *app);
 void				state_change(t_app *app);
@@ -339,9 +339,11 @@ t_node				*get_node(t_node **nodes, float x, float y);
 void				draw_view(t_app *app);
 void				fix_direction(t_app *app);
 void				check_for_init_errors(void);
-void				init_weapon_sprite(t_app *app, t_weapon *weapon, char *weapon_name);
-void				load_walls(t_app *app, t_textures *textures);
-void				load_sound(t_app *app, Mix_Chunk *sound, char *name);
-void				load_music(t_app *app, Mix_Music *music, char *name);
+void				init_weapon_sprite(t_app *app, t_weapon *weapon,
+										char *weapon_name);
+void				load_walls_1(t_app *app, t_textures *textures);
+void				load_walls_2(t_app *app, t_textures *textures);
+void				load_sound(t_app *app, Mix_Chunk **sound, char *name);
+void				load_music(t_app *app, Mix_Music **music, char *name);
 void				load_font(t_app *app, int size);
 #endif

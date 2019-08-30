@@ -6,7 +6,7 @@
 /*   By: lglover <lglover@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/26 11:25:20 by lglover           #+#    #+#             */
-/*   Updated: 2019/08/26 11:25:20 by lglover          ###   ########.fr       */
+/*   Updated: 2019/08/30 15:18:21 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,11 @@ void	init_idle_anim(t_app *app, t_animation *anim)
 	anim->play = 0;
 	anim->delayed = 0;
 	anim->current_frame = 0;
-	anim->total_frames = 60;
+	anim->total_frames = 30;
 	anim->loop = 1;
 	anim->delay = 0;
 	anim->counter = 0;
-	anim->speed = 0.01f;
+	anim->speed = 0.05f;
 }
 
 void	init_shoot_anim(t_app *app, t_animation *anim)
@@ -43,7 +43,7 @@ void	init_shoot_anim(t_app *app, t_animation *anim)
 	anim->total_frames = 11;
 	anim->loop = 0;
 	anim->delay = 0;
-	anim->speed = 0.1f;
+	anim->speed = 0.05f;
 }
 
 void	init_change_anim(t_app *app, t_animation *anim)
@@ -60,7 +60,7 @@ void	init_change_anim(t_app *app, t_animation *anim)
 	anim->total_frames = 30;
 	anim->loop = 0;
 	anim->delay = 0;
-	anim->speed = 0.1f;
+	anim->speed = 0.05f;
 	app->player->changed = 0;
 }
 
@@ -78,6 +78,6 @@ void	init_reload_anim(t_app *app, t_animation *anim)
 	anim->total_frames = 30;
 	anim->loop = 0;
 	anim->delay = 0;
-	anim->speed = 0.1f;
+	anim->speed = 0.05f;
 	app->player->reloaded = 0;
 }

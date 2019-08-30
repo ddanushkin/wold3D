@@ -6,7 +6,7 @@
 /*   By: lglover <lglover@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/26 11:23:42 by lglover           #+#    #+#             */
-/*   Updated: 2019/08/26 11:23:42 by lglover          ###   ########.fr       */
+/*   Updated: 2019/08/30 16:11:33 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,19 +19,10 @@ void	ft_error(char *str)
 
 void	quit_properly(t_app *app)
 {
-	SDL_DestroyWindow(app->sdl->window);
-	SDL_DestroyRenderer(app->sdl->renderer);
-	SDL_DestroyTexture(app->sdl->texture);
-	app->sfx->background = NULL;
-	app->player->sound_effect = NULL;
-	free(app->sdl->pixels);
-	free(app->sdl);
-	free(app->map);
-	free(app->player);
+	app->player->score = 0;
 	SDL_Quit();
 	Mix_Quit();
 	TTF_Quit();
-	app = NULL;
 	exit(0);
 }
 

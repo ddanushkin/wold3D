@@ -6,7 +6,7 @@
 /*   By: lglover <lglover@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/26 11:24:31 by lglover           #+#    #+#             */
-/*   Updated: 2019/08/26 19:18:05 by lglover          ###   ########.fr       */
+/*   Updated: 2019/08/30 16:15:54 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int		load_level(t_app *app, int level)
 			return (1);
 		else
 		{
-			ft_error("Map path error.");
+			ft_error("Bad map.");
 			return (0);
 		}
 	else

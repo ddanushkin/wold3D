@@ -6,7 +6,7 @@
 /*   By: lglover <lglover@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/26 11:25:55 by lglover           #+#    #+#             */
-/*   Updated: 2019/08/26 15:11:47 by lglover          ###   ########.fr       */
+/*   Updated: 2019/08/30 17:24:42 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,14 @@
 
 void		map_type_wall(t_app *app, t_node *node, int index)
 {
+	int wall_index;
+
+	wall_index = index * 4;
 	node->type = MAP_TYPE_WALL;
-	node->texture[0] = app->textures->walls[index];
-	node->texture[1] = app->textures->walls[index + 1];
-	node->texture[2] = app->textures->walls[index + 2];
-	node->texture[3] = app->textures->walls[index + 3];
+	node->texture[0] = app->textures->walls[wall_index];
+	node->texture[1] = app->textures->walls[wall_index + 1];
+	node->texture[2] = app->textures->walls[wall_index + 2];
+	node->texture[3] = app->textures->walls[wall_index + 3];
 	node->collidable = true;
 }
 

@@ -6,7 +6,7 @@
 /*   By: lglover <lglover@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/26 11:25:42 by lglover           #+#    #+#             */
-/*   Updated: 2019/08/26 18:24:52 by lglover          ###   ########.fr       */
+/*   Updated: 2019/08/30 17:19:20 by lglover          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,42 +55,26 @@ SDL_Texture		*load_texture(t_app *app, char *folder,
 	}
 }
 
-void			load_walls(t_app *app, t_textures *textures)
-{
-	textures->walls[0] = load_surface(app, "./resources/walls/", "1_e.bmp");
-	textures->walls[1] = load_surface(app, "./resources/walls/", "1_n.bmp");
-	textures->walls[2] = load_surface(app, "./resources/walls/", "1_s.bmp");
-	textures->walls[3] = load_surface(app, "./resources/walls/", "1_w.bmp");
-	textures->walls[4] = load_surface(app, "./resources/walls/", "2_e.bmp");
-	textures->walls[5] = load_surface(app, "./resources/walls/", "2_n.bmp");
-	textures->walls[6] = load_surface(app, "./resources/walls/", "2_s.bmp");
-	textures->walls[7] = load_surface(app, "./resources/walls/", "2_w.bmp");
-	textures->walls[8] = load_surface(app, "./resources/walls/", "3_e.bmp");
-	textures->walls[9] = load_surface(app, "./resources/walls/", "3_n.bmp");
-	textures->walls[10] = load_surface(app, "./resources/walls/", "3_s.bmp");
-	textures->walls[11] = load_surface(app, "./resources/walls/", "3_w.bmp");
-}
-
-void			load_sound(t_app *app, Mix_Chunk *sound, char *name)
+void			load_sound(t_app *app, Mix_Chunk **sound, char *name)
 {
 	char		file_path[50];
 
 	file_path[0] = '\0';
 	ft_strcpy(file_path, "./resources/sounds/");
 	ft_strcat(file_path, name);
-	sound = Mix_LoadWAV(file_path);
-	if (sound == NULL)
+	*sound = Mix_LoadWAV(file_path);
+	if (*sound == NULL)
 		app->error = 1;
 }
 
-void			load_music(t_app *app, Mix_Music *music, char *name)
+void			load_music(t_app *app, Mix_Music **music, char *name)
 {
 	char		file_path[50];
 
 	file_path[0] = '\0';
 	ft_strcpy(file_path, "./resources/sounds/");
 	ft_strcat(file_path, name);
-	music = Mix_LoadMUS(file_path);
-	if (music == NULL)
+	*music = Mix_LoadMUS(file_path);
+	if (*music == NULL)
 		app->error = 1;
 }
